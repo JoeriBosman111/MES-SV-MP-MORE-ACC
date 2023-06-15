@@ -1,0 +1,2083 @@
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 2
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"HANcoder_Olimexino_SV_MP.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.ByteSwap_x,"ax",%progbits
+  18              		.align	1
+  19              		.p2align 2,,3
+  20              		.global	ByteSwap_x
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	ByteSwap_x:
+  26              	.LVL0:
+  27              	.LFB1:
+  28              		.file 1 "HANcoder_Olimexino_SV_MP.c"
+   1:HANcoder_Olimexino_SV_MP.c **** /*
+   2:HANcoder_Olimexino_SV_MP.c ****  * Academic License - for use in teaching, academic research, and meeting
+   3:HANcoder_Olimexino_SV_MP.c ****  * course requirements at degree granting institutions only.  Not for
+   4:HANcoder_Olimexino_SV_MP.c ****  * government, commercial, or other organizational use.
+   5:HANcoder_Olimexino_SV_MP.c ****  *
+   6:HANcoder_Olimexino_SV_MP.c ****  * File: HANcoder_Olimexino_SV_MP.c
+   7:HANcoder_Olimexino_SV_MP.c ****  *
+   8:HANcoder_Olimexino_SV_MP.c ****  * Code generated for Simulink model 'HANcoder_Olimexino_SV_MP'.
+   9:HANcoder_Olimexino_SV_MP.c ****  *
+  10:HANcoder_Olimexino_SV_MP.c ****  * Model version                  : 16.8
+  11:HANcoder_Olimexino_SV_MP.c ****  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
+  12:HANcoder_Olimexino_SV_MP.c ****  * C/C++ source code generated on : Wed May 10 10:24:49 2023
+  13:HANcoder_Olimexino_SV_MP.c ****  *
+  14:HANcoder_Olimexino_SV_MP.c ****  * Target selection: ert.tlc
+  15:HANcoder_Olimexino_SV_MP.c ****  * Embedded hardware selection: ARM Compatible->ARM Cortex
+  16:HANcoder_Olimexino_SV_MP.c ****  * Code generation objectives: Unspecified
+  17:HANcoder_Olimexino_SV_MP.c ****  * Validation result: Not run
+  18:HANcoder_Olimexino_SV_MP.c ****  */
+  19:HANcoder_Olimexino_SV_MP.c **** 
+  20:HANcoder_Olimexino_SV_MP.c **** #include "HANcoder_Olimexino_SV_MP.h"
+  21:HANcoder_Olimexino_SV_MP.c **** #include <math.h>
+  22:HANcoder_Olimexino_SV_MP.c **** #include "rtwtypes.h"
+  23:HANcoder_Olimexino_SV_MP.c **** #include "HANcoder_Olimexino_SV_MP_private.h"
+  24:HANcoder_Olimexino_SV_MP.c **** 
+  25:HANcoder_Olimexino_SV_MP.c **** /* map ByteSwap function */
+  26:HANcoder_Olimexino_SV_MP.c **** #define ByteSwap(x)                    (ByteSwap_x((uint8_t *) &x, sizeof(x)))
+  27:HANcoder_Olimexino_SV_MP.c **** 
+  28:HANcoder_Olimexino_SV_MP.c **** /* Exported block signals */
+  29:HANcoder_Olimexino_SV_MP.c **** real_T E;                              /* '<S11>/Sum1' */
+  30:HANcoder_Olimexino_SV_MP.c **** uint32_T SI_FreeStack;                 /* '<S125>/Level-2 M-file S-Function' */
+  31:HANcoder_Olimexino_SV_MP.c **** uint32_T SI_FreeHeap;                  /* '<S126>/Level-2 M-file S-Function' */
+  32:HANcoder_Olimexino_SV_MP.c **** int16_T control_effort;                /* '<S12>/-5000 -5000 N1' */
+  33:HANcoder_Olimexino_SV_MP.c **** int16_T speed;                         /* '<S122>/In1' */
+  34:HANcoder_Olimexino_SV_MP.c **** int16_T gap;                           /* '<S122>/In2' */
+  35:HANcoder_Olimexino_SV_MP.c **** uint8_T SI_CPUload;                    /* '<S124>/Level-2 M-file S-Function' */
+  36:HANcoder_Olimexino_SV_MP.c **** 
+  37:HANcoder_Olimexino_SV_MP.c **** /* Block signals (default storage) */
+  38:HANcoder_Olimexino_SV_MP.c **** BlockIO rtB;
+  39:HANcoder_Olimexino_SV_MP.c **** 
+  40:HANcoder_Olimexino_SV_MP.c **** /* Block states (default storage) */
+  41:HANcoder_Olimexino_SV_MP.c **** D_Work rtDWork;
+  42:HANcoder_Olimexino_SV_MP.c **** static tCanDataTypes canTxData;
+  43:HANcoder_Olimexino_SV_MP.c **** static tCanDataTypes canRxData_0_256U;
+  44:HANcoder_Olimexino_SV_MP.c **** 
+  45:HANcoder_Olimexino_SV_MP.c **** /*
+  46:HANcoder_Olimexino_SV_MP.c ****  * Swaps the values of two bytes.
+  47:HANcoder_Olimexino_SV_MP.c ****  * a, b pointers to data values that need swapping
+  48:HANcoder_Olimexino_SV_MP.c ****  */
+  49:HANcoder_Olimexino_SV_MP.c **** static void swap(unsigned char *a, unsigned char *b)
+  50:HANcoder_Olimexino_SV_MP.c **** {
+  51:HANcoder_Olimexino_SV_MP.c ****   register char i = *a;
+  52:HANcoder_Olimexino_SV_MP.c ****   *a = *b;
+  53:HANcoder_Olimexino_SV_MP.c ****   *b = i;
+  54:HANcoder_Olimexino_SV_MP.c **** }                                      /*** end of swap ***/
+  55:HANcoder_Olimexino_SV_MP.c **** 
+  56:HANcoder_Olimexino_SV_MP.c **** /*
+  57:HANcoder_Olimexino_SV_MP.c ****  * Swaps all bytes in b. Typically used to fix endianes.
+  58:HANcoder_Olimexino_SV_MP.c ****  * b pointer to data with bytes to swap
+  59:HANcoder_Olimexino_SV_MP.c ****  * n number of bytes to swap
+  60:HANcoder_Olimexino_SV_MP.c ****  */
+  61:HANcoder_Olimexino_SV_MP.c **** void ByteSwap_x(uint8_t *b, size_t n)
+  62:HANcoder_Olimexino_SV_MP.c **** {
+  29              		.loc 1 62 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  63:HANcoder_Olimexino_SV_MP.c ****   int i = 0;
+  33              		.loc 1 63 3 view .LVU1
+  64:HANcoder_Olimexino_SV_MP.c ****   int j = n-1;
+  34              		.loc 1 64 3 view .LVU2
+  62:HANcoder_Olimexino_SV_MP.c ****   int i = 0;
+  35              		.loc 1 62 1 is_stmt 0 view .LVU3
+  36 0000 70B5     		push	{r4, r5, r6, lr}
+  37              		.cfi_def_cfa_offset 16
+  38              		.cfi_offset 4, -16
+  39              		.cfi_offset 5, -12
+  40              		.cfi_offset 6, -8
+  41              		.cfi_offset 14, -4
+  42              		.loc 1 64 12 view .LVU4
+  43 0002 01F1FF3E 		add	lr, r1, #-1
+  44              	.LVL1:
+  65:HANcoder_Olimexino_SV_MP.c ****   while (i<j) {
+  45              		.loc 1 65 3 is_stmt 1 view .LVU5
+  46              		.loc 1 65 9 view .LVU6
+  47 0006 BEF1000F 		cmp	lr, #0
+  48 000a 15DD     		ble	.L1
+  49 000c 6FF00106 		mvn	r6, #1
+  50 0010 00F1FF3C 		add	ip, r0, #-1
+  51 0014 8644     		add	lr, lr, r0
+  52              	.LVL2:
+  53              	.L3:
+  66:HANcoder_Olimexino_SV_MP.c ****     swap(&b[i], &b[j]);
+  54              		.loc 1 66 5 view .LVU7
+  55              	.LBB4:
+  56              	.LBI4:
+  49:HANcoder_Olimexino_SV_MP.c **** {
+  57              		.loc 1 49 13 view .LVU8
+  58              	.LBB5:
+  51:HANcoder_Olimexino_SV_MP.c ****   *a = *b;
+  59              		.loc 1 51 3 view .LVU9
+  60 0016 6246     		mov	r2, ip
+  51:HANcoder_Olimexino_SV_MP.c ****   *a = *b;
+  61              		.loc 1 51 17 is_stmt 0 view .LVU10
+  62 0018 1CF8014F 		ldrb	r4, [ip, #1]!	@ zero_extendqisi2
+  63              	.LVL3:
+  52:HANcoder_Olimexino_SV_MP.c ****   *b = i;
+  64              		.loc 1 52 3 is_stmt 1 view .LVU11
+  65              	.LBE5:
+  66              	.LBE4:
+  65:HANcoder_Olimexino_SV_MP.c ****     swap(&b[i], &b[j]);
+  67              		.loc 1 65 9 is_stmt 0 view .LVU12
+  68 001c 0232     		adds	r2, r2, #2
+  69              	.LVL4:
+  65:HANcoder_Olimexino_SV_MP.c ****     swap(&b[i], &b[j]);
+  70              		.loc 1 65 9 view .LVU13
+  71 001e A6EB0C03 		sub	r3, r6, ip
+  72 0022 0344     		add	r3, r3, r0
+  73              	.LBB8:
+  74              	.LBB6:
+  52:HANcoder_Olimexino_SV_MP.c ****   *b = i;
+  75              		.loc 1 52 8 view .LVU14
+  76 0024 9EF80050 		ldrb	r5, [lr]	@ zero_extendqisi2
+  77              	.LBE6:
+  78              	.LBE8:
+  65:HANcoder_Olimexino_SV_MP.c ****     swap(&b[i], &b[j]);
+  79              		.loc 1 65 9 view .LVU15
+  80 0028 0B44     		add	r3, r3, r1
+  81 002a 121A     		subs	r2, r2, r0
+  82              	.LVL5:
+  65:HANcoder_Olimexino_SV_MP.c ****     swap(&b[i], &b[j]);
+  83              		.loc 1 65 9 view .LVU16
+  84 002c 9A42     		cmp	r2, r3
+  85              	.LBB9:
+  86              	.LBB7:
+  52:HANcoder_Olimexino_SV_MP.c ****   *b = i;
+  87              		.loc 1 52 6 view .LVU17
+  88 002e 8CF80050 		strb	r5, [ip]
+  53:HANcoder_Olimexino_SV_MP.c **** }                                      /*** end of swap ***/
+  89              		.loc 1 53 3 is_stmt 1 view .LVU18
+  53:HANcoder_Olimexino_SV_MP.c **** }                                      /*** end of swap ***/
+  90              		.loc 1 53 6 is_stmt 0 view .LVU19
+  91 0032 0EF80149 		strb	r4, [lr], #-1
+  92              	.LVL6:
+  53:HANcoder_Olimexino_SV_MP.c **** }                                      /*** end of swap ***/
+  93              		.loc 1 53 6 view .LVU20
+  94              	.LBE7:
+  95              	.LBE9:
+  67:HANcoder_Olimexino_SV_MP.c ****     i++, j--;
+  96              		.loc 1 67 5 is_stmt 1 view .LVU21
+  65:HANcoder_Olimexino_SV_MP.c ****     swap(&b[i], &b[j]);
+  97              		.loc 1 65 9 view .LVU22
+  98 0036 EEDB     		blt	.L3
+  99              	.LVL7:
+ 100              	.L1:
+  68:HANcoder_Olimexino_SV_MP.c ****   }
+  69:HANcoder_Olimexino_SV_MP.c **** }
+ 101              		.loc 1 69 1 is_stmt 0 view .LVU23
+ 102 0038 70BD     		pop	{r4, r5, r6, pc}
+ 103              		.cfi_endproc
+ 104              	.LFE1:
+ 106              		.global	__aeabi_i2d
+ 107              		.global	__aeabi_dcmpge
+ 108              		.global	__aeabi_dcmpgt
+ 109              		.global	__aeabi_dmul
+ 110              		.global	__aeabi_d2iz
+ 111              		.global	__aeabi_dsub
+ 112              		.global	__aeabi_dadd
+ 113              		.global	__aeabi_dcmplt
+ 114              		.global	__aeabi_dcmpeq
+ 115 003a 00BF     		.section	.rodata.HANcoder_Olimexino_SV_MP_step.str1.4,"aMS",%progbits,1
+ 116              		.align	2
+ 117              	.LC0:
+ 118 0000 41707043 		.ascii	"AppCtrlTask\000"
+ 118      74726C54 
+ 118      61736B00 
+ 119              		.section	.text.HANcoder_Olimexino_SV_MP_step,"ax",%progbits
+ 120              		.align	1
+ 121              		.p2align 2,,3
+ 122              		.global	HANcoder_Olimexino_SV_MP_step
+ 123              		.syntax unified
+ 124              		.thumb
+ 125              		.thumb_func
+ 127              	HANcoder_Olimexino_SV_MP_step:
+ 128              	.LFB2:
+  70:HANcoder_Olimexino_SV_MP.c **** 
+  71:HANcoder_Olimexino_SV_MP.c **** /* Model step function */
+  72:HANcoder_Olimexino_SV_MP.c **** void HANcoder_Olimexino_SV_MP_step(void)
+  73:HANcoder_Olimexino_SV_MP.c **** {
+ 129              		.loc 1 73 1 is_stmt 1 view -0
+ 130              		.cfi_startproc
+ 131              		@ args = 0, pretend = 0, frame = 72
+ 132              		@ frame_needed = 0, uses_anonymous_args = 0
+  74:HANcoder_Olimexino_SV_MP.c ****   /* local block i/o variables */
+  75:HANcoder_Olimexino_SV_MP.c ****   int16_T rtb_SFunction_o2;
+ 133              		.loc 1 75 3 view .LVU25
+  76:HANcoder_Olimexino_SV_MP.c ****   int16_T rtb_SFunction_o3;
+ 134              		.loc 1 76 3 view .LVU26
+  77:HANcoder_Olimexino_SV_MP.c ****   int16_T rtb_SFunction_o4;
+ 135              		.loc 1 77 3 view .LVU27
+  78:HANcoder_Olimexino_SV_MP.c ****   int16_T rtb_SFunction_o5;
+ 136              		.loc 1 78 3 view .LVU28
+  79:HANcoder_Olimexino_SV_MP.c ****   int8_T rtb_SFunction_o1;
+ 137              		.loc 1 79 3 view .LVU29
+  80:HANcoder_Olimexino_SV_MP.c ****   real_T rtb_DeadZone;
+ 138              		.loc 1 80 3 view .LVU30
+  81:HANcoder_Olimexino_SV_MP.c ****   real_T rtb_DeadZone_0;
+ 139              		.loc 1 81 3 view .LVU31
+  82:HANcoder_Olimexino_SV_MP.c ****   real_T rtb_FilterCoefficient;
+ 140              		.loc 1 82 3 view .LVU32
+  83:HANcoder_Olimexino_SV_MP.c ****   real_T rtb_FilterCoefficient_i;
+ 141              		.loc 1 83 3 view .LVU33
+  84:HANcoder_Olimexino_SV_MP.c ****   real_T rtb_IntegralGain_b;
+ 142              		.loc 1 84 3 view .LVU34
+  85:HANcoder_Olimexino_SV_MP.c ****   real_T rtb_SumI1;
+ 143              		.loc 1 85 3 view .LVU35
+  86:HANcoder_Olimexino_SV_MP.c ****   real_T rtb_Switch2;
+ 144              		.loc 1 86 3 view .LVU36
+  87:HANcoder_Olimexino_SV_MP.c ****   real_T rtb_Switch_g;
+ 145              		.loc 1 87 3 view .LVU37
+  88:HANcoder_Olimexino_SV_MP.c ****   real_T rtb_TSamp;
+ 146              		.loc 1 88 3 view .LVU38
+  89:HANcoder_Olimexino_SV_MP.c ****   real_T u1;
+ 147              		.loc 1 89 3 view .LVU39
+  90:HANcoder_Olimexino_SV_MP.c ****   real_T u2;
+ 148              		.loc 1 90 3 view .LVU40
+  91:HANcoder_Olimexino_SV_MP.c ****   int8_T rtb_SumI1_0;
+ 149              		.loc 1 91 3 view .LVU41
+  92:HANcoder_Olimexino_SV_MP.c ****   int8_T rtb_fixforDTpropagationissue_0;
+ 150              		.loc 1 92 3 view .LVU42
+  93:HANcoder_Olimexino_SV_MP.c ****   boolean_T rtb_AND;
+ 151              		.loc 1 93 3 view .LVU43
+  94:HANcoder_Olimexino_SV_MP.c ****   boolean_T rtb_RelationalOperator;
+ 152              		.loc 1 94 3 view .LVU44
+  95:HANcoder_Olimexino_SV_MP.c ****   boolean_T rtb_fixforDTpropagationissue;
+ 153              		.loc 1 95 3 view .LVU45
+  96:HANcoder_Olimexino_SV_MP.c **** 
+  97:HANcoder_Olimexino_SV_MP.c ****   /* M-S-Function: '<S121>/S-Function' incorporates:
+  98:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S6>/Constant2'
+  99:HANcoder_Olimexino_SV_MP.c ****    */
+ 100:HANcoder_Olimexino_SV_MP.c **** 
+ 101:HANcoder_Olimexino_SV_MP.c ****   /* read the message data and store the new parameter */
+ 102:HANcoder_Olimexino_SV_MP.c ****   rtb_SFunction_o1 = CanIoGetMessage(0, 256U, NULL,
+ 154              		.loc 1 102 3 view .LVU46
+ 155              		.loc 1 102 22 is_stmt 0 view .LVU47
+ 156 0000 0022     		movs	r2, #0
+  73:HANcoder_Olimexino_SV_MP.c ****   /* local block i/o variables */
+ 157              		.loc 1 73 1 view .LVU48
+ 158 0002 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 159              		.cfi_def_cfa_offset 36
+ 160              		.cfi_offset 4, -36
+ 161              		.cfi_offset 5, -32
+ 162              		.cfi_offset 6, -28
+ 163              		.cfi_offset 7, -24
+ 164              		.cfi_offset 8, -20
+ 165              		.cfi_offset 9, -16
+ 166              		.cfi_offset 10, -12
+ 167              		.cfi_offset 11, -8
+ 168              		.cfi_offset 14, -4
+ 169              		.loc 1 102 22 view .LVU49
+ 170 0006 C04C     		ldr	r4, .L66+48
+  73:HANcoder_Olimexino_SV_MP.c ****   /* local block i/o variables */
+ 171              		.loc 1 73 1 view .LVU50
+ 172 0008 95B0     		sub	sp, sp, #84
+ 173              		.cfi_def_cfa_offset 120
+ 174              		.loc 1 102 22 view .LVU51
+ 175 000a 4FF48071 		mov	r1, #256
+ 176 000e 2346     		mov	r3, r4
+ 177 0010 1046     		mov	r0, r2
+ 178 0012 0092     		str	r2, [sp]
+ 179 0014 FFF7FEFF 		bl	CanIoGetMessage
+ 180              	.LVL8:
+ 103:HANcoder_Olimexino_SV_MP.c ****     &canRxData_0_256U.uint8_T_info[0], NULL);
+ 104:HANcoder_Olimexino_SV_MP.c **** 
+ 105:HANcoder_Olimexino_SV_MP.c ****   /* process the message data */
+ 106:HANcoder_Olimexino_SV_MP.c ****   if (rtb_SFunction_o1 > 0) {
+ 181              		.loc 1 106 3 is_stmt 1 view .LVU52
+ 182              		.loc 1 106 6 is_stmt 0 view .LVU53
+ 183 0018 0028     		cmp	r0, #0
+ 184 001a 40F3A682 		ble	.L60
+ 107:HANcoder_Olimexino_SV_MP.c ****     /* read the data */
+ 108:HANcoder_Olimexino_SV_MP.c ****     rtb_SFunction_o2 = canRxData_0_256U.int16_T_info[0];
+ 185              		.loc 1 108 5 is_stmt 1 view .LVU54
+ 186              		.loc 1 108 22 is_stmt 0 view .LVU55
+ 187 001e B4F90050 		ldrsh	r5, [r4]
+ 188              	.LVL9:
+ 109:HANcoder_Olimexino_SV_MP.c ****     rtb_SFunction_o3 = canRxData_0_256U.int16_T_info[1];
+ 189              		.loc 1 109 5 is_stmt 1 view .LVU56
+ 190              		.loc 1 109 22 is_stmt 0 view .LVU57
+ 191 0022 B4F90200 		ldrsh	r0, [r4, #2]
+ 192              	.LVL10:
+ 110:HANcoder_Olimexino_SV_MP.c ****     rtb_SFunction_o4 = canRxData_0_256U.int16_T_info[2];
+ 193              		.loc 1 110 5 is_stmt 1 view .LVU58
+ 111:HANcoder_Olimexino_SV_MP.c ****     rtb_SFunction_o5 = canRxData_0_256U.int16_T_info[3];
+ 194              		.loc 1 111 5 view .LVU59
+ 112:HANcoder_Olimexino_SV_MP.c ****   }
+ 113:HANcoder_Olimexino_SV_MP.c **** 
+ 114:HANcoder_Olimexino_SV_MP.c ****   /* Outputs for Enabled SubSystem: '<S121>/Enabled Subsystem' incorporates:
+ 115:HANcoder_Olimexino_SV_MP.c ****    *  EnablePort: '<S122>/Enable'
+ 116:HANcoder_Olimexino_SV_MP.c ****    */
+ 117:HANcoder_Olimexino_SV_MP.c ****   if (rtb_SFunction_o1 > 0) {
+ 195              		.loc 1 117 3 view .LVU60
+ 118:HANcoder_Olimexino_SV_MP.c ****     /* SignalConversion generated from: '<S122>/In1' */
+ 119:HANcoder_Olimexino_SV_MP.c ****     speed = rtb_SFunction_o2;
+ 196              		.loc 1 119 5 view .LVU61
+ 197              		.loc 1 119 11 is_stmt 0 view .LVU62
+ 198 0026 B94A     		ldr	r2, .L66+52
+ 120:HANcoder_Olimexino_SV_MP.c **** 
+ 121:HANcoder_Olimexino_SV_MP.c ****     /* SignalConversion generated from: '<S122>/In2' */
+ 122:HANcoder_Olimexino_SV_MP.c ****     gap = rtb_SFunction_o3;
+ 199              		.loc 1 122 9 view .LVU63
+ 200 0028 B94B     		ldr	r3, .L66+56
+ 119:HANcoder_Olimexino_SV_MP.c **** 
+ 201              		.loc 1 119 11 view .LVU64
+ 202 002a 1580     		strh	r5, [r2]	@ movhi
+ 203              		.loc 1 122 5 is_stmt 1 view .LVU65
+ 204              		.loc 1 122 9 is_stmt 0 view .LVU66
+ 205 002c 1880     		strh	r0, [r3]	@ movhi
+ 206              	.LVL11:
+ 207              	.L9:
+ 123:HANcoder_Olimexino_SV_MP.c ****   }
+ 124:HANcoder_Olimexino_SV_MP.c **** 
+ 125:HANcoder_Olimexino_SV_MP.c ****   /* End of Outputs for SubSystem: '<S121>/Enabled Subsystem' */
+ 126:HANcoder_Olimexino_SV_MP.c **** 
+ 127:HANcoder_Olimexino_SV_MP.c ****   /* Logic: '<S13>/AND' incorporates:
+ 128:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S120>/Constant'
+ 129:HANcoder_Olimexino_SV_MP.c ****    *  Logic: '<S13>/NAND'
+ 130:HANcoder_Olimexino_SV_MP.c ****    *  Memory: '<S13>/Memory'
+ 131:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S120>/Compare'
+ 132:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S13>/Relational Operator'
+ 133:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S13>/Relational Operator1'
+ 134:HANcoder_Olimexino_SV_MP.c ****    */
+ 135:HANcoder_Olimexino_SV_MP.c ****   rtb_AND = ((gap >= rtConstB.Entermargin) && ((gap > rtConstB.Exitmargin) ||
+ 208              		.loc 1 135 3 is_stmt 1 view .LVU67
+ 209              		.loc 1 135 19 is_stmt 0 view .LVU68
+ 210 002e FFF7FEFF 		bl	__aeabi_i2d
+ 211              	.LVL12:
+ 212              		.loc 1 135 30 view .LVU69
+ 213 0032 DFF8E0A2 		ldr	r10, .L66+60
+ 214              		.loc 1 135 19 view .LVU70
+ 215 0036 0646     		mov	r6, r0
+ 216              		.loc 1 135 44 view .LVU71
+ 217 0038 DAE90023 		ldrd	r2, [r10]
+ 218              		.loc 1 135 19 view .LVU72
+ 219 003c 0F46     		mov	r7, r1
+ 220              		.loc 1 135 44 view .LVU73
+ 221 003e FFF7FEFF 		bl	__aeabi_dcmpge
+ 222              	.LVL13:
+ 223 0042 0028     		cmp	r0, #0
+ 224 0044 40F0CB81 		bne	.L44
+ 225 0048 B34C     		ldr	r4, .L66+64
+ 226              	.L10:
+ 227              	.LVL14:
+ 136:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 137:HANcoder_Olimexino_SV_MP.c **** 
+ 138:HANcoder_Olimexino_SV_MP.c ****   /* Sum: '<S11>/Sum1' incorporates:
+ 139:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S10>/d_d'
+ 140:HANcoder_Olimexino_SV_MP.c ****    */
+ 141:HANcoder_Olimexino_SV_MP.c ****   E = (real_T)gap - 20.0;
+ 228              		.loc 1 141 3 is_stmt 1 view .LVU74
+ 229              		.loc 1 141 19 is_stmt 0 view .LVU75
+ 230 004a 3046     		mov	r0, r6
+ 231 004c 3946     		mov	r1, r7
+ 232 004e 0022     		movs	r2, #0
+ 233 0050 B24B     		ldr	r3, .L66+68
+ 234 0052 FFF7FEFF 		bl	__aeabi_dsub
+ 235              	.LVL15:
+ 236 0056 0646     		mov	r6, r0
+ 237 0058 0F46     		mov	r7, r1
+ 238              		.loc 1 141 5 view .LVU76
+ 239 005a B14B     		ldr	r3, .L66+72
+ 142:HANcoder_Olimexino_SV_MP.c **** 
+ 143:HANcoder_Olimexino_SV_MP.c ****   /* Gain: '<S52>/Filter Coefficient' incorporates:
+ 144:HANcoder_Olimexino_SV_MP.c ****    *  DiscreteIntegrator: '<S44>/Filter'
+ 145:HANcoder_Olimexino_SV_MP.c ****    *  Gain: '<S43>/Derivative Gain'
+ 146:HANcoder_Olimexino_SV_MP.c ****    *  Sum: '<S44>/SumD'
+ 147:HANcoder_Olimexino_SV_MP.c ****    */
+ 148:HANcoder_Olimexino_SV_MP.c ****   rtb_FilterCoefficient = (2.0 * E - rtDWork.Filter_DSTATE) * 100.0;
+ 240              		.loc 1 148 32 view .LVU77
+ 241 005c 0246     		mov	r2, r0
+ 141:HANcoder_Olimexino_SV_MP.c **** 
+ 242              		.loc 1 141 5 view .LVU78
+ 243 005e C3E90067 		strd	r6, [r3]
+ 244              		.loc 1 148 3 is_stmt 1 view .LVU79
+ 245              		.loc 1 148 32 is_stmt 0 view .LVU80
+ 246 0062 0B46     		mov	r3, r1
+ 141:HANcoder_Olimexino_SV_MP.c **** 
+ 247              		.loc 1 141 19 view .LVU81
+ 248 0064 CDE91067 		strd	r6, [sp, #64]
+ 249              		.loc 1 148 32 view .LVU82
+ 250 0068 FFF7FEFF 		bl	__aeabi_dadd
+ 251              	.LVL16:
+ 252              		.loc 1 148 36 view .LVU83
+ 253 006c D4E90223 		ldrd	r2, [r4, #8]
+ 254 0070 FFF7FEFF 		bl	__aeabi_dsub
+ 255              	.LVL17:
+ 256              		.loc 1 148 25 view .LVU84
+ 257 0074 0022     		movs	r2, #0
+ 258 0076 AB4B     		ldr	r3, .L66+76
+ 259 0078 FFF7FEFF 		bl	__aeabi_dmul
+ 260              	.LVL18:
+ 261 007c 8046     		mov	r8, r0
+ 262 007e 8946     		mov	r9, r1
+ 149:HANcoder_Olimexino_SV_MP.c **** 
+ 150:HANcoder_Olimexino_SV_MP.c ****   /* Sum: '<S59>/Sum' incorporates:
+ 151:HANcoder_Olimexino_SV_MP.c ****    *  DiscreteIntegrator: '<S49>/Integrator'
+ 152:HANcoder_Olimexino_SV_MP.c ****    *  Gain: '<S54>/Proportional Gain'
+ 153:HANcoder_Olimexino_SV_MP.c ****    */
+ 154:HANcoder_Olimexino_SV_MP.c ****   rtb_SumI1 = (1.5 * E + rtDWork.Integrator_DSTATE) + rtb_FilterCoefficient;
+ 263              		.loc 1 154 20 view .LVU85
+ 264 0080 0022     		movs	r2, #0
+ 265 0082 A94B     		ldr	r3, .L66+80
+ 266 0084 3046     		mov	r0, r6
+ 267 0086 3946     		mov	r1, r7
+ 148:HANcoder_Olimexino_SV_MP.c **** 
+ 268              		.loc 1 148 25 view .LVU86
+ 269 0088 CDE91289 		strd	r8, [sp, #72]
+ 270              	.LVL19:
+ 271              		.loc 1 154 3 is_stmt 1 view .LVU87
+ 272              		.loc 1 154 20 is_stmt 0 view .LVU88
+ 273 008c FFF7FEFF 		bl	__aeabi_dmul
+ 274              	.LVL20:
+ 275              		.loc 1 154 24 view .LVU89
+ 276 0090 D4E90023 		ldrd	r2, [r4]
+ 277 0094 FFF7FEFF 		bl	__aeabi_dadd
+ 278              	.LVL21:
+ 279              		.loc 1 154 13 view .LVU90
+ 280 0098 4246     		mov	r2, r8
+ 281 009a 4B46     		mov	r3, r9
+ 282 009c FFF7FEFF 		bl	__aeabi_dadd
+ 283              	.LVL22:
+ 155:HANcoder_Olimexino_SV_MP.c **** 
+ 156:HANcoder_Olimexino_SV_MP.c ****   /* Switch: '<S57>/Switch2' incorporates:
+ 157:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S10>/v_d'
+ 158:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S11>/Constant'
+ 159:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S57>/LowerRelop1'
+ 160:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S57>/UpperRelop'
+ 161:HANcoder_Olimexino_SV_MP.c ****    *  Switch: '<S57>/Switch'
+ 162:HANcoder_Olimexino_SV_MP.c ****    */
+ 163:HANcoder_Olimexino_SV_MP.c ****   if (rtb_SumI1 > 8.3333333333333339) {
+ 284              		.loc 1 163 6 view .LVU91
+ 285 00a0 8DA3     		adr	r3, .L66
+ 286 00a2 D3E90023 		ldrd	r2, [r3]
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 287              		.loc 1 154 13 view .LVU92
+ 288 00a6 8046     		mov	r8, r0
+ 289              	.LVL23:
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 290              		.loc 1 154 13 view .LVU93
+ 291 00a8 8946     		mov	r9, r1
+ 292              	.LVL24:
+ 293              		.loc 1 163 3 is_stmt 1 view .LVU94
+ 294              		.loc 1 163 6 is_stmt 0 view .LVU95
+ 295 00aa FFF7FEFF 		bl	__aeabi_dcmpgt
+ 296              	.LVL25:
+ 297 00ae 8346     		mov	fp, r0
+ 298 00b0 0028     		cmp	r0, #0
+ 299 00b2 00F0E981 		beq	.L61
+ 300 00b6 4FF0080B 		mov	fp, #8
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 301              		.loc 1 135 11 view .LVU96
+ 302 00ba 0023     		movs	r3, #0
+ 303              	.LVL26:
+ 304              	.L59:
+ 305              		.loc 1 163 6 view .LVU97
+ 306 00bc 0022     		movs	r2, #0
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 307              		.loc 1 135 11 view .LVU98
+ 308 00be 0993     		str	r3, [sp, #36]
+ 309              		.loc 1 163 6 view .LVU99
+ 310 00c0 0023     		movs	r3, #0
+ 311 00c2 CDE90C23 		strd	r2, [sp, #48]
+ 312              	.L58:
+ 313              		.loc 1 163 6 view .LVU100
+ 314 00c6 86A3     		adr	r3, .L66+8
+ 315 00c8 D3E90023 		ldrd	r2, [r3]
+ 164:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch2 = 8.3333333333333339;
+ 165:HANcoder_Olimexino_SV_MP.c ****   } else if (rtb_SumI1 < 0.0) {
+ 166:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 167:HANcoder_Olimexino_SV_MP.c ****      *  Constant: '<S11>/Constant'
+ 168:HANcoder_Olimexino_SV_MP.c ****      */
+ 169:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch2 = 0.0;
+ 170:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 171:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch2 = rtb_SumI1;
+ 172:HANcoder_Olimexino_SV_MP.c ****   }
+ 173:HANcoder_Olimexino_SV_MP.c **** 
+ 174:HANcoder_Olimexino_SV_MP.c ****   /* End of Switch: '<S57>/Switch2' */
+ 175:HANcoder_Olimexino_SV_MP.c **** 
+ 176:HANcoder_Olimexino_SV_MP.c ****   /* Switch: '<S10>/Switch' incorporates:
+ 177:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S10>/v_d'
+ 178:HANcoder_Olimexino_SV_MP.c ****    */
+ 179:HANcoder_Olimexino_SV_MP.c ****   if (rtb_AND) {
+ 180:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch_g = 8.3333333333333339;
+ 316              		.loc 1 180 18 view .LVU101
+ 317 00cc 82A7     		adr	r7, .L66
+ 318 00ce D7E90067 		ldrd	r6, [r7]
+ 163:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch2 = 8.3333333333333339;
+ 319              		.loc 1 163 6 view .LVU102
+ 320 00d2 CDE90223 		strd	r2, [sp, #8]
+ 321 00d6 84A3     		adr	r3, .L66+16
+ 322 00d8 D3E90023 		ldrd	r2, [r3]
+ 323 00dc CDE90A23 		strd	r2, [sp, #40]
+ 324              	.L13:
+ 325              	.LVL27:
+ 181:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 182:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch_g = rtb_Switch2;
+ 183:HANcoder_Olimexino_SV_MP.c ****   }
+ 184:HANcoder_Olimexino_SV_MP.c **** 
+ 185:HANcoder_Olimexino_SV_MP.c ****   /* End of Switch: '<S10>/Switch' */
+ 186:HANcoder_Olimexino_SV_MP.c **** 
+ 187:HANcoder_Olimexino_SV_MP.c ****   /* SampleTimeMath: '<S69>/TSamp'
+ 188:HANcoder_Olimexino_SV_MP.c ****    *
+ 189:HANcoder_Olimexino_SV_MP.c ****    * About '<S69>/TSamp':
+ 190:HANcoder_Olimexino_SV_MP.c ****    *  y = u * K where K = 1 / ( w * Ts )
+ 191:HANcoder_Olimexino_SV_MP.c ****    */
+ 192:HANcoder_Olimexino_SV_MP.c ****   rtb_TSamp = rtb_Switch_g * 100.0;
+ 326              		.loc 1 192 3 is_stmt 1 view .LVU103
+ 193:HANcoder_Olimexino_SV_MP.c **** 
+ 194:HANcoder_Olimexino_SV_MP.c ****   /* Sum: '<S12>/Sum1' */
+ 195:HANcoder_Olimexino_SV_MP.c ****   rtb_IntegralGain_b = rtb_Switch_g - (real_T)speed;
+ 327              		.loc 1 195 3 view .LVU104
+ 328              		.loc 1 195 39 is_stmt 0 view .LVU105
+ 329 00e0 2846     		mov	r0, r5
+ 330 00e2 FFF7FEFF 		bl	__aeabi_i2d
+ 331              	.LVL28:
+ 332 00e6 0246     		mov	r2, r0
+ 333 00e8 0B46     		mov	r3, r1
+ 334              		.loc 1 195 22 view .LVU106
+ 335 00ea 3046     		mov	r0, r6
+ 336 00ec 3946     		mov	r1, r7
+ 337 00ee FFF7FEFF 		bl	__aeabi_dsub
+ 338              	.LVL29:
+ 196:HANcoder_Olimexino_SV_MP.c **** 
+ 197:HANcoder_Olimexino_SV_MP.c ****   /* Gain: '<S106>/Filter Coefficient' incorporates:
+ 198:HANcoder_Olimexino_SV_MP.c ****    *  DiscreteIntegrator: '<S98>/Filter'
+ 199:HANcoder_Olimexino_SV_MP.c ****    *  Gain: '<S97>/Derivative Gain'
+ 200:HANcoder_Olimexino_SV_MP.c ****    *  Sum: '<S98>/SumD'
+ 201:HANcoder_Olimexino_SV_MP.c ****    */
+ 202:HANcoder_Olimexino_SV_MP.c ****   rtb_FilterCoefficient_i = (10.0 * rtb_IntegralGain_b - rtDWork.Filter_DSTATE_i)
+ 339              		.loc 1 202 3 is_stmt 1 view .LVU107
+ 195:HANcoder_Olimexino_SV_MP.c **** 
+ 340              		.loc 1 195 22 is_stmt 0 view .LVU108
+ 341 00f2 0246     		mov	r2, r0
+ 342 00f4 0B46     		mov	r3, r1
+ 343 00f6 CDE90423 		strd	r2, [sp, #16]
+ 344              	.LVL30:
+ 345              		.loc 1 202 35 view .LVU109
+ 346 00fa 0022     		movs	r2, #0
+ 347 00fc 8B4B     		ldr	r3, .L66+84
+ 348 00fe FFF7FEFF 		bl	__aeabi_dmul
+ 349              	.LVL31:
+ 350              		.loc 1 202 56 view .LVU110
+ 351 0102 D4E90823 		ldrd	r2, [r4, #32]
+ 352 0106 FFF7FEFF 		bl	__aeabi_dsub
+ 353              	.LVL32:
+ 354              		.loc 1 202 27 view .LVU111
+ 355 010a 0022     		movs	r2, #0
+ 356 010c 854B     		ldr	r3, .L66+76
+ 357 010e FFF7FEFF 		bl	__aeabi_dmul
+ 358              	.LVL33:
+ 359 0112 0E46     		mov	r6, r1
+ 360              	.LVL34:
+ 361              		.loc 1 202 27 view .LVU112
+ 362 0114 0546     		mov	r5, r0
+ 203:HANcoder_Olimexino_SV_MP.c ****     * 100.0;
+ 204:HANcoder_Olimexino_SV_MP.c **** 
+ 205:HANcoder_Olimexino_SV_MP.c ****   /* Sum: '<S112>/Sum' incorporates:
+ 206:HANcoder_Olimexino_SV_MP.c ****    *  DiscreteIntegrator: '<S103>/Integrator'
+ 207:HANcoder_Olimexino_SV_MP.c ****    *  Gain: '<S108>/Proportional Gain'
+ 208:HANcoder_Olimexino_SV_MP.c ****    */
+ 209:HANcoder_Olimexino_SV_MP.c ****   rtb_DeadZone = (2000.0 * rtb_IntegralGain_b + rtDWork.Integrator_DSTATE_g) +
+ 363              		.loc 1 209 26 view .LVU113
+ 364 0116 DDE90401 		ldrd	r0, [sp, #16]
+ 365 011a 0022     		movs	r2, #0
+ 366 011c 844B     		ldr	r3, .L66+88
+ 202:HANcoder_Olimexino_SV_MP.c ****     * 100.0;
+ 367              		.loc 1 202 27 view .LVU114
+ 368 011e CDE90E56 		strd	r5, [sp, #56]
+ 369              	.LVL35:
+ 370              		.loc 1 209 3 is_stmt 1 view .LVU115
+ 371              		.loc 1 209 26 is_stmt 0 view .LVU116
+ 372 0122 FFF7FEFF 		bl	__aeabi_dmul
+ 373              	.LVL36:
+ 374              		.loc 1 209 47 view .LVU117
+ 375 0126 D4E90623 		ldrd	r2, [r4, #24]
+ 376 012a FFF7FEFF 		bl	__aeabi_dadd
+ 377              	.LVL37:
+ 378              		.loc 1 209 16 view .LVU118
+ 379 012e 3346     		mov	r3, r6
+ 380 0130 2A46     		mov	r2, r5
+ 381 0132 FFF7FEFF 		bl	__aeabi_dadd
+ 382              	.LVL38:
+ 210:HANcoder_Olimexino_SV_MP.c ****     rtb_FilterCoefficient_i;
+ 211:HANcoder_Olimexino_SV_MP.c **** 
+ 212:HANcoder_Olimexino_SV_MP.c ****   /* Saturate: '<S110>/Saturation' */
+ 213:HANcoder_Olimexino_SV_MP.c ****   if (rtb_DeadZone > 5000.0) {
+ 383              		.loc 1 213 6 view .LVU119
+ 384 0136 6EA3     		adr	r3, .L66+24
+ 385 0138 D3E90023 		ldrd	r2, [r3]
+ 209:HANcoder_Olimexino_SV_MP.c ****     rtb_FilterCoefficient_i;
+ 386              		.loc 1 209 16 view .LVU120
+ 387 013c 0646     		mov	r6, r0
+ 388 013e 0F46     		mov	r7, r1
+ 389 0140 CDE90667 		strd	r6, [sp, #24]
+ 390              	.LVL39:
+ 391              		.loc 1 213 3 is_stmt 1 view .LVU121
+ 392              		.loc 1 213 6 is_stmt 0 view .LVU122
+ 393 0144 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 394              	.LVL40:
+ 395 0148 0028     		cmp	r0, #0
+ 396 014a 40F0E381 		bne	.L32
+ 214:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone_0 = 5000.0;
+ 215:HANcoder_Olimexino_SV_MP.c ****   } else if (rtb_DeadZone < (-5000.0)) {
+ 397              		.loc 1 215 10 is_stmt 1 view .LVU123
+ 398              		.loc 1 215 13 is_stmt 0 view .LVU124
+ 399 014e 6AA3     		adr	r3, .L66+32
+ 400 0150 D3E90023 		ldrd	r2, [r3]
+ 401 0154 3046     		mov	r0, r6
+ 402 0156 3946     		mov	r1, r7
+ 403 0158 FFF7FEFF 		bl	__aeabi_dcmplt
+ 404              	.LVL41:
+ 405 015c 10B1     		cbz	r0, .L14
+ 216:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone_0 = (-5000.0);
+ 406              		.loc 1 216 20 view .LVU125
+ 407 015e 66A7     		adr	r7, .L66+32
+ 408 0160 D7E90067 		ldrd	r6, [r7]
+ 409              	.LVL42:
+ 410              	.L14:
+ 217:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 218:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone_0 = rtb_DeadZone;
+ 219:HANcoder_Olimexino_SV_MP.c ****   }
+ 220:HANcoder_Olimexino_SV_MP.c **** 
+ 221:HANcoder_Olimexino_SV_MP.c ****   /* End of Saturate: '<S110>/Saturation' */
+ 222:HANcoder_Olimexino_SV_MP.c **** 
+ 223:HANcoder_Olimexino_SV_MP.c ****   /* Sum: '<S12>/Add' incorporates:
+ 224:HANcoder_Olimexino_SV_MP.c ****    *  Gain: '<S67>/Gain'
+ 225:HANcoder_Olimexino_SV_MP.c ****    *  Gain: '<S67>/Gain1'
+ 226:HANcoder_Olimexino_SV_MP.c ****    *  Sum: '<S67>/Add'
+ 227:HANcoder_Olimexino_SV_MP.c ****    *  Sum: '<S69>/Diff'
+ 228:HANcoder_Olimexino_SV_MP.c ****    *  UnitDelay: '<S69>/UD'
+ 229:HANcoder_Olimexino_SV_MP.c ****    *
+ 230:HANcoder_Olimexino_SV_MP.c ****    * Block description for '<S69>/Diff':
+ 231:HANcoder_Olimexino_SV_MP.c ****    *
+ 232:HANcoder_Olimexino_SV_MP.c ****    *  Add in CPU
+ 233:HANcoder_Olimexino_SV_MP.c ****    *
+ 234:HANcoder_Olimexino_SV_MP.c ****    * Block description for '<S69>/UD':
+ 235:HANcoder_Olimexino_SV_MP.c ****    *
+ 236:HANcoder_Olimexino_SV_MP.c ****    *  Store in Global RAM
+ 237:HANcoder_Olimexino_SV_MP.c ****    */
+ 238:HANcoder_Olimexino_SV_MP.c ****   rtb_DeadZone_0 += (rtb_TSamp - rtDWork.UD_DSTATE) * 1000.0 + 50.0 *
+ 411              		.loc 1 238 3 is_stmt 1 view .LVU126
+ 412              		.loc 1 238 32 is_stmt 0 view .LVU127
+ 413 0164 D4E90423 		ldrd	r2, [r4, #16]
+ 414 0168 DDE90201 		ldrd	r0, [sp, #8]
+ 415 016c FFF7FEFF 		bl	__aeabi_dsub
+ 416              	.LVL43:
+ 417              		.loc 1 238 53 view .LVU128
+ 418 0170 0022     		movs	r2, #0
+ 419 0172 704B     		ldr	r3, .L66+92
+ 420 0174 FFF7FEFF 		bl	__aeabi_dmul
+ 421              	.LVL44:
+ 422              		.loc 1 238 62 view .LVU129
+ 423 0178 DDE90A23 		ldrd	r2, [sp, #40]
+ 424 017c FFF7FEFF 		bl	__aeabi_dadd
+ 425              	.LVL45:
+ 426              		.loc 1 238 18 view .LVU130
+ 427 0180 3246     		mov	r2, r6
+ 428 0182 3B46     		mov	r3, r7
+ 429 0184 FFF7FEFF 		bl	__aeabi_dadd
+ 430              	.LVL46:
+ 239:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch_g;
+ 240:HANcoder_Olimexino_SV_MP.c **** 
+ 241:HANcoder_Olimexino_SV_MP.c ****   /* Saturate: '<S12>/-5000 -5000 N1' */
+ 242:HANcoder_Olimexino_SV_MP.c ****   u1 = (-5000);
+ 243:HANcoder_Olimexino_SV_MP.c ****   u2 = 5000;
+ 244:HANcoder_Olimexino_SV_MP.c ****   if (rtb_DeadZone_0 > u2) {
+ 431              		.loc 1 244 6 view .LVU131
+ 432 0188 59A3     		adr	r3, .L66+24
+ 433 018a D3E90023 		ldrd	r2, [r3]
+ 238:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch_g;
+ 434              		.loc 1 238 18 view .LVU132
+ 435 018e 0646     		mov	r6, r0
+ 436              	.LVL47:
+ 238:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch_g;
+ 437              		.loc 1 238 18 view .LVU133
+ 438 0190 0F46     		mov	r7, r1
+ 439              	.LVL48:
+ 242:HANcoder_Olimexino_SV_MP.c ****   u2 = 5000;
+ 440              		.loc 1 242 3 is_stmt 1 view .LVU134
+ 243:HANcoder_Olimexino_SV_MP.c ****   if (rtb_DeadZone_0 > u2) {
+ 441              		.loc 1 243 3 view .LVU135
+ 442              		.loc 1 244 3 view .LVU136
+ 443              		.loc 1 244 6 is_stmt 0 view .LVU137
+ 444 0192 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 445              	.LVL49:
+ 446 0196 0028     		cmp	r0, #0
+ 447 0198 40F0D281 		bne	.L34
+ 245:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone_0 = u2;
+ 246:HANcoder_Olimexino_SV_MP.c ****   } else if (rtb_DeadZone_0 < u1) {
+ 448              		.loc 1 246 10 is_stmt 1 view .LVU138
+ 449              		.loc 1 246 13 is_stmt 0 view .LVU139
+ 450 019c 56A3     		adr	r3, .L66+32
+ 451 019e D3E90023 		ldrd	r2, [r3]
+ 452 01a2 3046     		mov	r0, r6
+ 453 01a4 3946     		mov	r1, r7
+ 454 01a6 FFF7FEFF 		bl	__aeabi_dcmplt
+ 455              	.LVL50:
+ 456 01aa 0028     		cmp	r0, #0
+ 457 01ac 40F0E481 		bne	.L35
+ 247:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone_0 = u1;
+ 248:HANcoder_Olimexino_SV_MP.c ****   }
+ 249:HANcoder_Olimexino_SV_MP.c **** 
+ 250:HANcoder_Olimexino_SV_MP.c ****   /* Saturate: '<S12>/-5000 -5000 N1' */
+ 251:HANcoder_Olimexino_SV_MP.c ****   control_effort = (int16_T)floor(rtb_DeadZone_0);
+ 458              		.loc 1 251 29 view .LVU140
+ 459 01b0 3046     		mov	r0, r6
+ 460 01b2 3946     		mov	r1, r7
+ 461 01b4 FFF7FEFF 		bl	floor
+ 462              	.LVL51:
+ 463              		.loc 1 251 20 view .LVU141
+ 464 01b8 FFF7FEFF 		bl	__aeabi_d2iz
+ 465              	.LVL52:
+ 466 01bc 00B2     		sxth	r0, r0
+ 252:HANcoder_Olimexino_SV_MP.c **** 
+ 253:HANcoder_Olimexino_SV_MP.c ****   /* Gain: '<S7>/Gain' */
+ 254:HANcoder_Olimexino_SV_MP.c ****   rtB.Gain = (int16_T)((16384 * control_effort) >> 14);
+ 467              		.loc 1 254 14 view .LVU142
+ 468 01be 0346     		mov	r3, r0
+ 469              	.L15:
+ 470              	.LVL53:
+ 251:HANcoder_Olimexino_SV_MP.c **** 
+ 471              		.loc 1 251 3 is_stmt 1 view .LVU143
+ 472              		.loc 1 254 12 is_stmt 0 view .LVU144
+ 473 01c0 5D4D     		ldr	r5, .L66+96
+ 474              	.LVL54:
+ 255:HANcoder_Olimexino_SV_MP.c **** 
+ 256:HANcoder_Olimexino_SV_MP.c ****   /* Gain: '<S7>/Gain3' */
+ 257:HANcoder_Olimexino_SV_MP.c ****   rtB.Gain3 = (int16_T)floor(1.0 * rtb_Switch_g);
+ 258:HANcoder_Olimexino_SV_MP.c **** 
+ 259:HANcoder_Olimexino_SV_MP.c ****   /* Switch: '<S42>/Switch' incorporates:
+ 260:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S10>/v_d'
+ 261:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S11>/Constant'
+ 262:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S42>/u_GTE_up'
+ 263:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S42>/u_GT_lo'
+ 264:HANcoder_Olimexino_SV_MP.c ****    *  Switch: '<S42>/Switch1'
+ 265:HANcoder_Olimexino_SV_MP.c ****    */
+ 266:HANcoder_Olimexino_SV_MP.c ****   if (rtb_SumI1 >= 8.3333333333333339) {
+ 475              		.loc 1 266 6 view .LVU145
+ 476 01c2 4946     		mov	r1, r9
+ 254:HANcoder_Olimexino_SV_MP.c **** 
+ 477              		.loc 1 254 12 view .LVU146
+ 478 01c4 2B80     		strh	r3, [r5]	@ movhi
+ 251:HANcoder_Olimexino_SV_MP.c **** 
+ 479              		.loc 1 251 18 view .LVU147
+ 480 01c6 5D4B     		ldr	r3, .L66+100
+ 257:HANcoder_Olimexino_SV_MP.c **** 
+ 481              		.loc 1 257 13 view .LVU148
+ 482 01c8 A5F802B0 		strh	fp, [r5, #2]	@ movhi
+ 251:HANcoder_Olimexino_SV_MP.c **** 
+ 483              		.loc 1 251 18 view .LVU149
+ 484 01cc 1880     		strh	r0, [r3]	@ movhi
+ 254:HANcoder_Olimexino_SV_MP.c **** 
+ 485              		.loc 1 254 3 is_stmt 1 view .LVU150
+ 257:HANcoder_Olimexino_SV_MP.c **** 
+ 486              		.loc 1 257 3 view .LVU151
+ 487              		.loc 1 266 3 view .LVU152
+ 488              		.loc 1 266 6 is_stmt 0 view .LVU153
+ 489 01ce 4046     		mov	r0, r8
+ 490 01d0 41A3     		adr	r3, .L66
+ 491 01d2 D3E90023 		ldrd	r2, [r3]
+ 492 01d6 FFF7FEFF 		bl	__aeabi_dcmpge
+ 493              	.LVL55:
+ 494 01da 0028     		cmp	r0, #0
+ 495 01dc 00F09E81 		beq	.L50
+ 267:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone_0 = 8.3333333333333339;
+ 268:HANcoder_Olimexino_SV_MP.c ****   } else if (rtb_SumI1 > 0.0) {
+ 269:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S42>/Switch1' */
+ 270:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone_0 = rtb_SumI1;
+ 271:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 272:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone_0 = 0.0;
+ 273:HANcoder_Olimexino_SV_MP.c ****   }
+ 274:HANcoder_Olimexino_SV_MP.c **** 
+ 275:HANcoder_Olimexino_SV_MP.c ****   /* End of Switch: '<S42>/Switch' */
+ 276:HANcoder_Olimexino_SV_MP.c **** 
+ 277:HANcoder_Olimexino_SV_MP.c ****   /* Sum: '<S42>/Diff' */
+ 278:HANcoder_Olimexino_SV_MP.c ****   rtb_SumI1 -= rtb_DeadZone_0;
+ 496              		.loc 1 278 13 view .LVU154
+ 497 01e0 3DA3     		adr	r3, .L66
+ 498 01e2 D3E90023 		ldrd	r2, [r3]
+ 499 01e6 4046     		mov	r0, r8
+ 500 01e8 4946     		mov	r1, r9
+ 501 01ea FFF7FEFF 		bl	__aeabi_dsub
+ 502              	.LVL56:
+ 503 01ee 8046     		mov	r8, r0
+ 504              	.LVL57:
+ 505              		.loc 1 278 13 view .LVU155
+ 506 01f0 8946     		mov	r9, r1
+ 507              	.L18:
+ 508              		.loc 1 278 3 is_stmt 1 view .LVU156
+ 279:HANcoder_Olimexino_SV_MP.c **** 
+ 280:HANcoder_Olimexino_SV_MP.c ****   /* RelationalOperator: '<S39>/Relational Operator' incorporates:
+ 281:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S39>/Constant5'
+ 282:HANcoder_Olimexino_SV_MP.c ****    */
+ 283:HANcoder_Olimexino_SV_MP.c ****   rtb_RelationalOperator = (0.0 != rtb_SumI1);
+ 509              		.loc 1 283 3 view .LVU157
+ 510              	.LVL58:
+ 284:HANcoder_Olimexino_SV_MP.c **** 
+ 285:HANcoder_Olimexino_SV_MP.c ****   /* RelationalOperator: '<S39>/fix for DT propagation issue' incorporates:
+ 286:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S39>/Constant5'
+ 287:HANcoder_Olimexino_SV_MP.c ****    */
+ 288:HANcoder_Olimexino_SV_MP.c ****   rtb_fixforDTpropagationissue = (rtb_SumI1 > 0.0);
+ 511              		.loc 1 288 3 view .LVU158
+ 289:HANcoder_Olimexino_SV_MP.c **** 
+ 290:HANcoder_Olimexino_SV_MP.c ****   /* Sum: '<S62>/SumI1' incorporates:
+ 291:HANcoder_Olimexino_SV_MP.c ****    *  Gain: '<S46>/Integral Gain'
+ 292:HANcoder_Olimexino_SV_MP.c ****    *  Gain: '<S61>/Kt'
+ 293:HANcoder_Olimexino_SV_MP.c ****    *  Sum: '<S61>/SumI3'
+ 294:HANcoder_Olimexino_SV_MP.c ****    */
+ 295:HANcoder_Olimexino_SV_MP.c ****   rtb_SumI1 = (rtb_Switch_g - rtb_Switch2) * 1.0 + 0.1 * E;
+ 512              		.loc 1 295 3 view .LVU159
+ 513              		.loc 1 295 56 is_stmt 0 view .LVU160
+ 514 01f2 43A3     		adr	r3, .L66+40
+ 515 01f4 D3E90023 		ldrd	r2, [r3]
+ 516 01f8 DDE91001 		ldrd	r0, [sp, #64]
+ 517 01fc FFF7FEFF 		bl	__aeabi_dmul
+ 518              	.LVL59:
+ 519              		.loc 1 295 13 view .LVU161
+ 520 0200 DDE90C23 		ldrd	r2, [sp, #48]
+ 521 0204 FFF7FEFF 		bl	__aeabi_dadd
+ 522              	.LVL60:
+ 296:HANcoder_Olimexino_SV_MP.c **** 
+ 297:HANcoder_Olimexino_SV_MP.c ****   /* Switch: '<S39>/Switch1' incorporates:
+ 298:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S39>/Constant'
+ 299:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S39>/Constant2'
+ 300:HANcoder_Olimexino_SV_MP.c ****    */
+ 301:HANcoder_Olimexino_SV_MP.c ****   if (rtb_fixforDTpropagationissue) {
+ 523              		.loc 1 301 6 view .LVU162
+ 524 0208 0022     		movs	r2, #0
+ 525 020a 0023     		movs	r3, #0
+ 295:HANcoder_Olimexino_SV_MP.c **** 
+ 526              		.loc 1 295 13 view .LVU163
+ 527 020c 0646     		mov	r6, r0
+ 528 020e 0F46     		mov	r7, r1
+ 529              	.LVL61:
+ 530              		.loc 1 301 3 is_stmt 1 view .LVU164
+ 531              		.loc 1 301 6 is_stmt 0 view .LVU165
+ 532 0210 4046     		mov	r0, r8
+ 533 0212 4946     		mov	r1, r9
+ 534 0214 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 535              	.LVL62:
+ 302:HANcoder_Olimexino_SV_MP.c ****     rtb_fixforDTpropagationissue_0 = 1;
+ 303:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 304:HANcoder_Olimexino_SV_MP.c ****     rtb_fixforDTpropagationissue_0 = (-1);
+ 305:HANcoder_Olimexino_SV_MP.c ****   }
+ 306:HANcoder_Olimexino_SV_MP.c **** 
+ 307:HANcoder_Olimexino_SV_MP.c ****   /* End of Switch: '<S39>/Switch1' */
+ 308:HANcoder_Olimexino_SV_MP.c **** 
+ 309:HANcoder_Olimexino_SV_MP.c ****   /* Switch: '<S39>/Switch2' incorporates:
+ 310:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S39>/Constant3'
+ 311:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S39>/Constant4'
+ 312:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S39>/Constant5'
+ 313:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S39>/fix for DT propagation issue1'
+ 314:HANcoder_Olimexino_SV_MP.c ****    */
+ 315:HANcoder_Olimexino_SV_MP.c ****   if (rtb_SumI1 > 0.0) {
+ 536              		.loc 1 315 6 view .LVU166
+ 537 0218 0022     		movs	r2, #0
+ 538 021a 0023     		movs	r3, #0
+ 301:HANcoder_Olimexino_SV_MP.c ****     rtb_fixforDTpropagationissue_0 = 1;
+ 539              		.loc 1 301 6 view .LVU167
+ 540 021c 0028     		cmp	r0, #0
+ 541 021e 00F09381 		beq	.L62
+ 542              	.LVL63:
+ 543              		.loc 1 315 3 is_stmt 1 view .LVU168
+ 544              		.loc 1 315 6 is_stmt 0 view .LVU169
+ 545 0222 3046     		mov	r0, r6
+ 546 0224 3946     		mov	r1, r7
+ 547 0226 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 548              	.LVL64:
+ 549 022a 08B1     		cbz	r0, .L21
+ 550              	.LVL65:
+ 551              	.L41:
+ 316:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1_0 = 1;
+ 317:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 318:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1_0 = (-1);
+ 319:HANcoder_Olimexino_SV_MP.c ****   }
+ 320:HANcoder_Olimexino_SV_MP.c **** 
+ 321:HANcoder_Olimexino_SV_MP.c ****   /* End of Switch: '<S39>/Switch2' */
+ 322:HANcoder_Olimexino_SV_MP.c **** 
+ 323:HANcoder_Olimexino_SV_MP.c ****   /* Switch: '<S39>/Switch' incorporates:
+ 324:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S39>/Constant1'
+ 325:HANcoder_Olimexino_SV_MP.c ****    *  Logic: '<S39>/AND3'
+ 326:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S39>/Equal1'
+ 327:HANcoder_Olimexino_SV_MP.c ****    */
+ 328:HANcoder_Olimexino_SV_MP.c ****   if (rtb_RelationalOperator && (rtb_fixforDTpropagationissue_0 == rtb_SumI1_0))
+ 329:HANcoder_Olimexino_SV_MP.c ****   {
+ 330:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1 = 0.0;
+ 552              		.loc 1 330 15 view .LVU170
+ 553 022c 0026     		movs	r6, #0
+ 554              	.LVL66:
+ 555              		.loc 1 330 15 view .LVU171
+ 556 022e 0027     		movs	r7, #0
+ 557              	.L21:
+ 558              	.LVL67:
+ 331:HANcoder_Olimexino_SV_MP.c ****   }
+ 332:HANcoder_Olimexino_SV_MP.c **** 
+ 333:HANcoder_Olimexino_SV_MP.c ****   /* End of Switch: '<S39>/Switch' */
+ 334:HANcoder_Olimexino_SV_MP.c **** 
+ 335:HANcoder_Olimexino_SV_MP.c ****   /* DeadZone: '<S96>/DeadZone' */
+ 336:HANcoder_Olimexino_SV_MP.c ****   if (rtb_DeadZone > 5000.0) {
+ 559              		.loc 1 336 3 is_stmt 1 view .LVU172
+ 560              		.loc 1 336 6 is_stmt 0 view .LVU173
+ 561 0230 DDE90689 		ldrd	r8, [sp, #24]
+ 562 0234 2EA3     		adr	r3, .L66+24
+ 563 0236 D3E90023 		ldrd	r2, [r3]
+ 564 023a 4046     		mov	r0, r8
+ 565 023c 4946     		mov	r1, r9
+ 566 023e FFF7FEFF 		bl	__aeabi_dcmpgt
+ 567              	.LVL68:
+ 568 0242 0028     		cmp	r0, #0
+ 569 0244 00F05181 		beq	.L51
+ 337:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone -= 5000.0;
+ 570              		.loc 1 337 5 is_stmt 1 view .LVU174
+ 571              		.loc 1 337 18 is_stmt 0 view .LVU175
+ 572 0248 29A3     		adr	r3, .L66+24
+ 573 024a D3E90023 		ldrd	r2, [r3]
+ 574 024e 4046     		mov	r0, r8
+ 575 0250 4946     		mov	r1, r9
+ 576 0252 FFF7FEFF 		bl	__aeabi_dsub
+ 577              	.LVL69:
+ 578 0256 CDE90601 		strd	r0, [sp, #24]
+ 579              	.LVL70:
+ 580              	.L24:
+ 338:HANcoder_Olimexino_SV_MP.c ****   } else if (rtb_DeadZone >= (-5000.0)) {
+ 339:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone = 0.0;
+ 340:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 341:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone -= (-5000.0);
+ 342:HANcoder_Olimexino_SV_MP.c ****   }
+ 343:HANcoder_Olimexino_SV_MP.c **** 
+ 344:HANcoder_Olimexino_SV_MP.c ****   /* End of DeadZone: '<S96>/DeadZone' */
+ 345:HANcoder_Olimexino_SV_MP.c **** 
+ 346:HANcoder_Olimexino_SV_MP.c ****   /* Gain: '<S100>/Integral Gain' */
+ 347:HANcoder_Olimexino_SV_MP.c ****   rtb_IntegralGain_b *= 50.0;
+ 581              		.loc 1 347 3 is_stmt 1 view .LVU176
+ 582              		.loc 1 347 22 is_stmt 0 view .LVU177
+ 583 025a DDE90401 		ldrd	r0, [sp, #16]
+ 584 025e 0022     		movs	r2, #0
+ 585 0260 374B     		ldr	r3, .L66+104
+ 586 0262 FFF7FEFF 		bl	__aeabi_dmul
+ 587              	.LVL71:
+ 348:HANcoder_Olimexino_SV_MP.c **** 
+ 349:HANcoder_Olimexino_SV_MP.c ****   /* Switch: '<S94>/Switch1' incorporates:
+ 350:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S94>/Constant'
+ 351:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S94>/Constant2'
+ 352:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S94>/Constant5'
+ 353:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S94>/fix for DT propagation issue'
+ 354:HANcoder_Olimexino_SV_MP.c ****    */
+ 355:HANcoder_Olimexino_SV_MP.c ****   if (rtb_DeadZone > 0.0) {
+ 588              		.loc 1 355 6 view .LVU178
+ 589 0266 0022     		movs	r2, #0
+ 590 0268 0023     		movs	r3, #0
+ 347:HANcoder_Olimexino_SV_MP.c **** 
+ 591              		.loc 1 347 22 view .LVU179
+ 592 026a 8046     		mov	r8, r0
+ 593 026c 8946     		mov	r9, r1
+ 594              	.LVL72:
+ 595              		.loc 1 355 3 is_stmt 1 view .LVU180
+ 596              		.loc 1 355 6 is_stmt 0 view .LVU181
+ 597 026e DDE90601 		ldrd	r0, [sp, #24]
+ 598 0272 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 599              	.LVL73:
+ 356:HANcoder_Olimexino_SV_MP.c ****     rtb_fixforDTpropagationissue_0 = 1;
+ 357:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 358:HANcoder_Olimexino_SV_MP.c ****     rtb_fixforDTpropagationissue_0 = (-1);
+ 359:HANcoder_Olimexino_SV_MP.c ****   }
+ 360:HANcoder_Olimexino_SV_MP.c **** 
+ 361:HANcoder_Olimexino_SV_MP.c ****   /* End of Switch: '<S94>/Switch1' */
+ 362:HANcoder_Olimexino_SV_MP.c **** 
+ 363:HANcoder_Olimexino_SV_MP.c ****   /* Switch: '<S94>/Switch2' incorporates:
+ 364:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S94>/Constant3'
+ 365:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S94>/Constant4'
+ 366:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S94>/Constant5'
+ 367:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S94>/fix for DT propagation issue1'
+ 368:HANcoder_Olimexino_SV_MP.c ****    */
+ 369:HANcoder_Olimexino_SV_MP.c ****   if (rtb_IntegralGain_b > 0.0) {
+ 600              		.loc 1 369 6 view .LVU182
+ 601 0276 0022     		movs	r2, #0
+ 602 0278 0023     		movs	r3, #0
+ 355:HANcoder_Olimexino_SV_MP.c ****     rtb_fixforDTpropagationissue_0 = 1;
+ 603              		.loc 1 355 6 view .LVU183
+ 604 027a 0028     		cmp	r0, #0
+ 605 027c 00F09781 		beq	.L63
+ 606              	.LVL74:
+ 607              		.loc 1 369 3 is_stmt 1 view .LVU184
+ 608              		.loc 1 369 6 is_stmt 0 view .LVU185
+ 609 0280 4046     		mov	r0, r8
+ 610 0282 4946     		mov	r1, r9
+ 611 0284 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 612              	.LVL75:
+ 613 0288 18B1     		cbz	r0, .L27
+ 614              	.LVL76:
+ 615              	.L40:
+ 370:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1_0 = 1;
+ 371:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 372:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1_0 = (-1);
+ 373:HANcoder_Olimexino_SV_MP.c ****   }
+ 374:HANcoder_Olimexino_SV_MP.c **** 
+ 375:HANcoder_Olimexino_SV_MP.c ****   /* End of Switch: '<S94>/Switch2' */
+ 376:HANcoder_Olimexino_SV_MP.c **** 
+ 377:HANcoder_Olimexino_SV_MP.c ****   /* Switch: '<S94>/Switch' incorporates:
+ 378:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S94>/Constant1'
+ 379:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S94>/Constant5'
+ 380:HANcoder_Olimexino_SV_MP.c ****    *  Logic: '<S94>/AND3'
+ 381:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S94>/Equal1'
+ 382:HANcoder_Olimexino_SV_MP.c ****    *  RelationalOperator: '<S94>/Relational Operator'
+ 383:HANcoder_Olimexino_SV_MP.c ****    */
+ 384:HANcoder_Olimexino_SV_MP.c ****   if ((0.0 != rtb_DeadZone) && (rtb_fixforDTpropagationissue_0 == rtb_SumI1_0))
+ 385:HANcoder_Olimexino_SV_MP.c ****   {
+ 386:HANcoder_Olimexino_SV_MP.c ****     rtb_IntegralGain_b = 0.0;
+ 616              		.loc 1 386 24 view .LVU186
+ 617 028a 4FF00008 		mov	r8, #0
+ 618              	.LVL77:
+ 619              		.loc 1 386 24 view .LVU187
+ 620 028e 4FF00009 		mov	r9, #0
+ 621              	.LVL78:
+ 622              	.L27:
+ 387:HANcoder_Olimexino_SV_MP.c ****   }
+ 388:HANcoder_Olimexino_SV_MP.c **** 
+ 389:HANcoder_Olimexino_SV_MP.c ****   /* End of Switch: '<S94>/Switch' */
+ 390:HANcoder_Olimexino_SV_MP.c ****   /* M-S-Function: '<S124>/Level-2 M-file S-Function' */
+ 391:HANcoder_Olimexino_SV_MP.c ****   /* read the current CPU load */
+ 392:HANcoder_Olimexino_SV_MP.c ****   SI_CPUload = OsGetCpuLoad();
+ 623              		.loc 1 392 3 is_stmt 1 view .LVU188
+ 624              		.loc 1 392 16 is_stmt 0 view .LVU189
+ 625 0292 FFF7FEFF 		bl	OsGetCpuLoad
+ 626              	.LVL79:
+ 627              		.loc 1 392 14 view .LVU190
+ 628 0296 2B4B     		ldr	r3, .L66+108
+ 629 0298 1870     		strb	r0, [r3]
+ 393:HANcoder_Olimexino_SV_MP.c **** 
+ 394:HANcoder_Olimexino_SV_MP.c ****   /* M-S-Function: '<S125>/Level-2 M-file S-Function' */
+ 395:HANcoder_Olimexino_SV_MP.c ****   /* read the free heap size */
+ 396:HANcoder_Olimexino_SV_MP.c ****   SI_FreeStack = OsGetFreeHeapSize();
+ 630              		.loc 1 396 3 is_stmt 1 view .LVU191
+ 631              		.loc 1 396 18 is_stmt 0 view .LVU192
+ 632 029a FFF7FEFF 		bl	OsGetFreeHeapSize
+ 633              	.LVL80:
+ 634              		.loc 1 396 16 view .LVU193
+ 635 029e 2A4B     		ldr	r3, .L66+112
+ 636 02a0 1860     		str	r0, [r3]
+ 397:HANcoder_Olimexino_SV_MP.c **** 
+ 398:HANcoder_Olimexino_SV_MP.c ****   /* M-S-Function: '<S126>/Level-2 M-file S-Function' */
+ 399:HANcoder_Olimexino_SV_MP.c ****   /* read the task's free stack size */
+ 400:HANcoder_Olimexino_SV_MP.c ****   SI_FreeHeap = OsGetTaskFreeStackSize("AppCtrlTask");
+ 637              		.loc 1 400 3 is_stmt 1 view .LVU194
+ 638              		.loc 1 400 17 is_stmt 0 view .LVU195
+ 639 02a2 2A48     		ldr	r0, .L66+116
+ 640 02a4 FFF7FEFF 		bl	OsGetTaskFreeStackSize
+ 641              	.LVL81:
+ 401:HANcoder_Olimexino_SV_MP.c **** 
+ 402:HANcoder_Olimexino_SV_MP.c ****   /* Update for M-S-Function: '<S123>/S-Function' incorporates:
+ 403:HANcoder_Olimexino_SV_MP.c ****    *  Constant: '<S7>/Constant'
+ 404:HANcoder_Olimexino_SV_MP.c ****    */
+ 405:HANcoder_Olimexino_SV_MP.c ****   {
+ 406:HANcoder_Olimexino_SV_MP.c ****     /* prepare the data */
+ 407:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[0] = rtB.Gain;
+ 642              		.loc 1 407 31 view .LVU196
+ 643 02a8 294B     		ldr	r3, .L66+120
+ 644 02aa 2A88     		ldrh	r2, [r5]
+ 408:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[1] = rtConstB.Gain1;
+ 409:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[2] = rtConstB.Gain2;
+ 410:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[3] = rtB.Gain3;
+ 411:HANcoder_Olimexino_SV_MP.c **** 
+ 412:HANcoder_Olimexino_SV_MP.c ****     /* send the data */
+ 413:HANcoder_Olimexino_SV_MP.c ****     CanTransmit(0, 50U, 8, &canTxData.uint8_T_info[0]);
+ 645              		.loc 1 413 5 view .LVU197
+ 646 02ac 3221     		movs	r1, #50
+ 407:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[1] = rtConstB.Gain1;
+ 647              		.loc 1 407 31 view .LVU198
+ 648 02ae 1A80     		strh	r2, [r3]	@ movhi
+ 410:HANcoder_Olimexino_SV_MP.c **** 
+ 649              		.loc 1 410 31 view .LVU199
+ 650 02b0 6A88     		ldrh	r2, [r5, #2]
+ 651 02b2 DA80     		strh	r2, [r3, #6]	@ movhi
+ 408:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[1] = rtConstB.Gain1;
+ 652              		.loc 1 408 31 view .LVU200
+ 653 02b4 BAF81020 		ldrh	r2, [r10, #16]
+ 654 02b8 5A80     		strh	r2, [r3, #2]	@ movhi
+ 409:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[3] = rtB.Gain3;
+ 655              		.loc 1 409 31 view .LVU201
+ 656 02ba BAF81220 		ldrh	r2, [r10, #18]
+ 657 02be 9A80     		strh	r2, [r3, #4]	@ movhi
+ 400:HANcoder_Olimexino_SV_MP.c **** 
+ 658              		.loc 1 400 15 view .LVU202
+ 659 02c0 244A     		ldr	r2, .L66+124
+ 660 02c2 1060     		str	r0, [r2]
+ 407:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[1] = rtConstB.Gain1;
+ 661              		.loc 1 407 5 is_stmt 1 view .LVU203
+ 408:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[2] = rtConstB.Gain2;
+ 662              		.loc 1 408 5 view .LVU204
+ 409:HANcoder_Olimexino_SV_MP.c ****     canTxData.int16_T_info[3] = rtB.Gain3;
+ 663              		.loc 1 409 5 view .LVU205
+ 410:HANcoder_Olimexino_SV_MP.c **** 
+ 664              		.loc 1 410 5 view .LVU206
+ 665              		.loc 1 413 5 view .LVU207
+ 666 02c4 0822     		movs	r2, #8
+ 667 02c6 0020     		movs	r0, #0
+ 668 02c8 FFF7FEFF 		bl	CanTransmit
+ 669              	.LVL82:
+ 414:HANcoder_Olimexino_SV_MP.c ****   }
+ 415:HANcoder_Olimexino_SV_MP.c **** 
+ 416:HANcoder_Olimexino_SV_MP.c ****   /* Update for Memory: '<S13>/Memory' */
+ 417:HANcoder_Olimexino_SV_MP.c ****   rtDWork.Memory_PreviousInput = rtb_AND;
+ 670              		.loc 1 417 3 view .LVU208
+ 671              		.loc 1 417 32 is_stmt 0 view .LVU209
+ 672 02cc 099B     		ldr	r3, [sp, #36]
+ 418:HANcoder_Olimexino_SV_MP.c **** 
+ 419:HANcoder_Olimexino_SV_MP.c ****   /* Update for DiscreteIntegrator: '<S49>/Integrator' */
+ 420:HANcoder_Olimexino_SV_MP.c ****   rtDWork.Integrator_DSTATE += 0.01 * rtb_SumI1;
+ 673              		.loc 1 420 37 view .LVU210
+ 674 02ce 3046     		mov	r0, r6
+ 417:HANcoder_Olimexino_SV_MP.c **** 
+ 675              		.loc 1 417 32 view .LVU211
+ 676 02d0 84F82830 		strb	r3, [r4, #40]
+ 677              		.loc 1 420 3 is_stmt 1 view .LVU212
+ 678              		.loc 1 420 37 is_stmt 0 view .LVU213
+ 679 02d4 3946     		mov	r1, r7
+ 680 02d6 3FE0     		b	.L67
+ 681              	.L68:
+ 682              		.align	3
+ 683              	.L66:
+ 684 02d8 000000A0 		.word	-1610612736
+ 685 02dc AAAA2040 		.word	1075882666
+ 686 02e0 0000009A 		.word	-1711276032
+ 687 02e4 AA0A8A40 		.word	1082788522
+ 688 02e8 0000009A 		.word	-1711276032
+ 689 02ec AA0A7A40 		.word	1081739946
+ 690 02f0 00000000 		.word	0
+ 691 02f4 0088B340 		.word	1085507584
+ 692 02f8 00000000 		.word	0
+ 693 02fc 0088B3C0 		.word	-1061976064
+ 694 0300 000000A0 		.word	-1610612736
+ 695 0304 9999B93F 		.word	1069128089
+ 696 0308 00000000 		.word	.LANCHOR0
+ 697 030c 00000000 		.word	.LANCHOR2
+ 698 0310 00000000 		.word	.LANCHOR1
+ 699 0314 00000000 		.word	rtConstB
+ 700 0318 00000000 		.word	.LANCHOR3
+ 701 031c 00003440 		.word	1077149696
+ 702 0320 00000000 		.word	.LANCHOR10
+ 703 0324 00005940 		.word	1079574528
+ 704 0328 0000F83F 		.word	1073217536
+ 705 032c 00002440 		.word	1076101120
+ 706 0330 00409F40 		.word	1084178432
+ 707 0334 00408F40 		.word	1083129856
+ 708 0338 00000000 		.word	.LANCHOR5
+ 709 033c 00000000 		.word	.LANCHOR4
+ 710 0340 00004940 		.word	1078525952
+ 711 0344 00000000 		.word	.LANCHOR6
+ 712 0348 00000000 		.word	.LANCHOR7
+ 713 034c 00000000 		.word	.LC0
+ 714 0350 00000000 		.word	.LANCHOR9
+ 715 0354 00000000 		.word	.LANCHOR8
+ 716              	.L67:
+ 717 0358 A9A3     		adr	r3, .L69
+ 718 035a D3E90023 		ldrd	r2, [r3]
+ 719 035e FFF7FEFF 		bl	__aeabi_dmul
+ 720              	.LVL83:
+ 721 0362 0246     		mov	r2, r0
+ 722 0364 0B46     		mov	r3, r1
+ 723              		.loc 1 420 29 view .LVU214
+ 724 0366 D4E90001 		ldrd	r0, [r4]
+ 725 036a FFF7FEFF 		bl	__aeabi_dadd
+ 726              	.LVL84:
+ 421:HANcoder_Olimexino_SV_MP.c **** 
+ 422:HANcoder_Olimexino_SV_MP.c ****   /* Update for DiscreteIntegrator: '<S44>/Filter' */
+ 423:HANcoder_Olimexino_SV_MP.c ****   rtDWork.Filter_DSTATE += 0.01 * rtb_FilterCoefficient;
+ 727              		.loc 1 423 33 view .LVU215
+ 728 036e A4A3     		adr	r3, .L69
+ 729 0370 D3E90023 		ldrd	r2, [r3]
+ 420:HANcoder_Olimexino_SV_MP.c **** 
+ 730              		.loc 1 420 29 view .LVU216
+ 731 0374 C4E90001 		strd	r0, [r4]
+ 732              		.loc 1 423 3 is_stmt 1 view .LVU217
+ 733              		.loc 1 423 33 is_stmt 0 view .LVU218
+ 734 0378 DDE91201 		ldrd	r0, [sp, #72]
+ 735 037c FFF7FEFF 		bl	__aeabi_dmul
+ 736              	.LVL85:
+ 737 0380 0246     		mov	r2, r0
+ 738 0382 0B46     		mov	r3, r1
+ 739              		.loc 1 423 25 view .LVU219
+ 740 0384 D4E90201 		ldrd	r0, [r4, #8]
+ 741 0388 FFF7FEFF 		bl	__aeabi_dadd
+ 742              	.LVL86:
+ 424:HANcoder_Olimexino_SV_MP.c **** 
+ 425:HANcoder_Olimexino_SV_MP.c ****   /* Update for UnitDelay: '<S69>/UD'
+ 426:HANcoder_Olimexino_SV_MP.c ****    *
+ 427:HANcoder_Olimexino_SV_MP.c ****    * Block description for '<S69>/UD':
+ 428:HANcoder_Olimexino_SV_MP.c ****    *
+ 429:HANcoder_Olimexino_SV_MP.c ****    *  Store in Global RAM
+ 430:HANcoder_Olimexino_SV_MP.c ****    */
+ 431:HANcoder_Olimexino_SV_MP.c ****   rtDWork.UD_DSTATE = rtb_TSamp;
+ 743              		.loc 1 431 21 view .LVU220
+ 744 038c DDE90223 		ldrd	r2, [sp, #8]
+ 423:HANcoder_Olimexino_SV_MP.c **** 
+ 745              		.loc 1 423 25 view .LVU221
+ 746 0390 C4E90201 		strd	r0, [r4, #8]
+ 747              		.loc 1 431 3 is_stmt 1 view .LVU222
+ 432:HANcoder_Olimexino_SV_MP.c **** 
+ 433:HANcoder_Olimexino_SV_MP.c ****   /* Update for DiscreteIntegrator: '<S103>/Integrator' */
+ 434:HANcoder_Olimexino_SV_MP.c ****   rtDWork.Integrator_DSTATE_g += 0.01 * rtb_IntegralGain_b;
+ 748              		.loc 1 434 3 view .LVU223
+ 431:HANcoder_Olimexino_SV_MP.c **** 
+ 749              		.loc 1 431 21 is_stmt 0 view .LVU224
+ 750 0394 C4E90423 		strd	r2, [r4, #16]
+ 751              		.loc 1 434 39 view .LVU225
+ 752 0398 99A3     		adr	r3, .L69
+ 753 039a D3E90023 		ldrd	r2, [r3]
+ 754 039e 4046     		mov	r0, r8
+ 755 03a0 4946     		mov	r1, r9
+ 756 03a2 FFF7FEFF 		bl	__aeabi_dmul
+ 757              	.LVL87:
+ 758 03a6 0246     		mov	r2, r0
+ 759 03a8 0B46     		mov	r3, r1
+ 760              		.loc 1 434 31 view .LVU226
+ 761 03aa D4E90601 		ldrd	r0, [r4, #24]
+ 762 03ae FFF7FEFF 		bl	__aeabi_dadd
+ 763              	.LVL88:
+ 764 03b2 0246     		mov	r2, r0
+ 765 03b4 0B46     		mov	r3, r1
+ 435:HANcoder_Olimexino_SV_MP.c **** 
+ 436:HANcoder_Olimexino_SV_MP.c ****   /* Update for DiscreteIntegrator: '<S98>/Filter' */
+ 437:HANcoder_Olimexino_SV_MP.c ****   rtDWork.Filter_DSTATE_i += 0.01 * rtb_FilterCoefficient_i;
+ 766              		.loc 1 437 35 view .LVU227
+ 767 03b6 DDE90E01 		ldrd	r0, [sp, #56]
+ 434:HANcoder_Olimexino_SV_MP.c **** 
+ 768              		.loc 1 434 31 view .LVU228
+ 769 03ba C4E90623 		strd	r2, [r4, #24]
+ 770              		.loc 1 437 3 is_stmt 1 view .LVU229
+ 771              		.loc 1 437 35 is_stmt 0 view .LVU230
+ 772 03be 90A3     		adr	r3, .L69
+ 773 03c0 D3E90023 		ldrd	r2, [r3]
+ 774 03c4 FFF7FEFF 		bl	__aeabi_dmul
+ 775              	.LVL89:
+ 776 03c8 0246     		mov	r2, r0
+ 777 03ca 0B46     		mov	r3, r1
+ 778              		.loc 1 437 27 view .LVU231
+ 779 03cc D4E90801 		ldrd	r0, [r4, #32]
+ 780 03d0 FFF7FEFF 		bl	__aeabi_dadd
+ 781              	.LVL90:
+ 782 03d4 C4E90801 		strd	r0, [r4, #32]
+ 438:HANcoder_Olimexino_SV_MP.c **** }
+ 783              		.loc 1 438 1 view .LVU232
+ 784 03d8 15B0     		add	sp, sp, #84
+ 785              		.cfi_remember_state
+ 786              		.cfi_def_cfa_offset 36
+ 787              		@ sp needed
+ 788 03da BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 789              	.LVL91:
+ 790              	.L44:
+ 791              		.cfi_restore_state
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 792              		.loc 1 135 44 discriminator 1 view .LVU233
+ 793 03de 3046     		mov	r0, r6
+ 794 03e0 DAE90223 		ldrd	r2, [r10, #8]
+ 795 03e4 3946     		mov	r1, r7
+ 796 03e6 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 797              	.LVL92:
+ 798 03ea 914C     		ldr	r4, .L69+48
+ 799 03ec 0028     		cmp	r0, #0
+ 800 03ee 77D0     		beq	.L49
+ 801              	.L12:
+ 802              	.LVL93:
+ 141:HANcoder_Olimexino_SV_MP.c **** 
+ 803              		.loc 1 141 3 is_stmt 1 view .LVU234
+ 141:HANcoder_Olimexino_SV_MP.c **** 
+ 804              		.loc 1 141 19 is_stmt 0 view .LVU235
+ 805 03f0 3046     		mov	r0, r6
+ 806 03f2 3946     		mov	r1, r7
+ 807 03f4 0022     		movs	r2, #0
+ 808 03f6 8F4B     		ldr	r3, .L69+52
+ 809 03f8 FFF7FEFF 		bl	__aeabi_dsub
+ 810              	.LVL94:
+ 811 03fc 0646     		mov	r6, r0
+ 812 03fe 0F46     		mov	r7, r1
+ 141:HANcoder_Olimexino_SV_MP.c **** 
+ 813              		.loc 1 141 5 view .LVU236
+ 814 0400 8D4B     		ldr	r3, .L69+56
+ 148:HANcoder_Olimexino_SV_MP.c **** 
+ 815              		.loc 1 148 32 view .LVU237
+ 816 0402 0246     		mov	r2, r0
+ 141:HANcoder_Olimexino_SV_MP.c **** 
+ 817              		.loc 1 141 5 view .LVU238
+ 818 0404 C3E90067 		strd	r6, [r3]
+ 148:HANcoder_Olimexino_SV_MP.c **** 
+ 819              		.loc 1 148 3 is_stmt 1 view .LVU239
+ 148:HANcoder_Olimexino_SV_MP.c **** 
+ 820              		.loc 1 148 32 is_stmt 0 view .LVU240
+ 821 0408 0B46     		mov	r3, r1
+ 141:HANcoder_Olimexino_SV_MP.c **** 
+ 822              		.loc 1 141 19 view .LVU241
+ 823 040a CDE91067 		strd	r6, [sp, #64]
+ 148:HANcoder_Olimexino_SV_MP.c **** 
+ 824              		.loc 1 148 32 view .LVU242
+ 825 040e FFF7FEFF 		bl	__aeabi_dadd
+ 826              	.LVL95:
+ 148:HANcoder_Olimexino_SV_MP.c **** 
+ 827              		.loc 1 148 36 view .LVU243
+ 828 0412 D4E90223 		ldrd	r2, [r4, #8]
+ 829 0416 FFF7FEFF 		bl	__aeabi_dsub
+ 830              	.LVL96:
+ 148:HANcoder_Olimexino_SV_MP.c **** 
+ 831              		.loc 1 148 25 view .LVU244
+ 832 041a 0022     		movs	r2, #0
+ 833 041c 874B     		ldr	r3, .L69+60
+ 834 041e FFF7FEFF 		bl	__aeabi_dmul
+ 835              	.LVL97:
+ 836 0422 8046     		mov	r8, r0
+ 837 0424 8946     		mov	r9, r1
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 838              		.loc 1 154 20 view .LVU245
+ 839 0426 0022     		movs	r2, #0
+ 840 0428 854B     		ldr	r3, .L69+64
+ 841 042a 3046     		mov	r0, r6
+ 842 042c 3946     		mov	r1, r7
+ 148:HANcoder_Olimexino_SV_MP.c **** 
+ 843              		.loc 1 148 25 view .LVU246
+ 844 042e CDE91289 		strd	r8, [sp, #72]
+ 845              	.LVL98:
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 846              		.loc 1 154 3 is_stmt 1 view .LVU247
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 847              		.loc 1 154 20 is_stmt 0 view .LVU248
+ 848 0432 FFF7FEFF 		bl	__aeabi_dmul
+ 849              	.LVL99:
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 850              		.loc 1 154 24 view .LVU249
+ 851 0436 D4E90023 		ldrd	r2, [r4]
+ 852 043a FFF7FEFF 		bl	__aeabi_dadd
+ 853              	.LVL100:
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 854              		.loc 1 154 13 view .LVU250
+ 855 043e 4246     		mov	r2, r8
+ 856 0440 4B46     		mov	r3, r9
+ 857 0442 FFF7FEFF 		bl	__aeabi_dadd
+ 858              	.LVL101:
+ 163:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch2 = 8.3333333333333339;
+ 859              		.loc 1 163 6 view .LVU251
+ 860 0446 70A3     		adr	r3, .L69+8
+ 861 0448 D3E90023 		ldrd	r2, [r3]
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 862              		.loc 1 154 13 view .LVU252
+ 863 044c 8046     		mov	r8, r0
+ 864              	.LVL102:
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 865              		.loc 1 154 13 view .LVU253
+ 866 044e 8946     		mov	r9, r1
+ 867              	.LVL103:
+ 163:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch2 = 8.3333333333333339;
+ 868              		.loc 1 163 3 is_stmt 1 view .LVU254
+ 163:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch2 = 8.3333333333333339;
+ 869              		.loc 1 163 6 is_stmt 0 view .LVU255
+ 870 0450 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 871              	.LVL104:
+ 872 0454 0028     		cmp	r0, #0
+ 873 0456 40F09B80 		bne	.L39
+ 165:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 874              		.loc 1 165 10 is_stmt 1 view .LVU256
+ 165:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 875              		.loc 1 165 13 is_stmt 0 view .LVU257
+ 876 045a 0022     		movs	r2, #0
+ 877 045c 0023     		movs	r3, #0
+ 878 045e 4046     		mov	r0, r8
+ 879 0460 4946     		mov	r1, r9
+ 880 0462 FFF7FEFF 		bl	__aeabi_dcmplt
+ 881              	.LVL105:
+ 882 0466 0028     		cmp	r0, #0
+ 883 0468 40F0B280 		bne	.L64
+ 171:HANcoder_Olimexino_SV_MP.c ****   }
+ 884              		.loc 1 171 5 is_stmt 1 view .LVU258
+ 885              	.LVL106:
+ 179:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch_g = 8.3333333333333339;
+ 886              		.loc 1 179 3 view .LVU259
+ 295:HANcoder_Olimexino_SV_MP.c **** 
+ 887              		.loc 1 295 44 is_stmt 0 view .LVU260
+ 888 046c 66A1     		adr	r1, .L69+8
+ 889 046e D1E90001 		ldrd	r0, [r1]
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 890              		.loc 1 135 11 view .LVU261
+ 891 0472 0123     		movs	r3, #1
+ 295:HANcoder_Olimexino_SV_MP.c **** 
+ 892              		.loc 1 295 44 view .LVU262
+ 893 0474 4246     		mov	r2, r8
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 894              		.loc 1 135 11 view .LVU263
+ 895 0476 0993     		str	r3, [sp, #36]
+ 295:HANcoder_Olimexino_SV_MP.c **** 
+ 896              		.loc 1 295 44 view .LVU264
+ 897 0478 4B46     		mov	r3, r9
+ 898 047a FFF7FEFF 		bl	__aeabi_dsub
+ 899              	.LVL107:
+ 900 047e 4FF0080B 		mov	fp, #8
+ 901 0482 CDE90C01 		strd	r0, [sp, #48]
+ 902 0486 1EE6     		b	.L58
+ 903              	.LVL108:
+ 904              	.L61:
+ 165:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 905              		.loc 1 165 10 is_stmt 1 view .LVU265
+ 165:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 906              		.loc 1 165 13 is_stmt 0 view .LVU266
+ 907 0488 0022     		movs	r2, #0
+ 908 048a 0023     		movs	r3, #0
+ 909 048c 4046     		mov	r0, r8
+ 910 048e 4946     		mov	r1, r9
+ 911 0490 FFF7FEFF 		bl	__aeabi_dcmplt
+ 912              	.LVL109:
+ 913 0494 0028     		cmp	r0, #0
+ 914 0496 7FD1     		bne	.L65
+ 171:HANcoder_Olimexino_SV_MP.c ****   }
+ 915              		.loc 1 171 5 is_stmt 1 view .LVU267
+ 916              	.LVL110:
+ 179:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch_g = 8.3333333333333339;
+ 917              		.loc 1 179 3 view .LVU268
+ 238:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch_g;
+ 918              		.loc 1 238 69 is_stmt 0 view .LVU269
+ 919 0498 0022     		movs	r2, #0
+ 920 049a 6A4B     		ldr	r3, .L69+68
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 921              		.loc 1 135 11 view .LVU270
+ 922 049c 0990     		str	r0, [sp, #36]
+ 238:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch_g;
+ 923              		.loc 1 238 69 view .LVU271
+ 924 049e 4946     		mov	r1, r9
+ 925 04a0 4046     		mov	r0, r8
+ 926 04a2 FFF7FEFF 		bl	__aeabi_dmul
+ 927              	.LVL111:
+ 928 04a6 CDE90A01 		strd	r0, [sp, #40]
+ 257:HANcoder_Olimexino_SV_MP.c **** 
+ 929              		.loc 1 257 24 view .LVU272
+ 930 04aa 4046     		mov	r0, r8
+ 931 04ac 4946     		mov	r1, r9
+ 932 04ae FFF7FEFF 		bl	floor
+ 933              	.LVL112:
+ 257:HANcoder_Olimexino_SV_MP.c **** 
+ 934              		.loc 1 257 15 view .LVU273
+ 935 04b2 FFF7FEFF 		bl	__aeabi_d2iz
+ 936              	.LVL113:
+ 295:HANcoder_Olimexino_SV_MP.c **** 
+ 937              		.loc 1 295 44 view .LVU274
+ 938 04b6 4246     		mov	r2, r8
+ 939 04b8 4B46     		mov	r3, r9
+ 940 04ba 4946     		mov	r1, r9
+ 257:HANcoder_Olimexino_SV_MP.c **** 
+ 941              		.loc 1 257 15 view .LVU275
+ 942 04bc 0FFA80FB 		sxth	fp, r0
+ 295:HANcoder_Olimexino_SV_MP.c **** 
+ 943              		.loc 1 295 44 view .LVU276
+ 944 04c0 4046     		mov	r0, r8
+ 945 04c2 FFF7FEFF 		bl	__aeabi_dsub
+ 946              	.LVL114:
+ 192:HANcoder_Olimexino_SV_MP.c **** 
+ 947              		.loc 1 192 13 view .LVU277
+ 948 04c6 0022     		movs	r2, #0
+ 295:HANcoder_Olimexino_SV_MP.c **** 
+ 949              		.loc 1 295 44 view .LVU278
+ 950 04c8 CDE90C01 		strd	r0, [sp, #48]
+ 192:HANcoder_Olimexino_SV_MP.c **** 
+ 951              		.loc 1 192 13 view .LVU279
+ 952 04cc 5B4B     		ldr	r3, .L69+60
+ 953 04ce 4046     		mov	r0, r8
+ 954 04d0 4946     		mov	r1, r9
+ 955 04d2 FFF7FEFF 		bl	__aeabi_dmul
+ 956              	.LVL115:
+ 154:HANcoder_Olimexino_SV_MP.c **** 
+ 957              		.loc 1 154 13 view .LVU280
+ 958 04d6 4646     		mov	r6, r8
+ 959 04d8 4F46     		mov	r7, r9
+ 192:HANcoder_Olimexino_SV_MP.c **** 
+ 960              		.loc 1 192 13 view .LVU281
+ 961 04da CDE90201 		strd	r0, [sp, #8]
+ 962 04de FFE5     		b	.L13
+ 963              	.LVL116:
+ 964              	.L49:
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 965              		.loc 1 135 76 discriminator 4 view .LVU282
+ 966 04e0 94F82830 		ldrb	r3, [r4, #40]	@ zero_extendqisi2
+ 967 04e4 002B     		cmp	r3, #0
+ 968 04e6 83D1     		bne	.L12
+ 969 04e8 AFE5     		b	.L10
+ 970              	.LVL117:
+ 971              	.L51:
+ 338:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone = 0.0;
+ 972              		.loc 1 338 10 is_stmt 1 view .LVU283
+ 338:HANcoder_Olimexino_SV_MP.c ****     rtb_DeadZone = 0.0;
+ 973              		.loc 1 338 13 is_stmt 0 view .LVU284
+ 974 04ea DDE90689 		ldrd	r8, [sp, #24]
+ 975 04ee 48A3     		adr	r3, .L69+16
+ 976 04f0 D3E90023 		ldrd	r2, [r3]
+ 977 04f4 4046     		mov	r0, r8
+ 978 04f6 4946     		mov	r1, r9
+ 979 04f8 FFF7FEFF 		bl	__aeabi_dcmpge
+ 980              	.LVL118:
+ 981 04fc 0028     		cmp	r0, #0
+ 982 04fe 3ED1     		bne	.L25
+ 341:HANcoder_Olimexino_SV_MP.c ****   }
+ 983              		.loc 1 341 5 is_stmt 1 view .LVU285
+ 341:HANcoder_Olimexino_SV_MP.c ****   }
+ 984              		.loc 1 341 18 is_stmt 0 view .LVU286
+ 985 0500 45A3     		adr	r3, .L69+24
+ 986 0502 D3E90023 		ldrd	r2, [r3]
+ 987 0506 4046     		mov	r0, r8
+ 988 0508 4946     		mov	r1, r9
+ 989 050a FFF7FEFF 		bl	__aeabi_dadd
+ 990              	.LVL119:
+ 991 050e CDE90601 		strd	r0, [sp, #24]
+ 992              	.LVL120:
+ 341:HANcoder_Olimexino_SV_MP.c ****   }
+ 993              		.loc 1 341 18 view .LVU287
+ 994 0512 A2E6     		b	.L24
+ 995              	.LVL121:
+ 996              	.L32:
+ 214:HANcoder_Olimexino_SV_MP.c ****   } else if (rtb_DeadZone < (-5000.0)) {
+ 997              		.loc 1 214 20 view .LVU288
+ 998 0514 40A7     		adr	r7, .L69+24
+ 999 0516 D7E90067 		ldrd	r6, [r7]
+ 1000              	.LVL122:
+ 214:HANcoder_Olimexino_SV_MP.c ****   } else if (rtb_DeadZone < (-5000.0)) {
+ 1001              		.loc 1 214 20 view .LVU289
+ 1002 051a 23E6     		b	.L14
+ 1003              	.LVL123:
+ 1004              	.L50:
+ 268:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S42>/Switch1' */
+ 1005              		.loc 1 268 10 is_stmt 1 view .LVU290
+ 268:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S42>/Switch1' */
+ 1006              		.loc 1 268 13 is_stmt 0 view .LVU291
+ 1007 051c 0022     		movs	r2, #0
+ 1008 051e 0023     		movs	r3, #0
+ 1009 0520 4046     		mov	r0, r8
+ 1010 0522 4946     		mov	r1, r9
+ 1011 0524 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 1012              	.LVL124:
+ 1013 0528 0028     		cmp	r0, #0
+ 1014 052a 3FF462AE 		beq	.L18
+ 278:HANcoder_Olimexino_SV_MP.c **** 
+ 1015              		.loc 1 278 13 view .LVU292
+ 1016 052e 4246     		mov	r2, r8
+ 1017 0530 4B46     		mov	r3, r9
+ 1018 0532 4046     		mov	r0, r8
+ 1019 0534 4946     		mov	r1, r9
+ 1020 0536 FFF7FEFF 		bl	__aeabi_dsub
+ 1021              	.LVL125:
+ 1022 053a 8046     		mov	r8, r0
+ 1023              	.LVL126:
+ 278:HANcoder_Olimexino_SV_MP.c **** 
+ 1024              		.loc 1 278 13 view .LVU293
+ 1025 053c 8946     		mov	r9, r1
+ 1026 053e 58E6     		b	.L18
+ 1027              	.LVL127:
+ 1028              	.L34:
+ 278:HANcoder_Olimexino_SV_MP.c **** 
+ 1029              		.loc 1 278 13 view .LVU294
+ 1030 0540 41F28833 		movw	r3, #5000
+ 1031 0544 1846     		mov	r0, r3
+ 1032 0546 3BE6     		b	.L15
+ 1033              	.LVL128:
+ 1034              	.L62:
+ 304:HANcoder_Olimexino_SV_MP.c ****   }
+ 1035              		.loc 1 304 5 is_stmt 1 view .LVU295
+ 315:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1_0 = 1;
+ 1036              		.loc 1 315 3 view .LVU296
+ 315:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1_0 = 1;
+ 1037              		.loc 1 315 6 is_stmt 0 view .LVU297
+ 1038 0548 3046     		mov	r0, r6
+ 1039 054a 3946     		mov	r1, r7
+ 1040 054c FFF7FEFF 		bl	__aeabi_dcmpgt
+ 1041              	.LVL129:
+ 1042 0550 0028     		cmp	r0, #0
+ 1043 0552 7FF46DAE 		bne	.L21
+ 1044              	.LVL130:
+ 328:HANcoder_Olimexino_SV_MP.c ****   {
+ 1045              		.loc 1 328 3 is_stmt 1 view .LVU298
+ 328:HANcoder_Olimexino_SV_MP.c ****   {
+ 1046              		.loc 1 328 6 is_stmt 0 view .LVU299
+ 1047 0556 4046     		mov	r0, r8
+ 1048 0558 4946     		mov	r1, r9
+ 1049 055a 0022     		movs	r2, #0
+ 1050 055c 0023     		movs	r3, #0
+ 1051 055e FFF7FEFF 		bl	__aeabi_dcmpeq
+ 1052              	.LVL131:
+ 1053 0562 0028     		cmp	r0, #0
+ 1054 0564 7FF464AE 		bne	.L21
+ 1055 0568 60E6     		b	.L41
+ 1056              	.LVL132:
+ 1057              	.L60:
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 1058              		.loc 1 135 19 view .LVU300
+ 1059 056a 374A     		ldr	r2, .L69+72
+ 195:HANcoder_Olimexino_SV_MP.c **** 
+ 1060              		.loc 1 195 39 view .LVU301
+ 1061 056c 374B     		ldr	r3, .L69+76
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 1062              		.loc 1 135 19 view .LVU302
+ 1063 056e B2F90000 		ldrsh	r0, [r2]
+ 1064              	.LVL133:
+ 195:HANcoder_Olimexino_SV_MP.c **** 
+ 1065              		.loc 1 195 39 view .LVU303
+ 1066 0572 B3F90050 		ldrsh	r5, [r3]
+ 1067 0576 5AE5     		b	.L9
+ 1068              	.LVL134:
+ 1069              	.L35:
+ 195:HANcoder_Olimexino_SV_MP.c **** 
+ 1070              		.loc 1 195 39 view .LVU304
+ 1071 0578 354B     		ldr	r3, .L69+80
+ 1072 057a 1846     		mov	r0, r3
+ 1073 057c 20E6     		b	.L15
+ 1074              	.LVL135:
+ 1075              	.L25:
+ 347:HANcoder_Olimexino_SV_MP.c **** 
+ 1076              		.loc 1 347 3 is_stmt 1 view .LVU305
+ 347:HANcoder_Olimexino_SV_MP.c **** 
+ 1077              		.loc 1 347 22 is_stmt 0 view .LVU306
+ 1078 057e 0022     		movs	r2, #0
+ 1079 0580 DDE90401 		ldrd	r0, [sp, #16]
+ 1080 0584 2F4B     		ldr	r3, .L69+68
+ 1081 0586 FFF7FEFF 		bl	__aeabi_dmul
+ 1082              	.LVL136:
+ 1083 058a 8046     		mov	r8, r0
+ 1084 058c 8946     		mov	r9, r1
+ 1085              	.LVL137:
+ 355:HANcoder_Olimexino_SV_MP.c ****     rtb_fixforDTpropagationissue_0 = 1;
+ 1086              		.loc 1 355 3 is_stmt 1 view .LVU307
+ 369:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1_0 = 1;
+ 1087              		.loc 1 369 3 view .LVU308
+ 1088 058e 80E6     		b	.L27
+ 1089              	.LVL138:
+ 1090              	.L39:
+ 163:HANcoder_Olimexino_SV_MP.c ****     rtb_Switch2 = 8.3333333333333339;
+ 1091              		.loc 1 163 6 is_stmt 0 view .LVU309
+ 1092 0590 4FF0080B 		mov	fp, #8
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 1093              		.loc 1 135 11 view .LVU310
+ 1094 0594 0123     		movs	r3, #1
+ 1095 0596 91E5     		b	.L59
+ 1096              	.LVL139:
+ 1097              	.L65:
+ 165:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 1098              		.loc 1 165 13 view .LVU311
+ 1099 0598 0026     		movs	r6, #0
+ 1100 059a 0027     		movs	r7, #0
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 1101              		.loc 1 135 11 view .LVU312
+ 1102 059c CDF824B0 		str	fp, [sp, #36]
+ 165:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 1103              		.loc 1 165 13 view .LVU313
+ 1104 05a0 CDE90267 		strd	r6, [sp, #8]
+ 1105 05a4 CDE90C67 		strd	r6, [sp, #48]
+ 1106 05a8 CDE90A67 		strd	r6, [sp, #40]
+ 1107 05ac 98E5     		b	.L13
+ 1108              	.LVL140:
+ 1109              	.L63:
+ 358:HANcoder_Olimexino_SV_MP.c ****   }
+ 1110              		.loc 1 358 5 is_stmt 1 view .LVU314
+ 369:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1_0 = 1;
+ 1111              		.loc 1 369 3 view .LVU315
+ 369:HANcoder_Olimexino_SV_MP.c ****     rtb_SumI1_0 = 1;
+ 1112              		.loc 1 369 6 is_stmt 0 view .LVU316
+ 1113 05ae 4046     		mov	r0, r8
+ 1114 05b0 4946     		mov	r1, r9
+ 1115 05b2 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 1116              	.LVL141:
+ 1117 05b6 0028     		cmp	r0, #0
+ 1118 05b8 7FF46BAE 		bne	.L27
+ 372:HANcoder_Olimexino_SV_MP.c ****   }
+ 1119              		.loc 1 372 5 is_stmt 1 view .LVU317
+ 1120              	.LVL142:
+ 384:HANcoder_Olimexino_SV_MP.c ****   {
+ 1121              		.loc 1 384 3 view .LVU318
+ 384:HANcoder_Olimexino_SV_MP.c ****   {
+ 1122              		.loc 1 384 6 is_stmt 0 view .LVU319
+ 1123 05bc DDE90601 		ldrd	r0, [sp, #24]
+ 1124 05c0 0022     		movs	r2, #0
+ 1125 05c2 0023     		movs	r3, #0
+ 1126 05c4 FFF7FEFF 		bl	__aeabi_dcmpeq
+ 1127              	.LVL143:
+ 1128 05c8 0028     		cmp	r0, #0
+ 1129 05ca 7FF462AE 		bne	.L27
+ 1130 05ce 5CE6     		b	.L40
+ 1131              	.LVL144:
+ 1132              	.L64:
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 1133              		.loc 1 135 11 view .LVU320
+ 1134 05d0 0123     		movs	r3, #1
+ 165:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 1135              		.loc 1 165 13 view .LVU321
+ 1136 05d2 4FF0080B 		mov	fp, #8
+ 135:HANcoder_Olimexino_SV_MP.c ****               (rtDWork.Memory_PreviousInput != false)));
+ 1137              		.loc 1 135 11 view .LVU322
+ 1138 05d6 0993     		str	r3, [sp, #36]
+ 165:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 1139              		.loc 1 165 13 view .LVU323
+ 1140 05d8 0BA3     		adr	r3, .L69+8
+ 1141 05da D3E90023 		ldrd	r2, [r3]
+ 180:HANcoder_Olimexino_SV_MP.c ****   } else {
+ 1142              		.loc 1 180 18 view .LVU324
+ 1143 05de 1646     		mov	r6, r2
+ 1144 05e0 1F46     		mov	r7, r3
+ 165:HANcoder_Olimexino_SV_MP.c ****     /* Switch: '<S57>/Switch' incorporates:
+ 1145              		.loc 1 165 13 view .LVU325
+ 1146 05e2 CDE90C23 		strd	r2, [sp, #48]
+ 1147 05e6 0EA3     		adr	r3, .L69+32
+ 1148 05e8 D3E90023 		ldrd	r2, [r3]
+ 1149 05ec CDE90223 		strd	r2, [sp, #8]
+ 1150 05f0 0DA3     		adr	r3, .L69+40
+ 1151 05f2 D3E90023 		ldrd	r2, [r3]
+ 1152 05f6 CDE90A23 		strd	r2, [sp, #40]
+ 1153 05fa 71E5     		b	.L13
+ 1154              	.L70:
+ 1155 05fc AFF30080 		.align	3
+ 1156              	.L69:
+ 1157 0600 00000040 		.word	1073741824
+ 1158 0604 E17A843F 		.word	1065646817
+ 1159 0608 000000A0 		.word	-1610612736
+ 1160 060c AAAA2040 		.word	1075882666
+ 1161 0610 00000000 		.word	0
+ 1162 0614 0088B3C0 		.word	-1061976064
+ 1163 0618 00000000 		.word	0
+ 1164 061c 0088B340 		.word	1085507584
+ 1165 0620 0000009A 		.word	-1711276032
+ 1166 0624 AA0A8A40 		.word	1082788522
+ 1167 0628 0000009A 		.word	-1711276032
+ 1168 062c AA0A7A40 		.word	1081739946
+ 1169 0630 00000000 		.word	.LANCHOR3
+ 1170 0634 00003440 		.word	1077149696
+ 1171 0638 00000000 		.word	.LANCHOR10
+ 1172 063c 00005940 		.word	1079574528
+ 1173 0640 0000F83F 		.word	1073217536
+ 1174 0644 00004940 		.word	1078525952
+ 1175 0648 00000000 		.word	.LANCHOR1
+ 1176 064c 00000000 		.word	.LANCHOR2
+ 1177 0650 78ECFFFF 		.word	-5000
+ 1178              		.cfi_endproc
+ 1179              	.LFE2:
+ 1181              		.section	.rodata.HANcoder_Olimexino_SV_MP_initialize.str1.4,"aMS",%progbits,1
+ 1182              		.align	2
+ 1183              	.LC1:
+ 1184 0000 48414E63 		.ascii	"HANcoder_Olimexino_SV_MP.c\000"
+ 1184      6F646572 
+ 1184      5F4F6C69 
+ 1184      6D657869 
+ 1184      6E6F5F53 
+ 1185              		.section	.text.HANcoder_Olimexino_SV_MP_initialize,"ax",%progbits
+ 1186              		.align	1
+ 1187              		.p2align 2,,3
+ 1188              		.global	HANcoder_Olimexino_SV_MP_initialize
+ 1189              		.syntax unified
+ 1190              		.thumb
+ 1191              		.thumb_func
+ 1193              	HANcoder_Olimexino_SV_MP_initialize:
+ 1194              	.LFB3:
+ 439:HANcoder_Olimexino_SV_MP.c **** 
+ 440:HANcoder_Olimexino_SV_MP.c **** /* Model initialize function */
+ 441:HANcoder_Olimexino_SV_MP.c **** void HANcoder_Olimexino_SV_MP_initialize(void)
+ 442:HANcoder_Olimexino_SV_MP.c **** {
+ 1195              		.loc 1 442 1 is_stmt 1 view -0
+ 1196              		.cfi_startproc
+ 1197              		@ args = 0, pretend = 0, frame = 16
+ 1198              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1199              	.LBB10:
+ 443:HANcoder_Olimexino_SV_MP.c ****   {
+ 444:HANcoder_Olimexino_SV_MP.c ****     /* user code (Start function Header) */
+ 445:HANcoder_Olimexino_SV_MP.c ****     uint8_t canResult1;
+ 1200              		.loc 1 445 5 view .LVU327
+ 446:HANcoder_Olimexino_SV_MP.c ****     tCanFilter canFilter1;
+ 1201              		.loc 1 446 5 view .LVU328
+ 447:HANcoder_Olimexino_SV_MP.c **** 
+ 448:HANcoder_Olimexino_SV_MP.c ****     /* user code (Start function Body) */
+ 449:HANcoder_Olimexino_SV_MP.c **** 
+ 450:HANcoder_Olimexino_SV_MP.c ****     /* initialize the CAN driver. */
+ 451:HANcoder_Olimexino_SV_MP.c ****     CanInit(32, 8);
+ 1202              		.loc 1 451 5 view .LVU329
+ 1203              	.LBE10:
+ 442:HANcoder_Olimexino_SV_MP.c ****   {
+ 1204              		.loc 1 442 1 is_stmt 0 view .LVU330
+ 1205 0000 00B5     		push	{lr}
+ 1206              		.cfi_def_cfa_offset 4
+ 1207              		.cfi_offset 14, -4
+ 1208              	.LBB11:
+ 1209              		.loc 1 451 5 view .LVU331
+ 1210 0002 0821     		movs	r1, #8
+ 1211              	.LBE11:
+ 442:HANcoder_Olimexino_SV_MP.c ****   {
+ 1212              		.loc 1 442 1 view .LVU332
+ 1213 0004 85B0     		sub	sp, sp, #20
+ 1214              		.cfi_def_cfa_offset 24
+ 1215              	.LBB12:
+ 1216              		.loc 1 451 5 view .LVU333
+ 1217 0006 2020     		movs	r0, #32
+ 1218 0008 FFF7FEFF 		bl	CanInit
+ 1219              	.LVL145:
+ 452:HANcoder_Olimexino_SV_MP.c **** 
+ 453:HANcoder_Olimexino_SV_MP.c ****     /* initialize the CAN I/O module for channel 1 */
+ 454:HANcoder_Olimexino_SV_MP.c ****     CanIoInit(0);
+ 1220              		.loc 1 454 5 is_stmt 1 view .LVU334
+ 1221 000c 0020     		movs	r0, #0
+ 1222 000e FFF7FEFF 		bl	CanIoInit
+ 1223              	.LVL146:
+ 455:HANcoder_Olimexino_SV_MP.c **** 
+ 456:HANcoder_Olimexino_SV_MP.c ****     /* Start for M-S-Function: '<S121>/S-Function' incorporates:
+ 457:HANcoder_Olimexino_SV_MP.c ****      *  Constant: '<S6>/Constant2'
+ 458:HANcoder_Olimexino_SV_MP.c ****      */
+ 459:HANcoder_Olimexino_SV_MP.c **** 
+ 460:HANcoder_Olimexino_SV_MP.c ****     /* register a CAN storage buffer for the message with this ID */
+ 461:HANcoder_Olimexino_SV_MP.c ****     CanIoCreateMessageReceivedStorage(0, 256U);
+ 1224              		.loc 1 461 5 view .LVU335
+ 1225 0012 4FF48071 		mov	r1, #256
+ 1226 0016 0020     		movs	r0, #0
+ 1227 0018 FFF7FEFF 		bl	CanIoCreateMessageReceivedStorage
+ 1228              	.LVL147:
+ 462:HANcoder_Olimexino_SV_MP.c **** 
+ 463:HANcoder_Olimexino_SV_MP.c ****     /* Start for M-S-Function: '<S3>/Level-2 M-file S-Function' */
+ 464:HANcoder_Olimexino_SV_MP.c **** 
+ 465:HANcoder_Olimexino_SV_MP.c ****     /* configure the stack size for the task that executes the model */
+ 466:HANcoder_Olimexino_SV_MP.c ****     AppCtrlTaskSetStackSize((configMINIMAL_STACK_SIZE*sizeof(portBASE_TYPE)) + 0);
+ 1229              		.loc 1 466 5 view .LVU336
+ 1230 001c 4FF40070 		mov	r0, #512
+ 1231 0020 FFF7FEFF 		bl	AppCtrlTaskSetStackSize
+ 1232              	.LVL148:
+ 467:HANcoder_Olimexino_SV_MP.c **** 
+ 468:HANcoder_Olimexino_SV_MP.c ****     /* configure the sample time of the model in microseconds */
+ 469:HANcoder_Olimexino_SV_MP.c ****     AppCtrlTaskSetPeriod(10000);
+ 1233              		.loc 1 469 5 view .LVU337
+ 1234 0024 42F21070 		movw	r0, #10000
+ 1235 0028 FFF7FEFF 		bl	AppCtrlTaskSetPeriod
+ 1236              	.LVL149:
+ 470:HANcoder_Olimexino_SV_MP.c **** 
+ 471:HANcoder_Olimexino_SV_MP.c ****     /* Run the ADC conversions ten times faster than the Simulink model */
+ 472:HANcoder_Olimexino_SV_MP.c ****     ADCconversionTaskSetPeriod(10000/10);
+ 1237              		.loc 1 472 5 view .LVU338
+ 1238 002c 4FF47A70 		mov	r0, #1000
+ 1239 0030 FFF7FEFF 		bl	ADCconversionTaskSetPeriod
+ 1240              	.LVL150:
+ 473:HANcoder_Olimexino_SV_MP.c **** 
+ 474:HANcoder_Olimexino_SV_MP.c ****     /* Start for M-S-Function: '<S4>/Level-2 M-file S-Function' */
+ 475:HANcoder_Olimexino_SV_MP.c **** 
+ 476:HANcoder_Olimexino_SV_MP.c ****     /* store the CAN controller's filter configuration */
+ 477:HANcoder_Olimexino_SV_MP.c ****     canFilter1.mask = 0x00000000;
+ 1241              		.loc 1 477 5 view .LVU339
+ 1242              		.loc 1 477 21 is_stmt 0 view .LVU340
+ 1243 0034 0020     		movs	r0, #0
+ 478:HANcoder_Olimexino_SV_MP.c ****     canFilter1.code = 0x00000000;
+ 479:HANcoder_Olimexino_SV_MP.c ****     canFilter1.mode = CAN_FILTER_MODE_STDID_ONLY;
+ 480:HANcoder_Olimexino_SV_MP.c **** 
+ 481:HANcoder_Olimexino_SV_MP.c ****     /* connect and synchronize the CAN bus */
+ 482:HANcoder_Olimexino_SV_MP.c ****     canResult1 = CanConnect(0, 500000, &canFilter1);
+ 1244              		.loc 1 482 18 view .LVU341
+ 1245 0036 0B49     		ldr	r1, .L77
+ 1246 0038 01AA     		add	r2, sp, #4
+ 478:HANcoder_Olimexino_SV_MP.c ****     canFilter1.code = 0x00000000;
+ 1247              		.loc 1 478 21 view .LVU342
+ 1248 003a CDE90100 		strd	r0, r0, [sp, #4]
+ 479:HANcoder_Olimexino_SV_MP.c **** 
+ 1249              		.loc 1 479 5 is_stmt 1 view .LVU343
+ 479:HANcoder_Olimexino_SV_MP.c **** 
+ 1250              		.loc 1 479 21 is_stmt 0 view .LVU344
+ 1251 003e 8DF80C00 		strb	r0, [sp, #12]
+ 1252              		.loc 1 482 5 is_stmt 1 view .LVU345
+ 1253              		.loc 1 482 18 is_stmt 0 view .LVU346
+ 1254 0042 FFF7FEFF 		bl	CanConnect
+ 1255              	.LVL151:
+ 483:HANcoder_Olimexino_SV_MP.c ****     configASSERT(canResult1 == TRUE);
+ 1256              		.loc 1 483 5 is_stmt 1 view .LVU347
+ 1257 0046 0128     		cmp	r0, #1
+ 1258 0048 04D0     		beq	.L72
+ 1259              		.loc 1 483 5 discriminator 2 view .LVU348
+ 1260 004a 40F2E311 		movw	r1, #483
+ 1261 004e 0648     		ldr	r0, .L77+4
+ 1262              	.LVL152:
+ 1263              		.loc 1 483 5 is_stmt 0 discriminator 2 view .LVU349
+ 1264 0050 FFF7FEFF 		bl	AssertFailure
+ 1265              	.LVL153:
+ 1266              	.L72:
+ 484:HANcoder_Olimexino_SV_MP.c **** 
+ 485:HANcoder_Olimexino_SV_MP.c ****     /* Start for M-S-Function: '<S9>/Level-2 M-file S-Function' */
+ 486:HANcoder_Olimexino_SV_MP.c **** 
+ 487:HANcoder_Olimexino_SV_MP.c ****     /* initialize the measurement and calibration interface */
+ 488:HANcoder_Olimexino_SV_MP.c ****     MacUsbComInit();
+ 1267              		.loc 1 488 5 is_stmt 1 view .LVU350
+ 1268 0054 FFF7FEFF 		bl	MacUsbComInit
+ 1269              	.LVL154:
+ 489:HANcoder_Olimexino_SV_MP.c ****     MacInit();
+ 1270              		.loc 1 489 5 view .LVU351
+ 1271 0058 FFF7FEFF 		bl	MacInit
+ 1272              	.LVL155:
+ 1273              	.LBE12:
+ 490:HANcoder_Olimexino_SV_MP.c ****   }
+ 491:HANcoder_Olimexino_SV_MP.c **** }
+ 1274              		.loc 1 491 1 is_stmt 0 view .LVU352
+ 1275 005c 05B0     		add	sp, sp, #20
+ 1276              		.cfi_def_cfa_offset 4
+ 1277              		@ sp needed
+ 1278 005e 5DF804FB 		ldr	pc, [sp], #4
+ 1279              	.L78:
+ 1280 0062 00BF     		.align	2
+ 1281              	.L77:
+ 1282 0064 20A10700 		.word	500000
+ 1283 0068 00000000 		.word	.LC1
+ 1284              		.cfi_endproc
+ 1285              	.LFE3:
+ 1287              		.global	rtDWork
+ 1288              		.global	rtB
+ 1289              		.global	SI_CPUload
+ 1290              		.global	gap
+ 1291              		.global	speed
+ 1292              		.global	control_effort
+ 1293              		.global	SI_FreeHeap
+ 1294              		.global	SI_FreeStack
+ 1295              		.global	E
+ 1296              		.section	.bss.E,"aw",%nobits
+ 1297              		.align	3
+ 1298              		.set	.LANCHOR10,. + 0
+ 1301              	E:
+ 1302 0000 00000000 		.space	8
+ 1302      00000000 
+ 1303              		.section	.bss.SI_CPUload,"aw",%nobits
+ 1304              		.set	.LANCHOR6,. + 0
+ 1307              	SI_CPUload:
+ 1308 0000 00       		.space	1
+ 1309              		.section	.bss.SI_FreeHeap,"aw",%nobits
+ 1310              		.align	2
+ 1311              		.set	.LANCHOR8,. + 0
+ 1314              	SI_FreeHeap:
+ 1315 0000 00000000 		.space	4
+ 1316              		.section	.bss.SI_FreeStack,"aw",%nobits
+ 1317              		.align	2
+ 1318              		.set	.LANCHOR7,. + 0
+ 1321              	SI_FreeStack:
+ 1322 0000 00000000 		.space	4
+ 1323              		.section	.bss.canRxData_0_256U,"aw",%nobits
+ 1324              		.align	2
+ 1325              		.set	.LANCHOR0,. + 0
+ 1328              	canRxData_0_256U:
+ 1329 0000 00000000 		.space	8
+ 1329      00000000 
+ 1330              		.section	.bss.canTxData,"aw",%nobits
+ 1331              		.align	2
+ 1332              		.set	.LANCHOR9,. + 0
+ 1335              	canTxData:
+ 1336 0000 00000000 		.space	8
+ 1336      00000000 
+ 1337              		.section	.bss.control_effort,"aw",%nobits
+ 1338              		.align	1
+ 1339              		.set	.LANCHOR4,. + 0
+ 1342              	control_effort:
+ 1343 0000 0000     		.space	2
+ 1344              		.section	.bss.gap,"aw",%nobits
+ 1345              		.align	1
+ 1346              		.set	.LANCHOR1,. + 0
+ 1349              	gap:
+ 1350 0000 0000     		.space	2
+ 1351              		.section	.bss.rtB,"aw",%nobits
+ 1352              		.align	2
+ 1353              		.set	.LANCHOR5,. + 0
+ 1356              	rtB:
+ 1357 0000 00000000 		.space	4
+ 1358              		.section	.bss.rtDWork,"aw",%nobits
+ 1359              		.align	3
+ 1360              		.set	.LANCHOR3,. + 0
+ 1363              	rtDWork:
+ 1364 0000 00000000 		.space	48
+ 1364      00000000 
+ 1364      00000000 
+ 1364      00000000 
+ 1364      00000000 
+ 1365              		.section	.bss.speed,"aw",%nobits
+ 1366              		.align	1
+ 1367              		.set	.LANCHOR2,. + 0
+ 1370              	speed:
+ 1371 0000 0000     		.space	2
+ 1372              		.text
+ 1373              	.Letext0:
+ 1374              		.file 2 "rtwtypes.h"
+ 1375              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1376              		.file 4 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 1377              		.file 5 "../blockset/rtw/STM32/inc/Olimexino_STM32/can.h"
+ 1378              		.file 6 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\lib\\gcc\\arm-none-eabi\
+ 1379              		.file 7 "HANcoder_Olimexino_SV_MP_types.h"
+ 1380              		.file 8 "HANcoder_Olimexino_SV_MP.h"
+ 1381              		.file 9 "../blockset/rtw/STM32/inc/Olimexino_STM32/canio.h"
+ 1382              		.file 10 "../blockset/rtw/STM32/inc/app.h"
+ 1383              		.file 11 "../blockset/rtw/STM32/inc/Olimexino_STM32/anin.h"
+ 1384              		.file 12 "../blockset/rtw/STM32/inc/Olimexino_STM32/FreeRTOSConfig.h"
+ 1385              		.file 13 "../blockset/rtw/STM32/inc/Olimexino_STM32/mac.h"
+ 1386              		.file 14 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\
+ 1387              		.file 15 "../blockset/rtw/STM32/inc/os.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 HANcoder_Olimexino_SV_MP.c
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:18     .text.ByteSwap_x:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:25     .text.ByteSwap_x:00000000 ByteSwap_x
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:116    .rodata.HANcoder_Olimexino_SV_MP_step.str1.4:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:120    .text.HANcoder_Olimexino_SV_MP_step:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:127    .text.HANcoder_Olimexino_SV_MP_step:00000000 HANcoder_Olimexino_SV_MP_step
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:684    .text.HANcoder_Olimexino_SV_MP_step:000002d8 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:717    .text.HANcoder_Olimexino_SV_MP_step:00000358 $t
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1157   .text.HANcoder_Olimexino_SV_MP_step:00000600 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1182   .rodata.HANcoder_Olimexino_SV_MP_initialize.str1.4:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1186   .text.HANcoder_Olimexino_SV_MP_initialize:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1193   .text.HANcoder_Olimexino_SV_MP_initialize:00000000 HANcoder_Olimexino_SV_MP_initialize
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1282   .text.HANcoder_Olimexino_SV_MP_initialize:00000064 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1363   .bss.rtDWork:00000000 rtDWork
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1356   .bss.rtB:00000000 rtB
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1307   .bss.SI_CPUload:00000000 SI_CPUload
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1349   .bss.gap:00000000 gap
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1370   .bss.speed:00000000 speed
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1342   .bss.control_effort:00000000 control_effort
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1314   .bss.SI_FreeHeap:00000000 SI_FreeHeap
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1321   .bss.SI_FreeStack:00000000 SI_FreeStack
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1301   .bss.E:00000000 E
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1297   .bss.E:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1308   .bss.SI_CPUload:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1310   .bss.SI_FreeHeap:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1317   .bss.SI_FreeStack:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1324   .bss.canRxData_0_256U:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1328   .bss.canRxData_0_256U:00000000 canRxData_0_256U
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1331   .bss.canTxData:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1335   .bss.canTxData:00000000 canTxData
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1338   .bss.control_effort:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1345   .bss.gap:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1352   .bss.rtB:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1359   .bss.rtDWork:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccydkjMB.s:1366   .bss.speed:00000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_i2d
+__aeabi_dcmpge
+__aeabi_dcmpgt
+__aeabi_dmul
+__aeabi_d2iz
+__aeabi_dsub
+__aeabi_dadd
+__aeabi_dcmplt
+__aeabi_dcmpeq
+CanIoGetMessage
+floor
+OsGetCpuLoad
+OsGetFreeHeapSize
+OsGetTaskFreeStackSize
+CanTransmit
+rtConstB
+CanInit
+CanIoInit
+CanIoCreateMessageReceivedStorage
+AppCtrlTaskSetStackSize
+AppCtrlTaskSetPeriod
+ADCconversionTaskSetPeriod
+CanConnect
+AssertFailure
+MacUsbComInit
+MacInit

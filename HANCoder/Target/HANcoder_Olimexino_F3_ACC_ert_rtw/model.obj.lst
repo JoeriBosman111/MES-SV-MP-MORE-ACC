@@ -1,0 +1,309 @@
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 2
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"model.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.ModelBootCroMsgReceived,"ax",%progbits
+  19              		.align	1
+  20              		.p2align 2,,3
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	ModelBootCroMsgReceived:
+  26              	.LVL0:
+  27              	.LFB6:
+  28              		.file 1 "../blockset/rtw/src/model.c"
+   1:../blockset/rtw/src/model.c **** /************************************************************************************//**
+   2:../blockset/rtw/src/model.c **** * \file         model.c
+   3:../blockset/rtw/src/model.c **** * \brief        Interface to Simulink generated model source file
+   4:../blockset/rtw/src/model.c **** * \internal
+   5:../blockset/rtw/src/model.c **** *----------------------------------------------------------------------------------------
+   6:../blockset/rtw/src/model.c **** *                          C O P Y R I G H T
+   7:../blockset/rtw/src/model.c **** *----------------------------------------------------------------------------------------
+   8:../blockset/rtw/src/model.c **** *  Copyright 2019 (c)  by HAN Automotive   http://www.han.nl        All rights reserved
+   9:../blockset/rtw/src/model.c **** *
+  10:../blockset/rtw/src/model.c **** *----------------------------------------------------------------------------------------
+  11:../blockset/rtw/src/model.c **** *                            L I C E N S E
+  12:../blockset/rtw/src/model.c **** *----------------------------------------------------------------------------------------
+  13:../blockset/rtw/src/model.c **** * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+  14:../blockset/rtw/src/model.c **** * software and associated documentation files (the "Software"), to deal in the Software
+  15:../blockset/rtw/src/model.c **** * without restriction, including without limitation the rights to use, copy, modify, merge,
+  16:../blockset/rtw/src/model.c **** * publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+  17:../blockset/rtw/src/model.c **** * persons to whom the Software is furnished to do so, subject to the following conditions:
+  18:../blockset/rtw/src/model.c **** *
+  19:../blockset/rtw/src/model.c **** * The above copyright notice and this permission notice shall be included in all copies or
+  20:../blockset/rtw/src/model.c **** * substantial portions of the Software.
+  21:../blockset/rtw/src/model.c **** *
+  22:../blockset/rtw/src/model.c **** * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+  23:../blockset/rtw/src/model.c **** * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+  24:../blockset/rtw/src/model.c **** * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+  25:../blockset/rtw/src/model.c **** * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+  26:../blockset/rtw/src/model.c **** * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+  27:../blockset/rtw/src/model.c **** * DEALINGS IN THE SOFTWARE.
+  28:../blockset/rtw/src/model.c **** * \endinternal
+  29:../blockset/rtw/src/model.c **** ****************************************************************************************/
+  30:../blockset/rtw/src/model.c **** 
+  31:../blockset/rtw/src/model.c **** 
+  32:../blockset/rtw/src/model.c **** /****************************************************************************************
+  33:../blockset/rtw/src/model.c **** * Include files
+  34:../blockset/rtw/src/model.c **** ****************************************************************************************/
+  35:../blockset/rtw/src/model.c **** #include "model.h"
+  36:../blockset/rtw/src/model.c **** #include "rtwtypes.h"
+  37:../blockset/rtw/src/model.c **** #include "SYS_config.h"
+  38:../blockset/rtw/src/model.c **** #include "XcpTargetSpecific.h"
+  39:../blockset/rtw/src/model.c **** #include "anin.h"
+  40:../blockset/rtw/src/model.c **** #if (HANcoder_BOOTLOADER > 0)
+  41:../blockset/rtw/src/model.c **** #include "can.h"
+  42:../blockset/rtw/src/model.c **** #include "canio.h"
+  43:../blockset/rtw/src/model.c **** #include "os.h"
+  44:../blockset/rtw/src/model.c **** #endif
+  45:../blockset/rtw/src/model.c **** 
+  46:../blockset/rtw/src/model.c **** /****************************************************************************************
+  47:../blockset/rtw/src/model.c **** * Global data declarations
+  48:../blockset/rtw/src/model.c **** ****************************************************************************************/
+  49:../blockset/rtw/src/model.c **** /** \brief Variable that holds the number of analog channels with filtering */
+  50:../blockset/rtw/src/model.c **** uint8_t nrFilteredADCchannels = NUMFILTEREDCHANNELS;
+  51:../blockset/rtw/src/model.c **** 
+  52:../blockset/rtw/src/model.c **** 
+  53:../blockset/rtw/src/model.c **** /****************************************************************************************
+  54:../blockset/rtw/src/model.c **** * Plausibility checks
+  55:../blockset/rtw/src/model.c **** ****************************************************************************************/
+  56:../blockset/rtw/src/model.c **** #if ONESTEPFCN==0
+  57:../blockset/rtw/src/model.c **** #error Separate output and update functions are not supported.
+  58:../blockset/rtw/src/model.c **** #endif
+  59:../blockset/rtw/src/model.c **** 
+  60:../blockset/rtw/src/model.c **** #if MT==1
+  61:../blockset/rtw/src/model.c **** #error Only single tasking is supported.
+  62:../blockset/rtw/src/model.c **** #endif
+  63:../blockset/rtw/src/model.c **** 
+  64:../blockset/rtw/src/model.c **** 
+  65:../blockset/rtw/src/model.c **** /****************************************************************************************
+  66:../blockset/rtw/src/model.c **** * External function prototypes
+  67:../blockset/rtw/src/model.c **** ****************************************************************************************/
+  68:../blockset/rtw/src/model.c **** #if defined(INCLUDE_FIRST_TIME_ARG) && INCLUDE_FIRST_TIME_ARG==0
+  69:../blockset/rtw/src/model.c **** extern void MODEL_INITIALIZE();
+  70:../blockset/rtw/src/model.c **** #else
+  71:../blockset/rtw/src/model.c **** extern void MODEL_INITIALIZE(boolean_T firstTime);
+  72:../blockset/rtw/src/model.c **** #endif
+  73:../blockset/rtw/src/model.c **** extern void MODEL_TERMINATE(void);
+  74:../blockset/rtw/src/model.c **** #if NUMST == 1
+  75:../blockset/rtw/src/model.c **** extern void MODEL_STEP(void);                      /* single instance                  */
+  76:../blockset/rtw/src/model.c **** #else
+  77:../blockset/rtw/src/model.c **** extern void MODEL_STEP(int_T tid);                 /* multiple instance                */
+  78:../blockset/rtw/src/model.c **** #endif
+  79:../blockset/rtw/src/model.c **** 
+  80:../blockset/rtw/src/model.c **** /****************************************************************************************
+  81:../blockset/rtw/src/model.c **** * Function prototypes
+  82:../blockset/rtw/src/model.c **** ****************************************************************************************/
+  83:../blockset/rtw/src/model.c **** #if (HANcoder_BOOTLOADER > 0)
+  84:../blockset/rtw/src/model.c **** static void ModelBootCroMsgReceived(uint8_t dlc, uint8_t *data, uint32_t timestamp);
+  85:../blockset/rtw/src/model.c **** #endif
+  86:../blockset/rtw/src/model.c **** 
+  87:../blockset/rtw/src/model.c **** 
+  88:../blockset/rtw/src/model.c **** /************************************************************************************//**
+  89:../blockset/rtw/src/model.c **** ** \brief     Initializes the Simulink model.
+  90:../blockset/rtw/src/model.c **** ** \return    none.
+  91:../blockset/rtw/src/model.c **** **
+  92:../blockset/rtw/src/model.c **** ****************************************************************************************/
+  93:../blockset/rtw/src/model.c **** void ModelInit(void)
+  94:../blockset/rtw/src/model.c **** {
+  95:../blockset/rtw/src/model.c ****   /* initialize the model */
+  96:../blockset/rtw/src/model.c **** #if defined(INCLUDE_FIRST_TIME_ARG) && INCLUDE_FIRST_TIME_ARG==0
+  97:../blockset/rtw/src/model.c ****   MODEL_INITIALIZE();
+  98:../blockset/rtw/src/model.c **** #else
+  99:../blockset/rtw/src/model.c ****   MODEL_INITIALIZE(1);
+ 100:../blockset/rtw/src/model.c **** #endif
+ 101:../blockset/rtw/src/model.c **** 
+ 102:../blockset/rtw/src/model.c **** #if (HANcoder_BOOTLOADER > 0)
+ 103:../blockset/rtw/src/model.c ****   /* register function that can re-activate the bootloader. note that this assumes the
+ 104:../blockset/rtw/src/model.c ****    * model itself contains a CAN Config block, otherwise the CAN can CANIO modules
+ 105:../blockset/rtw/src/model.c ****    * should be initialized here as well. If the bootloader's XCP CRO message identifier
+ 106:../blockset/rtw/src/model.c ****    * is changed, it should be changed here as well.
+ 107:../blockset/rtw/src/model.c ****    */
+ 108:../blockset/rtw/src/model.c ****   CanIoRegisterMessageReceivedCallback(0, 0x667, ModelBootCroMsgReceived);
+ 109:../blockset/rtw/src/model.c **** #endif
+ 110:../blockset/rtw/src/model.c **** } /*** end of ModelInit ***/
+ 111:../blockset/rtw/src/model.c **** 
+ 112:../blockset/rtw/src/model.c **** 
+ 113:../blockset/rtw/src/model.c **** /************************************************************************************//**
+ 114:../blockset/rtw/src/model.c **** ** \brief     Runs the Simulink model. It is important that this function is called
+ 115:../blockset/rtw/src/model.c **** **            with the same period time as the fixed steptime configuration in the
+ 116:../blockset/rtw/src/model.c **** **            Simulink model itself.
+ 117:../blockset/rtw/src/model.c **** ** \return    none.
+ 118:../blockset/rtw/src/model.c **** **
+ 119:../blockset/rtw/src/model.c **** ****************************************************************************************/
+ 120:../blockset/rtw/src/model.c **** void ModelStep(void)
+ 121:../blockset/rtw/src/model.c **** {
+ 122:../blockset/rtw/src/model.c ****   #if NUMST > 1
+ 123:../blockset/rtw/src/model.c ****   /* perform a step of the model */
+ 124:../blockset/rtw/src/model.c ****   MODEL_STEP(0);
+ 125:../blockset/rtw/src/model.c **** #else
+ 126:../blockset/rtw/src/model.c ****   /* perform a step of the model */
+ 127:../blockset/rtw/src/model.c ****   MODEL_STEP();
+ 128:../blockset/rtw/src/model.c **** #endif
+ 129:../blockset/rtw/src/model.c **** } /*** end of ModelStep ***/
+ 130:../blockset/rtw/src/model.c **** 
+ 131:../blockset/rtw/src/model.c **** 
+ 132:../blockset/rtw/src/model.c **** /************************************************************************************//**
+ 133:../blockset/rtw/src/model.c **** ** \brief     Callback function that gets called each time the bootloader's XCP CRO
+ 134:../blockset/rtw/src/model.c **** **            message was received. If the contents are the CONNECT command, then the
+ 135:../blockset/rtw/src/model.c **** **            bootloader is started.
+ 136:../blockset/rtw/src/model.c **** ** \param     dlc Number of bytes in the message.
+ 137:../blockset/rtw/src/model.c **** ** \param     data Byte array with message data
+ 138:../blockset/rtw/src/model.c **** ** \param     timestamp Message timestamp in ms.
+ 139:../blockset/rtw/src/model.c **** ** \return    none.
+ 140:../blockset/rtw/src/model.c **** **
+ 141:../blockset/rtw/src/model.c **** ****************************************************************************************/
+ 142:../blockset/rtw/src/model.c **** #if (HANcoder_BOOTLOADER > 0)
+ 143:../blockset/rtw/src/model.c **** static void ModelBootCroMsgReceived(uint8_t dlc, uint8_t *data, uint32_t timestamp)
+ 144:../blockset/rtw/src/model.c **** {
+  29              		.loc 1 144 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+ 145:../blockset/rtw/src/model.c ****   /* check if this was an XCP CONNECT command */
+ 146:../blockset/rtw/src/model.c ****   if ((data[0] == 0xff) && (data[1] == 0x00))
+  34              		.loc 1 146 3 view .LVU1
+  35              		.loc 1 146 6 is_stmt 0 view .LVU2
+  36 0000 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+  37 0002 FF2B     		cmp	r3, #255
+  38 0004 00D0     		beq	.L4
+  39              	.L1:
+ 147:../blockset/rtw/src/model.c ****   {
+ 148:../blockset/rtw/src/model.c ****     /* perform software reset to activate the bootoader again */
+ 149:../blockset/rtw/src/model.c ****     OsSystemReset();
+ 150:../blockset/rtw/src/model.c ****   }
+ 151:../blockset/rtw/src/model.c **** } /*** end of ModelBootCroMsgReceived ***/
+  40              		.loc 1 151 1 view .LVU3
+  41 0006 7047     		bx	lr
+  42              	.L4:
+  43              	.LVL1:
+  44              	.LBB4:
+  45              	.LBI4:
+ 143:../blockset/rtw/src/model.c **** {
+  46              		.loc 1 143 13 is_stmt 1 view .LVU4
+  47              	.LBB5:
+ 146:../blockset/rtw/src/model.c ****   {
+  48              		.loc 1 146 25 is_stmt 0 view .LVU5
+  49 0008 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+  50 000a 002B     		cmp	r3, #0
+  51 000c FBD1     		bne	.L1
+ 149:../blockset/rtw/src/model.c ****   }
+  52              		.loc 1 149 5 is_stmt 1 view .LVU6
+  53 000e FFF7FEBF 		b	OsSystemReset
+  54              	.LVL2:
+ 149:../blockset/rtw/src/model.c ****   }
+  55              		.loc 1 149 5 is_stmt 0 view .LVU7
+  56              	.LBE5:
+  57              	.LBE4:
+  58              		.cfi_endproc
+  59              	.LFE6:
+  61 0012 00BF     		.section	.text.ModelInit,"ax",%progbits
+  62              		.align	1
+  63              		.p2align 2,,3
+  64              		.global	ModelInit
+  65              		.syntax unified
+  66              		.thumb
+  67              		.thumb_func
+  69              	ModelInit:
+  70              	.LFB4:
+  94:../blockset/rtw/src/model.c ****   /* initialize the model */
+  71              		.loc 1 94 1 is_stmt 1 view -0
+  72              		.cfi_startproc
+  73              		@ args = 0, pretend = 0, frame = 0
+  74              		@ frame_needed = 0, uses_anonymous_args = 0
+  99:../blockset/rtw/src/model.c **** #endif
+  75              		.loc 1 99 3 view .LVU9
+  94:../blockset/rtw/src/model.c ****   /* initialize the model */
+  76              		.loc 1 94 1 is_stmt 0 view .LVU10
+  77 0000 08B5     		push	{r3, lr}
+  78              		.cfi_def_cfa_offset 8
+  79              		.cfi_offset 3, -8
+  80              		.cfi_offset 14, -4
+  99:../blockset/rtw/src/model.c **** #endif
+  81              		.loc 1 99 3 view .LVU11
+  82 0002 0120     		movs	r0, #1
+  83 0004 FFF7FEFF 		bl	HANcoder_Olimexino_F3_ACC_initialize
+  84              	.LVL3:
+ 108:../blockset/rtw/src/model.c **** #endif
+  85              		.loc 1 108 3 is_stmt 1 view .LVU12
+ 110:../blockset/rtw/src/model.c **** 
+  86              		.loc 1 110 1 is_stmt 0 view .LVU13
+  87 0008 BDE80840 		pop	{r3, lr}
+  88              		.cfi_restore 14
+  89              		.cfi_restore 3
+  90              		.cfi_def_cfa_offset 0
+ 108:../blockset/rtw/src/model.c **** #endif
+  91              		.loc 1 108 3 view .LVU14
+  92 000c 024A     		ldr	r2, .L7
+  93 000e 40F26761 		movw	r1, #1639
+  94 0012 0020     		movs	r0, #0
+  95 0014 FFF7FEBF 		b	CanIoRegisterMessageReceivedCallback
+  96              	.LVL4:
+  97              	.L8:
+  98              		.align	2
+  99              	.L7:
+ 100 0018 00000000 		.word	ModelBootCroMsgReceived
+ 101              		.cfi_endproc
+ 102              	.LFE4:
+ 104              		.section	.text.ModelStep,"ax",%progbits
+ 105              		.align	1
+ 106              		.p2align 2,,3
+ 107              		.global	ModelStep
+ 108              		.syntax unified
+ 109              		.thumb
+ 110              		.thumb_func
+ 112              	ModelStep:
+ 113              	.LFB5:
+ 121:../blockset/rtw/src/model.c ****   #if NUMST > 1
+ 114              		.loc 1 121 1 is_stmt 1 view -0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 0, uses_anonymous_args = 0
+ 118              		@ link register save eliminated.
+ 127:../blockset/rtw/src/model.c **** #endif
+ 119              		.loc 1 127 3 view .LVU16
+ 120 0000 FFF7FEBF 		b	HANcoder_Olimexino_F3_ACC_step
+ 121              	.LVL5:
+ 122              		.cfi_endproc
+ 123              	.LFE5:
+ 125              		.global	nrFilteredADCchannels
+ 126              		.section	.bss.nrFilteredADCchannels,"aw",%nobits
+ 129              	nrFilteredADCchannels:
+ 130 0000 00       		.space	1
+ 131              		.text
+ 132              	.Letext0:
+ 133              		.file 2 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 134              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 135              		.file 4 "../blockset/rtw/inc/Olimexino_STM32_F3/canio.h"
+ 136              		.file 5 "../blockset/rtw/inc/os.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 model.c
+C:\Users\joeri\AppData\Local\Temp\ccH5izz4.s:19     .text.ModelBootCroMsgReceived:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccH5izz4.s:25     .text.ModelBootCroMsgReceived:00000000 ModelBootCroMsgReceived
+C:\Users\joeri\AppData\Local\Temp\ccH5izz4.s:62     .text.ModelInit:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccH5izz4.s:69     .text.ModelInit:00000000 ModelInit
+C:\Users\joeri\AppData\Local\Temp\ccH5izz4.s:100    .text.ModelInit:00000018 $d
+C:\Users\joeri\AppData\Local\Temp\ccH5izz4.s:105    .text.ModelStep:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccH5izz4.s:112    .text.ModelStep:00000000 ModelStep
+C:\Users\joeri\AppData\Local\Temp\ccH5izz4.s:129    .bss.nrFilteredADCchannels:00000000 nrFilteredADCchannels
+C:\Users\joeri\AppData\Local\Temp\ccH5izz4.s:130    .bss.nrFilteredADCchannels:00000000 $d
+
+UNDEFINED SYMBOLS
+OsSystemReset
+HANcoder_Olimexino_F3_ACC_initialize
+CanIoRegisterMessageReceivedCallback
+HANcoder_Olimexino_F3_ACC_step

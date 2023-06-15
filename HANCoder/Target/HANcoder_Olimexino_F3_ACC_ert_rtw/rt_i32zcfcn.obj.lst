@@ -1,0 +1,345 @@
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 2
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"rt_i32zcfcn.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.rt_I32ZCFcn,"ax",%progbits
+  19              		.align	1
+  20              		.p2align 2,,3
+  21              		.global	rt_I32ZCFcn
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	rt_I32ZCFcn:
+  27              	.LVL0:
+  28              	.LFB0:
+  29              		.file 1 "rt_i32zcfcn.c"
+   1:rt_i32zcfcn.c **** /*
+   2:rt_i32zcfcn.c ****  * Academic License - for use in teaching, academic research, and meeting
+   3:rt_i32zcfcn.c ****  * course requirements at degree granting institutions only.  Not for
+   4:rt_i32zcfcn.c ****  * government, commercial, or other organizational use.
+   5:rt_i32zcfcn.c ****  *
+   6:rt_i32zcfcn.c ****  * File: rt_i32zcfcn.c
+   7:rt_i32zcfcn.c ****  *
+   8:rt_i32zcfcn.c ****  * Code generated for Simulink model 'HANcoder_Olimexino_F3_ACC'.
+   9:rt_i32zcfcn.c ****  *
+  10:rt_i32zcfcn.c ****  * Model version                  : 1.2
+  11:rt_i32zcfcn.c ****  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
+  12:rt_i32zcfcn.c ****  * C/C++ source code generated on : Thu May 11 12:35:49 2023
+  13:rt_i32zcfcn.c ****  *
+  14:rt_i32zcfcn.c ****  * Target selection: ert.tlc
+  15:rt_i32zcfcn.c ****  * Embedded hardware selection: ARM Compatible->ARM Cortex
+  16:rt_i32zcfcn.c ****  * Code generation objectives: Unspecified
+  17:rt_i32zcfcn.c ****  * Validation result: Not run
+  18:rt_i32zcfcn.c ****  */
+  19:rt_i32zcfcn.c **** 
+  20:rt_i32zcfcn.c **** #include "rtwtypes.h"
+  21:rt_i32zcfcn.c **** #include "zero_crossing_types.h"
+  22:rt_i32zcfcn.c **** #include "rt_i32zcfcn.h"
+  23:rt_i32zcfcn.c **** #include "solver_zc.h"
+  24:rt_i32zcfcn.c **** 
+  25:rt_i32zcfcn.c **** /* Detect zero crossings events. */
+  26:rt_i32zcfcn.c **** ZCEventType rt_I32ZCFcn(ZCDirection zcDir, ZCSigState *prevZc, int32_T currValue)
+  27:rt_i32zcfcn.c **** {
+  30              		.loc 1 27 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  28:rt_i32zcfcn.c ****   slZcEventType zcsDir;
+  34              		.loc 1 28 3 view .LVU1
+  29:rt_i32zcfcn.c ****   slZcEventType tempEv;
+  35              		.loc 1 29 3 view .LVU2
+  30:rt_i32zcfcn.c ****   ZCEventType zcEvent = NO_ZCEVENT;    /* assume */
+  36              		.loc 1 30 3 view .LVU3
+  31:rt_i32zcfcn.c **** 
+  32:rt_i32zcfcn.c ****   /* zcEvent matrix */
+  33:rt_i32zcfcn.c ****   static const slZcEventType eventMatrix[4][4] = {
+  37              		.loc 1 33 3 view .LVU4
+  34:rt_i32zcfcn.c ****     /*          ZER              POS              NEG              UNK */
+  35:rt_i32zcfcn.c ****     { SL_ZCS_EVENT_NUL, SL_ZCS_EVENT_Z2P, SL_ZCS_EVENT_Z2N, SL_ZCS_EVENT_NUL },/* ZER */
+  36:rt_i32zcfcn.c **** 
+  37:rt_i32zcfcn.c ****     { SL_ZCS_EVENT_P2Z, SL_ZCS_EVENT_NUL, SL_ZCS_EVENT_P2N, SL_ZCS_EVENT_NUL },/* POS */
+  38:rt_i32zcfcn.c **** 
+  39:rt_i32zcfcn.c ****     { SL_ZCS_EVENT_N2Z, SL_ZCS_EVENT_N2P, SL_ZCS_EVENT_NUL, SL_ZCS_EVENT_NUL },/* NEG */
+  40:rt_i32zcfcn.c **** 
+  41:rt_i32zcfcn.c ****     { SL_ZCS_EVENT_NUL, SL_ZCS_EVENT_NUL, SL_ZCS_EVENT_NUL, SL_ZCS_EVENT_NUL }/* UNK */
+  42:rt_i32zcfcn.c ****   };
+  43:rt_i32zcfcn.c **** 
+  44:rt_i32zcfcn.c ****   /* get prevZcEvent and prevZcSign from prevZc */
+  45:rt_i32zcfcn.c ****   slZcEventType prevEv = (slZcEventType)(((uint8_T)(*prevZc)) >> 2);
+  38              		.loc 1 45 3 view .LVU5
+  46:rt_i32zcfcn.c ****   slZcSignalSignType prevSign = (slZcSignalSignType)(((uint8_T)(*prevZc)) &
+  39              		.loc 1 46 3 view .LVU6
+  47:rt_i32zcfcn.c ****     (uint8_T)0x03);
+  48:rt_i32zcfcn.c **** 
+  49:rt_i32zcfcn.c ****   /* get current zcSignal sign from current zcSignal value */
+  50:rt_i32zcfcn.c ****   slZcSignalSignType currSign = (slZcSignalSignType)((currValue) > 0 ?
+  40              		.loc 1 50 3 view .LVU7
+  41              		.loc 1 50 33 is_stmt 0 view .LVU8
+  42 0000 002A     		cmp	r2, #0
+  43              		.loc 1 50 33 view .LVU9
+  44 0002 2CDD     		ble	.L26
+  45 0004 0123     		movs	r3, #1
+  46 0006 1A46     		mov	r2, r3
+  47              	.LVL1:
+  48              	.L2:
+  51:rt_i32zcfcn.c ****     SL_ZCS_SIGN_POS :
+  52:rt_i32zcfcn.c ****     ((currValue) < 0 ? SL_ZCS_SIGN_NEG : SL_ZCS_SIGN_ZERO));
+  53:rt_i32zcfcn.c **** 
+  54:rt_i32zcfcn.c ****   /* get current zcEvent based on prev and current zcSignal value */
+  55:rt_i32zcfcn.c ****   slZcEventType currEv = eventMatrix[prevSign][currSign];
+  49              		.loc 1 55 3 is_stmt 1 discriminator 4 view .LVU10
+  56:rt_i32zcfcn.c **** 
+  57:rt_i32zcfcn.c ****   /* get slZcEventType from ZCDirection */
+  58:rt_i32zcfcn.c ****   switch (zcDir) {
+  50              		.loc 1 58 3 discriminator 4 view .LVU11
+  51 0008 0130     		adds	r0, r0, #1
+  52              	.LVL2:
+  53              		.loc 1 58 3 is_stmt 0 discriminator 4 view .LVU12
+  54 000a C0B2     		uxtb	r0, r0
+  55 000c 0228     		cmp	r0, #2
+  56 000e 02D9     		bls	.L27
+  57              	.LVL3:
+  59:rt_i32zcfcn.c ****    case ANY_ZERO_CROSSING:
+  60:rt_i32zcfcn.c ****     zcsDir = SL_ZCS_EVENT_ALL;
+  61:rt_i32zcfcn.c ****     break;
+  62:rt_i32zcfcn.c **** 
+  63:rt_i32zcfcn.c ****    case FALLING_ZERO_CROSSING:
+  64:rt_i32zcfcn.c ****     zcsDir = SL_ZCS_EVENT_ALL_DN;
+  65:rt_i32zcfcn.c ****     break;
+  66:rt_i32zcfcn.c **** 
+  67:rt_i32zcfcn.c ****    case RISING_ZERO_CROSSING:
+  68:rt_i32zcfcn.c ****     zcsDir = SL_ZCS_EVENT_ALL_UP;
+  69:rt_i32zcfcn.c ****     break;
+  70:rt_i32zcfcn.c **** 
+  71:rt_i32zcfcn.c ****    default:
+  72:rt_i32zcfcn.c ****     zcsDir = SL_ZCS_EVENT_NUL;
+  73:rt_i32zcfcn.c ****     break;
+  74:rt_i32zcfcn.c ****   }
+  75:rt_i32zcfcn.c **** 
+  76:rt_i32zcfcn.c ****   /*had event, check if double zc happend remove double detection. */
+  77:rt_i32zcfcn.c ****   if (slZcHadEvent(currEv, zcsDir)) {
+  78:rt_i32zcfcn.c ****     currEv = (slZcEventType)(slZcUnAliasEvents(prevEv, currEv));
+  79:rt_i32zcfcn.c ****   } else {
+  80:rt_i32zcfcn.c ****     currEv = SL_ZCS_EVENT_NUL;
+  81:rt_i32zcfcn.c ****   }
+  82:rt_i32zcfcn.c **** 
+  83:rt_i32zcfcn.c ****   /* Update prevZc */
+  84:rt_i32zcfcn.c ****   tempEv = (slZcEventType)(currEv << 2);/* shift left by 2 bits */
+  58              		.loc 1 84 3 is_stmt 1 view .LVU13
+  85:rt_i32zcfcn.c ****   *prevZc = (ZCSigState)((currSign) | (tempEv));
+  59              		.loc 1 85 3 view .LVU14
+  60              		.loc 1 85 11 is_stmt 0 view .LVU15
+  61 0010 0A70     		strb	r2, [r1]
+  62              	.LVL4:
+  86:rt_i32zcfcn.c ****   if ((currEv & SL_ZCS_EVENT_ALL_DN) != 0) {
+  63              		.loc 1 86 3 is_stmt 1 view .LVU16
+  85:rt_i32zcfcn.c ****   *prevZc = (ZCSigState)((currSign) | (tempEv));
+  64              		.loc 1 85 11 is_stmt 0 view .LVU17
+  65 0012 0020     		movs	r0, #0
+  87:rt_i32zcfcn.c ****     zcEvent = FALLING_ZCEVENT;
+  88:rt_i32zcfcn.c ****   } else if ((currEv & SL_ZCS_EVENT_ALL_UP) != 0) {
+  89:rt_i32zcfcn.c ****     zcEvent = RISING_ZCEVENT;
+  90:rt_i32zcfcn.c ****   } else {
+  91:rt_i32zcfcn.c ****     zcEvent = NO_ZCEVENT;
+  92:rt_i32zcfcn.c ****   }
+  93:rt_i32zcfcn.c **** 
+  94:rt_i32zcfcn.c ****   return zcEvent;
+  66              		.loc 1 94 3 is_stmt 1 view .LVU18
+  95:rt_i32zcfcn.c **** }                                      /* end rt_I32ZCFcn */
+  67              		.loc 1 95 1 is_stmt 0 view .LVU19
+  68 0014 7047     		bx	lr
+  69              	.LVL5:
+  70              	.L27:
+  45:rt_i32zcfcn.c ****   slZcSignalSignType prevSign = (slZcSignalSignType)(((uint8_T)(*prevZc)) &
+  71              		.loc 1 45 53 discriminator 4 view .LVU20
+  72 0016 91F800C0 		ldrb	ip, [r1]	@ zero_extendqisi2
+  27:rt_i32zcfcn.c ****   slZcEventType zcsDir;
+  73              		.loc 1 27 1 discriminator 4 view .LVU21
+  74 001a 10B5     		push	{r4, lr}
+  75              		.cfi_def_cfa_offset 8
+  76              		.cfi_offset 4, -8
+  77              		.cfi_offset 14, -4
+  55:rt_i32zcfcn.c **** 
+  78              		.loc 1 55 17 discriminator 4 view .LVU22
+  79 001c 164C     		ldr	r4, .L31
+  55:rt_i32zcfcn.c **** 
+  80              		.loc 1 55 47 discriminator 4 view .LVU23
+  81 001e 0CF0030E 		and	lr, ip, #3
+  55:rt_i32zcfcn.c **** 
+  82              		.loc 1 55 17 discriminator 4 view .LVU24
+  83 0022 04EB8E0E 		add	lr, r4, lr, lsl #2
+  77:rt_i32zcfcn.c ****     currEv = (slZcEventType)(slZcUnAliasEvents(prevEv, currEv));
+  84              		.loc 1 77 7 discriminator 4 view .LVU25
+  85 0026 154C     		ldr	r4, .L31+4
+  55:rt_i32zcfcn.c **** 
+  86              		.loc 1 55 17 discriminator 4 view .LVU26
+  87 0028 1EF80330 		ldrb	r3, [lr, r3]	@ zero_extendqisi2
+  88              	.LVL6:
+  77:rt_i32zcfcn.c ****     currEv = (slZcEventType)(slZcUnAliasEvents(prevEv, currEv));
+  89              		.loc 1 77 3 is_stmt 1 discriminator 4 view .LVU27
+  77:rt_i32zcfcn.c ****     currEv = (slZcEventType)(slZcUnAliasEvents(prevEv, currEv));
+  90              		.loc 1 77 7 is_stmt 0 discriminator 4 view .LVU28
+  91 002c 205C     		ldrb	r0, [r4, r0]	@ zero_extendqisi2
+  92              	.LVL7:
+  77:rt_i32zcfcn.c ****     currEv = (slZcEventType)(slZcUnAliasEvents(prevEv, currEv));
+  93              		.loc 1 77 6 discriminator 4 view .LVU29
+  94 002e 0342     		tst	r3, r0
+  95 0030 12D0     		beq	.L3
+  78:rt_i32zcfcn.c ****   } else {
+  96              		.loc 1 78 14 view .LVU30
+  97 0032 1CF0080F 		tst	ip, #8
+  45:rt_i32zcfcn.c ****   slZcSignalSignType prevSign = (slZcSignalSignType)(((uint8_T)(*prevZc)) &
+  98              		.loc 1 45 17 view .LVU31
+  99 0036 4FEA9C00 		lsr	r0, ip, #2
+  78:rt_i32zcfcn.c ****   } else {
+ 100              		.loc 1 78 5 is_stmt 1 view .LVU32
+  78:rt_i32zcfcn.c ****   } else {
+ 101              		.loc 1 78 14 is_stmt 0 view .LVU33
+ 102 003a 0BD1     		bne	.L28
+ 103              	.L4:
+  78:rt_i32zcfcn.c ****   } else {
+ 104              		.loc 1 78 30 discriminator 3 view .LVU34
+ 105 003c C406     		lsls	r4, r0, #27
+ 106 003e 13D4     		bmi	.L29
+ 107              	.L5:
+  84:rt_i32zcfcn.c ****   *prevZc = (ZCSigState)((currSign) | (tempEv));
+ 108              		.loc 1 84 3 is_stmt 1 view .LVU35
+ 109              	.LVL8:
+  85:rt_i32zcfcn.c ****   if ((currEv & SL_ZCS_EVENT_ALL_DN) != 0) {
+ 110              		.loc 1 85 3 view .LVU36
+  85:rt_i32zcfcn.c ****   if ((currEv & SL_ZCS_EVENT_ALL_DN) != 0) {
+ 111              		.loc 1 85 13 is_stmt 0 view .LVU37
+ 112 0040 42EA8302 		orr	r2, r2, r3, lsl #2
+ 113              	.LVL9:
+  86:rt_i32zcfcn.c ****     zcEvent = FALLING_ZCEVENT;
+ 114              		.loc 1 86 6 view .LVU38
+ 115 0044 13F0380F 		tst	r3, #56
+  85:rt_i32zcfcn.c ****   if ((currEv & SL_ZCS_EVENT_ALL_DN) != 0) {
+ 116              		.loc 1 85 11 view .LVU39
+ 117 0048 0A70     		strb	r2, [r1]
+ 118              	.LVL10:
+  86:rt_i32zcfcn.c ****     zcEvent = FALLING_ZCEVENT;
+ 119              		.loc 1 86 3 is_stmt 1 view .LVU40
+  87:rt_i32zcfcn.c ****   } else if ((currEv & SL_ZCS_EVENT_ALL_UP) != 0) {
+ 120              		.loc 1 87 13 is_stmt 0 view .LVU41
+ 121 004a 18BF     		it	ne
+ 122 004c 4FF0FF30 		movne	r0, #-1
+  86:rt_i32zcfcn.c ****     zcEvent = FALLING_ZCEVENT;
+ 123              		.loc 1 86 6 view .LVU42
+ 124 0050 0DD0     		beq	.L30
+ 125              		.loc 1 95 1 view .LVU43
+ 126 0052 10BD     		pop	{r4, pc}
+ 127              	.LVL11:
+ 128              	.L28:
+  78:rt_i32zcfcn.c ****   } else {
+ 129              		.loc 1 78 30 discriminator 2 view .LVU44
+ 130 0054 5C07     		lsls	r4, r3, #29
+ 131 0056 F1D5     		bpl	.L4
+ 132              	.L3:
+ 133              	.LVL12:
+  84:rt_i32zcfcn.c ****   *prevZc = (ZCSigState)((currSign) | (tempEv));
+ 134              		.loc 1 84 3 is_stmt 1 view .LVU45
+  85:rt_i32zcfcn.c ****   if ((currEv & SL_ZCS_EVENT_ALL_DN) != 0) {
+ 135              		.loc 1 85 3 view .LVU46
+  85:rt_i32zcfcn.c ****   if ((currEv & SL_ZCS_EVENT_ALL_DN) != 0) {
+ 136              		.loc 1 85 11 is_stmt 0 view .LVU47
+ 137 0058 0A70     		strb	r2, [r1]
+ 138              	.LVL13:
+  86:rt_i32zcfcn.c ****     zcEvent = FALLING_ZCEVENT;
+ 139              		.loc 1 86 3 is_stmt 1 view .LVU48
+  85:rt_i32zcfcn.c ****   if ((currEv & SL_ZCS_EVENT_ALL_DN) != 0) {
+ 140              		.loc 1 85 11 is_stmt 0 view .LVU49
+ 141 005a 0020     		movs	r0, #0
+  94:rt_i32zcfcn.c **** }                                      /* end rt_I32ZCFcn */
+ 142              		.loc 1 94 3 is_stmt 1 view .LVU50
+ 143              		.loc 1 95 1 is_stmt 0 view .LVU51
+ 144 005c 10BD     		pop	{r4, pc}
+ 145              	.LVL14:
+ 146              	.L26:
+ 147              		.cfi_def_cfa_offset 0
+ 148              		.cfi_restore 4
+ 149              		.cfi_restore 14
+  50:rt_i32zcfcn.c ****     SL_ZCS_SIGN_POS :
+ 150              		.loc 1 50 33 discriminator 1 view .LVU52
+ 151 005e 9217     		asrs	r2, r2, #30
+ 152              	.LVL15:
+  50:rt_i32zcfcn.c ****     SL_ZCS_SIGN_POS :
+ 153              		.loc 1 50 33 discriminator 1 view .LVU53
+ 154 0060 02F00202 		and	r2, r2, #2
+  55:rt_i32zcfcn.c **** 
+ 155              		.loc 1 55 47 discriminator 1 view .LVU54
+ 156 0064 1346     		mov	r3, r2
+ 157 0066 CFE7     		b	.L2
+ 158              	.LVL16:
+ 159              	.L29:
+ 160              		.cfi_def_cfa_offset 8
+ 161              		.cfi_offset 4, -8
+ 162              		.cfi_offset 14, -4
+  78:rt_i32zcfcn.c ****   } else {
+ 163              		.loc 1 78 30 discriminator 6 view .LVU55
+ 164 0068 9806     		lsls	r0, r3, #26
+ 165 006a F5D4     		bmi	.L3
+ 166 006c E8E7     		b	.L5
+ 167              	.LVL17:
+ 168              	.L30:
+  87:rt_i32zcfcn.c ****   } else if ((currEv & SL_ZCS_EVENT_ALL_UP) != 0) {
+ 169              		.loc 1 87 13 view .LVU56
+ 170 006e 13F00700 		ands	r0, r3, #7
+ 171 0072 18BF     		it	ne
+ 172 0074 0120     		movne	r0, #1
+ 173              	.LVL18:
+  88:rt_i32zcfcn.c ****     zcEvent = RISING_ZCEVENT;
+ 174              		.loc 1 88 10 is_stmt 1 view .LVU57
+ 175              		.loc 1 95 1 is_stmt 0 view .LVU58
+ 176 0076 10BD     		pop	{r4, pc}
+ 177              	.L32:
+ 178              		.align	2
+ 179              	.L31:
+ 180 0078 00000000 		.word	.LANCHOR0
+ 181 007c 00000000 		.word	.LANCHOR1
+ 182              		.cfi_endproc
+ 183              	.LFE0:
+ 185              		.section	.rodata.CSWTCH.3,"a"
+ 186              		.align	2
+ 187              		.set	.LANCHOR1,. + 0
+ 190              	CSWTCH.3:
+ 191 0000 38       		.byte	56
+ 192 0001 3F       		.byte	63
+ 193 0002 07       		.byte	7
+ 194              		.section	.rodata.eventMatrix.0,"a"
+ 195              		.align	2
+ 196              		.set	.LANCHOR0,. + 0
+ 199              	eventMatrix.0:
+ 200 0000 00042000 		.ascii	"\000\004 \000"
+ 201 0004 10000800 		.ascii	"\020\000\010\000"
+ 202 0008 02010000 		.ascii	"\002\001\000\000"
+ 203 000c 00000000 		.ascii	"\000\000\000\000"
+ 204              		.text
+ 205              	.Letext0:
+ 206              		.file 2 "rtwtypes.h"
+ 207              		.file 3 "zero_crossing_types.h"
+ 208              		.file 4 "C:\\PROGRA~1\\MATLAB\\R2022a\\simulink\\include/solver_zc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 rt_i32zcfcn.c
+C:\Users\joeri\AppData\Local\Temp\ccEaRPFS.s:19     .text.rt_I32ZCFcn:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccEaRPFS.s:26     .text.rt_I32ZCFcn:00000000 rt_I32ZCFcn
+C:\Users\joeri\AppData\Local\Temp\ccEaRPFS.s:180    .text.rt_I32ZCFcn:00000078 $d
+C:\Users\joeri\AppData\Local\Temp\ccEaRPFS.s:186    .rodata.CSWTCH.3:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccEaRPFS.s:190    .rodata.CSWTCH.3:00000000 CSWTCH.3
+C:\Users\joeri\AppData\Local\Temp\ccEaRPFS.s:195    .rodata.eventMatrix.0:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccEaRPFS.s:199    .rodata.eventMatrix.0:00000000 eventMatrix.0
+
+NO UNDEFINED SYMBOLS

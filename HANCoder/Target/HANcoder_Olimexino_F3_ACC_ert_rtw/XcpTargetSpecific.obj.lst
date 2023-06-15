@@ -1,0 +1,1397 @@
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 2
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"XcpTargetSpecific.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.XcpUsbConfigureParamaters,"ax",%progbits
+  19              		.align	1
+  20              		.p2align 2,,3
+  21              		.global	XcpUsbConfigureParamaters
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	XcpUsbConfigureParamaters:
+  27              	.LFB114:
+  28              		.file 1 "../blockset/rtw/src/XcpTargetSpecific.c"
+   1:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+   2:../blockset/rtw/src/XcpTargetSpecific.c **** * \file         XcpTargetSpecific.c
+   3:../blockset/rtw/src/XcpTargetSpecific.c **** * \brief        XCP functions to interface the stack with a target device
+   4:../blockset/rtw/src/XcpTargetSpecific.c **** * \internal
+   5:../blockset/rtw/src/XcpTargetSpecific.c **** *----------------------------------------------------------------------------------------
+   6:../blockset/rtw/src/XcpTargetSpecific.c **** *                          C O P Y R I G H T
+   7:../blockset/rtw/src/XcpTargetSpecific.c **** *----------------------------------------------------------------------------------------
+   8:../blockset/rtw/src/XcpTargetSpecific.c **** *  Copyright (c) 2019  by HAN Automotive  http://www.han.nl           All rights reserved
+   9:../blockset/rtw/src/XcpTargetSpecific.c **** *----------------------------------------------------------------------------------------
+  10:../blockset/rtw/src/XcpTargetSpecific.c **** *                            L I C E N S E
+  11:../blockset/rtw/src/XcpTargetSpecific.c **** *----------------------------------------------------------------------------------------
+  12:../blockset/rtw/src/XcpTargetSpecific.c **** * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+  13:../blockset/rtw/src/XcpTargetSpecific.c **** * software and associated documentation files (the "Software"), to deal in the Software
+  14:../blockset/rtw/src/XcpTargetSpecific.c **** * without restriction, including without limitation the rights to use, copy, modify, merge,
+  15:../blockset/rtw/src/XcpTargetSpecific.c **** * publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+  16:../blockset/rtw/src/XcpTargetSpecific.c **** * persons to whom the Software is furnished to do so, subject to the following conditions:
+  17:../blockset/rtw/src/XcpTargetSpecific.c **** *
+  18:../blockset/rtw/src/XcpTargetSpecific.c **** * The above copyright notice and this permission notice shall be included in all copies or
+  19:../blockset/rtw/src/XcpTargetSpecific.c **** * substantial portions of the Software.
+  20:../blockset/rtw/src/XcpTargetSpecific.c **** *
+  21:../blockset/rtw/src/XcpTargetSpecific.c **** * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+  22:../blockset/rtw/src/XcpTargetSpecific.c **** * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+  23:../blockset/rtw/src/XcpTargetSpecific.c **** * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+  24:../blockset/rtw/src/XcpTargetSpecific.c **** * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+  25:../blockset/rtw/src/XcpTargetSpecific.c **** * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+  26:../blockset/rtw/src/XcpTargetSpecific.c **** * DEALINGS IN THE SOFTWARE.
+  27:../blockset/rtw/src/XcpTargetSpecific.c **** * \endinternal
+  28:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+  29:../blockset/rtw/src/XcpTargetSpecific.c **** 
+  30:../blockset/rtw/src/XcpTargetSpecific.c **** /****************************************************************************************
+  31:../blockset/rtw/src/XcpTargetSpecific.c **** * General information about the XCP stack functionality
+  32:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************
+  33:../blockset/rtw/src/XcpTargetSpecific.c **** * This is a basic target independent implementation of the XCP protocol. At this time it
+  34:../blockset/rtw/src/XcpTargetSpecific.c **** * only takes care of the parameter upload and variable download functions.
+  35:../blockset/rtw/src/XcpTargetSpecific.c **** *
+  36:../blockset/rtw/src/XcpTargetSpecific.c **** * This stack needs the following files:
+  37:../blockset/rtw/src/XcpTargetSpecific.c **** *	- XcpStack.c
+  38:../blockset/rtw/src/XcpTargetSpecific.c **** *	- XcpStack.h 
+  39:../blockset/rtw/src/XcpTargetSpecific.c **** *	- XcpTargetSpecific.c (this file)
+  40:../blockset/rtw/src/XcpTargetSpecific.c **** *	- XcpTargetSpecific.h
+  41:../blockset/rtw/src/XcpTargetSpecific.c **** *
+  42:../blockset/rtw/src/XcpTargetSpecific.c **** * The XcpTargetSpecific.c file holds the stack entry and exit functions wich can be 
+  43:../blockset/rtw/src/XcpTargetSpecific.c **** * adapted to the desired transport communication bus and target device
+  44:../blockset/rtw/src/XcpTargetSpecific.c **** *
+  45:../blockset/rtw/src/XcpTargetSpecific.c **** * XcpStack.c <--> XcpTargetSpecific.c <--> target device
+  46:../blockset/rtw/src/XcpTargetSpecific.c **** *
+  47:../blockset/rtw/src/XcpTargetSpecific.c **** * To receive and send the data in a proper way, the incomming and outging data array's
+  48:../blockset/rtw/src/XcpTargetSpecific.c **** * need to meet a specific build up:
+  49:../blockset/rtw/src/XcpTargetSpecific.c **** * Incomming data from master:
+  50:../blockset/rtw/src/XcpTargetSpecific.c **** * 	- dataReceived[0] 		= XCP command
+  51:../blockset/rtw/src/XcpTargetSpecific.c **** * 	- dataReceived[1...n]	= XCP data
+  52:../blockset/rtw/src/XcpTargetSpecific.c **** *
+  53:../blockset/rtw/src/XcpTargetSpecific.c **** * Outgoing data to master:
+  54:../blockset/rtw/src/XcpTargetSpecific.c **** * 	- dataToSend[0] 		= XCP Message length (excluded the byte for length and checksum)
+  55:../blockset/rtw/src/XcpTargetSpecific.c **** * 	- dataToSend[1]			= XCP positive (0xff) or negative (0xfe) reply
+  56:../blockset/rtw/src/XcpTargetSpecific.c **** * 	- dataToSend[2...n]		= XCP data that needs to be send back to the master
+  57:../blockset/rtw/src/XcpTargetSpecific.c **** * 	- dataToSend[n+1]		= XCP checksum added if checksum is enabled.
+  58:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************
+  59:../blockset/rtw/src/XcpTargetSpecific.c **** 
+  60:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+  61:../blockset/rtw/src/XcpTargetSpecific.c **** 
+  62:../blockset/rtw/src/XcpTargetSpecific.c **** /****************************************************************************************
+  63:../blockset/rtw/src/XcpTargetSpecific.c **** * Include files
+  64:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+  65:../blockset/rtw/src/XcpTargetSpecific.c **** #include "XcpStack.h"
+  66:../blockset/rtw/src/XcpTargetSpecific.c **** #include "XcpTargetSpecific.h"
+  67:../blockset/rtw/src/XcpTargetSpecific.c **** #include "mac.h"					/* Needed for target specific implementation	*/
+  68:../blockset/rtw/src/XcpTargetSpecific.c **** 
+  69:../blockset/rtw/src/XcpTargetSpecific.c **** #if defined(XCPE407) || defined(XCPP405)
+  70:../blockset/rtw/src/XcpTargetSpecific.c **** #include "usbcom.h"                              	/* USB COM-port header file    	*/
+  71:../blockset/rtw/src/XcpTargetSpecific.c **** #include "canio.h"                               	/* CAN I/O module               */
+  72:../blockset/rtw/src/XcpTargetSpecific.c **** #include "stm32f4xx_flash.h" 						/* Memory programming functions	*/
+  73:../blockset/rtw/src/XcpTargetSpecific.c **** #include "uart.h"                               	/* UART module              	*/  	
+  74:../blockset/rtw/src/XcpTargetSpecific.c **** #endif
+  75:../blockset/rtw/src/XcpTargetSpecific.c **** 
+  76:../blockset/rtw/src/XcpTargetSpecific.c **** #if defined(XCPOLIMEXINO)
+  77:../blockset/rtw/src/XcpTargetSpecific.c **** #include "usbcom.h"                             	/* USB COM-port header file    	*/
+  78:../blockset/rtw/src/XcpTargetSpecific.c **** #include "canio.h"                               	/* CAN I/O module              	*/  
+  79:../blockset/rtw/src/XcpTargetSpecific.c **** #include "uart.h"                               	/* UART module              	*/  
+  80:../blockset/rtw/src/XcpTargetSpecific.c **** #include "stm32f10x.h"   
+  81:../blockset/rtw/src/XcpTargetSpecific.c **** #include "stm32f10x_conf.h"
+  82:../blockset/rtw/src/XcpTargetSpecific.c **** #include "stm32f10x_flash.h" 						/* Memory programming functions	*/	 
+  83:../blockset/rtw/src/XcpTargetSpecific.c **** #include "usb_regs.h"								/* Used for USB sendbuffer check*/
+  84:../blockset/rtw/src/XcpTargetSpecific.c **** #endif
+  85:../blockset/rtw/src/XcpTargetSpecific.c **** 
+  86:../blockset/rtw/src/XcpTargetSpecific.c **** #if defined(XCPOLIMEXINOF3)
+  87:../blockset/rtw/src/XcpTargetSpecific.c **** #include "usbcom.h"                             	/* USB COM-port header file    	*/
+  88:../blockset/rtw/src/XcpTargetSpecific.c **** #include "canio.h"                               	/* CAN I/O module              	*/  
+  89:../blockset/rtw/src/XcpTargetSpecific.c **** #include "uart.h"                               	/* UART module              	*/  
+  90:../blockset/rtw/src/XcpTargetSpecific.c **** #include "stm32f30x.h"   
+  91:../blockset/rtw/src/XcpTargetSpecific.c **** #include "stm32f30x_conf.h"
+  92:../blockset/rtw/src/XcpTargetSpecific.c **** #include "stm32f30x_flash.h" 						/* Memory programming functions	*/	 
+  93:../blockset/rtw/src/XcpTargetSpecific.c **** #include "usb_regs.h"								/* Used for USB sendbuffer check*/
+  94:../blockset/rtw/src/XcpTargetSpecific.c **** #endif
+  95:../blockset/rtw/src/XcpTargetSpecific.c **** 
+  96:../blockset/rtw/src/XcpTargetSpecific.c **** /****************************************************************************************
+  97:../blockset/rtw/src/XcpTargetSpecific.c **** * Macro definitions
+  98:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+  99:../blockset/rtw/src/XcpTargetSpecific.c **** #define XCPUSB  1
+ 100:../blockset/rtw/src/XcpTargetSpecific.c **** #define XCPETH  2
+ 101:../blockset/rtw/src/XcpTargetSpecific.c **** #define XCPCAN  3
+ 102:../blockset/rtw/src/XcpTargetSpecific.c **** #define XCPUART 4
+ 103:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 104:../blockset/rtw/src/XcpTargetSpecific.c **** /****************************************************************************************
+ 105:../blockset/rtw/src/XcpTargetSpecific.c **** * Type definitions
+ 106:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 107:../blockset/rtw/src/XcpTargetSpecific.c **** typedef struct{
+ 108:../blockset/rtw/src/XcpTargetSpecific.c **** uint32_t xcpDtoId;
+ 109:../blockset/rtw/src/XcpTargetSpecific.c **** uint8_t xcpMacCanChannel;
+ 110:../blockset/rtw/src/XcpTargetSpecific.c **** }_xcpCanParameters;
+ 111:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 112:../blockset/rtw/src/XcpTargetSpecific.c **** _xcpCanParameters xcpCanParameters;
+ 113:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 114:../blockset/rtw/src/XcpTargetSpecific.c **** //TODO Channels must be assigned during timer creation.
+ 115:../blockset/rtw/src/XcpTargetSpecific.c **** _eventChannel eventChannel[3] ={
+ 116:../blockset/rtw/src/XcpTargetSpecific.c **** 		{"EvChnl1"},
+ 117:../blockset/rtw/src/XcpTargetSpecific.c **** 		{"EvChnl2"},
+ 118:../blockset/rtw/src/XcpTargetSpecific.c **** 		{"EvChnl3"}};
+ 119:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 120:../blockset/rtw/src/XcpTargetSpecific.c **** /****************************************************************************************
+ 121:../blockset/rtw/src/XcpTargetSpecific.c **** * Function prototypes
+ 122:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 123:../blockset/rtw/src/XcpTargetSpecific.c **** static void XcpUsbSend(uint8_t *data);
+ 124:../blockset/rtw/src/XcpTargetSpecific.c **** static void XcpCanSend(uint8_t *data);
+ 125:../blockset/rtw/src/XcpTargetSpecific.c **** static void XcpEthSend(uint8_t *data);
+ 126:../blockset/rtw/src/XcpTargetSpecific.c **** static void XcpUartSend(uint8_t *data);
+ 127:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 128:../blockset/rtw/src/XcpTargetSpecific.c **** /****************************************************************************************
+ 129:../blockset/rtw/src/XcpTargetSpecific.c **** * Data declarations
+ 130:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 131:../blockset/rtw/src/XcpTargetSpecific.c **** static uint8_t dataToSend[120] = {0};
+ 132:../blockset/rtw/src/XcpTargetSpecific.c **** static uint8_t xcpTransmissionBus = 0;
+ 133:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 134:../blockset/rtw/src/XcpTargetSpecific.c **** #if defined(XCPE407) || defined(XCPOLIMEXINO) || defined(XCPOLIMEXINOF3)
+ 135:../blockset/rtw/src/XcpTargetSpecific.c **** static uint8_t xcpUartChannel;
+ 136:../blockset/rtw/src/XcpTargetSpecific.c **** #endif
+ 137:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 138:../blockset/rtw/src/XcpTargetSpecific.c **** //short kXcpStationIdLengthVariable = kXcpStationIdLength;
+ 139:../blockset/rtw/src/XcpTargetSpecific.c **** uint32_t uniqueIdLength = kXcpStationIdLength;
+ 140:../blockset/rtw/src/XcpTargetSpecific.c **** char uniqueIdString[] = kXcpStationIdString;
+ 141:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 142:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 143:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function configures the XCP stack interface for USB connectivity
+ 144:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  none.
+ 145:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 146:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 147:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 148:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpUsbConfigureParamaters(void)
+ 149:../blockset/rtw/src/XcpTargetSpecific.c **** {		
+  29              		.loc 1 149 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+ 150:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpTransmissionBus = XCPUSB; 		// Set USB as active communication bus
+  34              		.loc 1 150 3 view .LVU1
+  35              		.loc 1 150 22 is_stmt 0 view .LVU2
+  36 0000 014B     		ldr	r3, .L3
+  37 0002 0122     		movs	r2, #1
+  38 0004 1A70     		strb	r2, [r3]
+ 151:../blockset/rtw/src/XcpTargetSpecific.c **** }
+  39              		.loc 1 151 1 view .LVU3
+  40 0006 7047     		bx	lr
+  41              	.L4:
+  42              		.align	2
+  43              	.L3:
+  44 0008 00000000 		.word	.LANCHOR0
+  45              		.cfi_endproc
+  46              	.LFE114:
+  48              		.section	.text.XcpUsbReceive,"ax",%progbits
+  49              		.align	1
+  50              		.p2align 2,,3
+  51              		.global	XcpUsbReceive
+  52              		.syntax unified
+  53              		.thumb
+  54              		.thumb_func
+  56              	XcpUsbReceive:
+  57              	.LVL0:
+  58              	.LFB115:
+ 152:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 153:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 154:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function is the entrypoint for XCP data received over the USB communication
+ 155:../blockset/rtw/src/XcpTargetSpecific.c **** **			  bus. In this function, adaptations can be made in case the incomming data is not 
+ 156:../blockset/rtw/src/XcpTargetSpecific.c **** **			  alligned according the demands of the XCP stack.(see general information in the 
+ 157:../blockset/rtw/src/XcpTargetSpecific.c **** **			  file header) 
+ 158:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  Pointer to de data array that holds the incomming XCP data 
+ 159:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  Number of relevant bytes that are available in the
+ 160:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 161:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 162:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 163:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpUsbReceive (uint8_t *dataReceived, uint32_t receivedLength)
+ 164:../blockset/rtw/src/XcpTargetSpecific.c **** {
+  59              		.loc 1 164 1 is_stmt 1 view -0
+  60              		.cfi_startproc
+  61              		@ args = 0, pretend = 0, frame = 0
+  62              		@ frame_needed = 0, uses_anonymous_args = 0
+  63              		@ link register save eliminated.
+ 165:../blockset/rtw/src/XcpTargetSpecific.c ****   XcpCommunicationHandling(&dataReceived[1],receivedLength,&dataToSend[0]); // dataReceived start @
+  64              		.loc 1 165 3 view .LVU5
+  65 0000 014A     		ldr	r2, .L6
+  66 0002 0130     		adds	r0, r0, #1
+  67              	.LVL1:
+  68              		.loc 1 165 3 is_stmt 0 view .LVU6
+  69 0004 FFF7FEBF 		b	XcpCommunicationHandling
+  70              	.LVL2:
+  71              	.L7:
+  72              		.loc 1 165 3 view .LVU7
+  73              		.align	2
+  74              	.L6:
+  75 0008 00000000 		.word	.LANCHOR1
+  76              		.cfi_endproc
+  77              	.LFE115:
+  79              		.section	.text.XcpCanConfigureParamaters,"ax",%progbits
+  80              		.align	1
+  81              		.p2align 2,,3
+  82              		.global	XcpCanConfigureParamaters
+  83              		.syntax unified
+  84              		.thumb
+  85              		.thumb_func
+  87              	XcpCanConfigureParamaters:
+  88              	.LVL3:
+  89              	.LFB117:
+ 166:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 167:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 168:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 169:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function is the exit point of the XCP stack. This function can be adapted
+ 170:../blockset/rtw/src/XcpTargetSpecific.c **** **			  according the target specific functons to send data over USB
+ 171:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  A pointer to the data array that holds de data to be send to the master
+ 172:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 173:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 174:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 175:../blockset/rtw/src/XcpTargetSpecific.c **** static void XcpUsbSend(uint8_t *data)
+ 176:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 177:../blockset/rtw/src/XcpTargetSpecific.c ****   if(dataToSend[0] != 0)
+ 178:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 179:../blockset/rtw/src/XcpTargetSpecific.c ****     /*Target specific function */
+ 180:../blockset/rtw/src/XcpTargetSpecific.c ****     #if defined(XCPE407) || defined(XCPP405) || defined(XCPOLIMEXINO) || defined(XCPOLIMEXINOF3)
+ 181:../blockset/rtw/src/XcpTargetSpecific.c ****     UsbComTransmit(&data[0],(data[0]+2)); // For serial communication 2 are added for Length and ch
+ 182:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 183:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 184:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 185:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 186:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 187:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 188:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function configures the XCP stack interface for CAN connectivity
+ 189:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  XCP DTO CAN identifier wich holds the identifier of the messages send to the 
+ 190:../blockset/rtw/src/XcpTargetSpecific.c **** **			  master
+ 191:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  Sets the CAN channel on wich the XCP stack needs to communicate
+ 192:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 193:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 194:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 195:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpCanConfigureParamaters(uint32_t xcpDtoId, uint8_t xcpMacCanChannel)
+ 196:../blockset/rtw/src/XcpTargetSpecific.c **** {
+  90              		.loc 1 196 1 is_stmt 1 view -0
+  91              		.cfi_startproc
+  92              		@ args = 0, pretend = 0, frame = 0
+  93              		@ frame_needed = 0, uses_anonymous_args = 0
+  94              		@ link register save eliminated.
+ 197:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpCanParameters.xcpDtoId 			= xcpDtoId;
+  95              		.loc 1 197 3 view .LVU9
+  96              		.loc 1 197 32 is_stmt 0 view .LVU10
+  97 0000 044B     		ldr	r3, .L9
+ 198:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpCanParameters.xcpMacCanChannel 	= xcpMacCanChannel;
+ 199:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpTransmissionBus 					= XCPCAN;  		// Set CAN as active communication bus
+  98              		.loc 1 199 27 view .LVU11
+  99 0002 054A     		ldr	r2, .L9+4
+ 197:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpCanParameters.xcpDtoId 			= xcpDtoId;
+ 100              		.loc 1 197 32 view .LVU12
+ 101 0004 1860     		str	r0, [r3]
+ 198:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpCanParameters.xcpMacCanChannel 	= xcpMacCanChannel;
+ 102              		.loc 1 198 3 is_stmt 1 view .LVU13
+ 103              		.loc 1 199 27 is_stmt 0 view .LVU14
+ 104 0006 4FF0030C 		mov	ip, #3
+ 198:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpCanParameters.xcpMacCanChannel 	= xcpMacCanChannel;
+ 105              		.loc 1 198 38 view .LVU15
+ 106 000a 1971     		strb	r1, [r3, #4]
+ 107              		.loc 1 199 3 is_stmt 1 view .LVU16
+ 108              		.loc 1 199 27 is_stmt 0 view .LVU17
+ 109 000c 82F800C0 		strb	ip, [r2]
+ 200:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 110              		.loc 1 200 1 view .LVU18
+ 111 0010 7047     		bx	lr
+ 112              	.L10:
+ 113 0012 00BF     		.align	2
+ 114              	.L9:
+ 115 0014 00000000 		.word	.LANCHOR2
+ 116 0018 00000000 		.word	.LANCHOR0
+ 117              		.cfi_endproc
+ 118              	.LFE117:
+ 120              		.section	.text.XcpCanReceive,"ax",%progbits
+ 121              		.align	1
+ 122              		.p2align 2,,3
+ 123              		.global	XcpCanReceive
+ 124              		.syntax unified
+ 125              		.thumb
+ 126              		.thumb_func
+ 128              	XcpCanReceive:
+ 129              	.LVL4:
+ 130              	.LFB118:
+ 201:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 202:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 203:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function is the entrypoint for XCP data received over the CAN communication
+ 204:../blockset/rtw/src/XcpTargetSpecific.c **** **			  bus. In this function, adaptations can be made in case the incomming data is not 
+ 205:../blockset/rtw/src/XcpTargetSpecific.c **** **			  alligned according the demands of the XCP stack. (see general information in the 
+ 206:../blockset/rtw/src/XcpTargetSpecific.c **** **			  file header) 
+ 207:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  Pointer to de data array that holds the incomming XCP data 
+ 208:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  Number of relevant bytes that are available in the
+ 209:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 210:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 211:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 212:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpCanReceive (uint8_t *dataReceived, uint32_t receivedLength)
+ 213:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 131              		.loc 1 213 1 is_stmt 1 view -0
+ 132              		.cfi_startproc
+ 133              		@ args = 0, pretend = 0, frame = 0
+ 134              		@ frame_needed = 0, uses_anonymous_args = 0
+ 135              		@ link register save eliminated.
+ 214:../blockset/rtw/src/XcpTargetSpecific.c ****   XcpCommunicationHandling(dataReceived,receivedLength,&dataToSend[0]);
+ 136              		.loc 1 214 3 view .LVU20
+ 137 0000 014A     		ldr	r2, .L12
+ 138 0002 FFF7FEBF 		b	XcpCommunicationHandling
+ 139              	.LVL5:
+ 140              	.L13:
+ 141              		.loc 1 214 3 is_stmt 0 view .LVU21
+ 142 0006 00BF     		.align	2
+ 143              	.L12:
+ 144 0008 00000000 		.word	.LANCHOR1
+ 145              		.cfi_endproc
+ 146              	.LFE118:
+ 148              		.section	.text.XcpUartConfigureParamaters,"ax",%progbits
+ 149              		.align	1
+ 150              		.p2align 2,,3
+ 151              		.global	XcpUartConfigureParamaters
+ 152              		.syntax unified
+ 153              		.thumb
+ 154              		.thumb_func
+ 156              	XcpUartConfigureParamaters:
+ 157              	.LVL6:
+ 158              	.LFB120:
+ 215:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 216:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 217:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 218:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function is the exit point of the XCP stack. This function can be adapted
+ 219:../blockset/rtw/src/XcpTargetSpecific.c **** **			  according the target specific functons to send data over CAN
+ 220:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  A pointer to the data array that holds de data to be send to the master
+ 221:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 222:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 223:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 224:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpCanSend(uint8_t *data)
+ 225:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 226:../blockset/rtw/src/XcpTargetSpecific.c ****   if(dataToSend[0] != 0)
+ 227:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 228:../blockset/rtw/src/XcpTargetSpecific.c ****     /*Target specific function */
+ 229:../blockset/rtw/src/XcpTargetSpecific.c ****     #if defined(XCPE407) || defined(XCPP405) || defined(XCPOLIMEXINO) || defined(XCPOLIMEXINOF3)
+ 230:../blockset/rtw/src/XcpTargetSpecific.c ****     CanTransmit(xcpCanParameters.xcpMacCanChannel, xcpCanParameters.xcpDtoId , data[0], &data[1]); 
+ 231:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 232:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 233:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 234:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 235:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 236:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 237:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function configures the XCP stack interface for UART connectivity
+ 238:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  none.
+ 239:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 240:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 241:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 242:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpUartConfigureParamaters(uint8_t channel)
+ 243:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 159              		.loc 1 243 1 is_stmt 1 view -0
+ 160              		.cfi_startproc
+ 161              		@ args = 0, pretend = 0, frame = 0
+ 162              		@ frame_needed = 0, uses_anonymous_args = 0
+ 163              		@ link register save eliminated.
+ 244:../blockset/rtw/src/XcpTargetSpecific.c **** #if defined(XCPE407) || defined(XCPOLIMEXINO) || defined(XCPOLIMEXINOF3)
+ 245:../blockset/rtw/src/XcpTargetSpecific.c ****     
+ 246:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpUartChannel = channel;
+ 164              		.loc 1 246 3 view .LVU23
+ 165              		.loc 1 246 18 is_stmt 0 view .LVU24
+ 166 0000 0249     		ldr	r1, .L15
+ 247:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpTransmissionBus = XCPUART; // Set UART as active communication bus
+ 167              		.loc 1 247 22 view .LVU25
+ 168 0002 034B     		ldr	r3, .L15+4
+ 246:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpTransmissionBus = XCPUART; // Set UART as active communication bus
+ 169              		.loc 1 246 18 view .LVU26
+ 170 0004 0870     		strb	r0, [r1]
+ 171              		.loc 1 247 3 is_stmt 1 view .LVU27
+ 172              		.loc 1 247 22 is_stmt 0 view .LVU28
+ 173 0006 0422     		movs	r2, #4
+ 174 0008 1A70     		strb	r2, [r3]
+ 248:../blockset/rtw/src/XcpTargetSpecific.c ****   
+ 249:../blockset/rtw/src/XcpTargetSpecific.c **** #endif  
+ 250:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 175              		.loc 1 250 1 view .LVU29
+ 176 000a 7047     		bx	lr
+ 177              	.L16:
+ 178              		.align	2
+ 179              	.L15:
+ 180 000c 00000000 		.word	.LANCHOR3
+ 181 0010 00000000 		.word	.LANCHOR0
+ 182              		.cfi_endproc
+ 183              	.LFE120:
+ 185              		.section	.text.XcpUartReceive,"ax",%progbits
+ 186              		.align	1
+ 187              		.p2align 2,,3
+ 188              		.global	XcpUartReceive
+ 189              		.syntax unified
+ 190              		.thumb
+ 191              		.thumb_func
+ 193              	XcpUartReceive:
+ 194              	.LFB121:
+ 251:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 252:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 253:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function is the entrypoint for XCP data received over the UART communication
+ 254:../blockset/rtw/src/XcpTargetSpecific.c **** **			  bus. In this function, adaptations can be made in case the incomming data is not 
+ 255:../blockset/rtw/src/XcpTargetSpecific.c **** **			  alligned according the demands of the XCP stack.(see general information in the 
+ 256:../blockset/rtw/src/XcpTargetSpecific.c **** **			  file header)
+ 257:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 258:../blockset/rtw/src/XcpTargetSpecific.c **** **            The function assumes the following SxI Message frame format
+ 259:../blockset/rtw/src/XcpTargetSpecific.c **** **            
+ 260:../blockset/rtw/src/XcpTargetSpecific.c **** **            Field     | Number of bytes
+ 261:../blockset/rtw/src/XcpTargetSpecific.c **** **            ----------+----------------
+ 262:../blockset/rtw/src/XcpTargetSpecific.c **** **            LEN       | 1
+ 263:../blockset/rtw/src/XcpTargetSpecific.c **** **            CTR       | unused
+ 264:../blockset/rtw/src/XcpTargetSpecific.c **** **            XCP Packet| LEN
+ 265:../blockset/rtw/src/XcpTargetSpecific.c **** **            FILL      | unused
+ 266:../blockset/rtw/src/XcpTargetSpecific.c **** **            CS        | 1
+ 267:../blockset/rtw/src/XcpTargetSpecific.c **** **            
+ 268:../blockset/rtw/src/XcpTargetSpecific.c **** **            Refer to Figure 45 (page 55) of [1]
+ 269:../blockset/rtw/src/XcpTargetSpecific.c **** **            
+ 270:../blockset/rtw/src/XcpTargetSpecific.c **** **            [1] Patzer A., Zaiser R. (2014). XCP - The Standard Protocol for ECU Development.
+ 271:../blockset/rtw/src/XcpTargetSpecific.c **** **                Stuttgart: Vector Informatik GmbH
+ 272:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 273:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  Pointer to de data array that holds the incomming XCP data 
+ 274:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  Number of relevant bytes that are available in the
+ 275:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 276:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 277:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 278:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpUartReceive(void)
+ 279:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 195              		.loc 1 279 1 is_stmt 1 view -0
+ 196              		.cfi_startproc
+ 197              		@ args = 0, pretend = 0, frame = 40
+ 198              		@ frame_needed = 0, uses_anonymous_args = 0
+ 280:../blockset/rtw/src/XcpTargetSpecific.c **** #if defined(XCPE407) || defined(XCPOLIMEXINO) || defined(XCPOLIMEXINOF3)
+ 281:../blockset/rtw/src/XcpTargetSpecific.c ****     
+ 282:../blockset/rtw/src/XcpTargetSpecific.c ****   static uint8_t length = 0;
+ 199              		.loc 1 282 3 view .LVU31
+ 283:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 284:../blockset/rtw/src/XcpTargetSpecific.c ****   // Is a new message expected?
+ 285:../blockset/rtw/src/XcpTargetSpecific.c ****   if(length == 0)
+ 200              		.loc 1 285 3 view .LVU32
+ 279:../blockset/rtw/src/XcpTargetSpecific.c **** #if defined(XCPE407) || defined(XCPOLIMEXINO) || defined(XCPOLIMEXINOF3)
+ 201              		.loc 1 279 1 is_stmt 0 view .LVU33
+ 202 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 203              		.cfi_def_cfa_offset 24
+ 204              		.cfi_offset 4, -24
+ 205              		.cfi_offset 5, -20
+ 206              		.cfi_offset 6, -16
+ 207              		.cfi_offset 7, -12
+ 208              		.cfi_offset 8, -8
+ 209              		.cfi_offset 14, -4
+ 210              		.loc 1 285 13 view .LVU34
+ 211 0004 194E     		ldr	r6, .L30
+ 286:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 287:../blockset/rtw/src/XcpTargetSpecific.c ****     // Set the number of bytes in the message
+ 288:../blockset/rtw/src/XcpTargetSpecific.c ****     UartGetByte(xcpUartChannel, &length);
+ 212              		.loc 1 288 5 view .LVU35
+ 213 0006 1A4F     		ldr	r7, .L30+4
+ 285:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 214              		.loc 1 285 5 view .LVU36
+ 215 0008 3378     		ldrb	r3, [r6]	@ zero_extendqisi2
+ 279:../blockset/rtw/src/XcpTargetSpecific.c **** #if defined(XCPE407) || defined(XCPOLIMEXINO) || defined(XCPOLIMEXINOF3)
+ 216              		.loc 1 279 1 view .LVU37
+ 217 000a 8AB0     		sub	sp, sp, #40
+ 218              		.cfi_def_cfa_offset 64
+ 285:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 219              		.loc 1 285 5 view .LVU38
+ 220 000c 43B3     		cbz	r3, .L26
+ 221              	.L18:
+ 289:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 290:../blockset/rtw/src/XcpTargetSpecific.c ****   
+ 291:../blockset/rtw/src/XcpTargetSpecific.c ****   // Are all expected bytes received?
+ 292:../blockset/rtw/src/XcpTargetSpecific.c ****   // Add one additional byte for checksum
+ 293:../blockset/rtw/src/XcpTargetSpecific.c ****   if(UartGetNumReceivedBytes(xcpUartChannel) == (length+1))
+ 222              		.loc 1 293 3 is_stmt 1 view .LVU39
+ 223              		.loc 1 293 6 is_stmt 0 view .LVU40
+ 224 000e 3878     		ldrb	r0, [r7]	@ zero_extendqisi2
+ 225 0010 FFF7FEFF 		bl	UartGetNumReceivedBytes
+ 226              	.LVL7:
+ 227              		.loc 1 293 56 view .LVU41
+ 228 0014 3378     		ldrb	r3, [r6]	@ zero_extendqisi2
+ 229 0016 5A1C     		adds	r2, r3, #1
+ 230              		.loc 1 293 5 view .LVU42
+ 231 0018 9042     		cmp	r0, r2
+ 232 001a 02D0     		beq	.L29
+ 294:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 295:../blockset/rtw/src/XcpTargetSpecific.c ****     uint8_t data[32];
+ 296:../blockset/rtw/src/XcpTargetSpecific.c ****     
+ 297:../blockset/rtw/src/XcpTargetSpecific.c ****     // Copy the message data
+ 298:../blockset/rtw/src/XcpTargetSpecific.c ****     for(uint16_t i=0; i<length; ++i)
+ 299:../blockset/rtw/src/XcpTargetSpecific.c ****     {
+ 300:../blockset/rtw/src/XcpTargetSpecific.c ****       UartGetByte(xcpUartChannel, &data[i]);
+ 301:../blockset/rtw/src/XcpTargetSpecific.c ****     }
+ 302:../blockset/rtw/src/XcpTargetSpecific.c ****     
+ 303:../blockset/rtw/src/XcpTargetSpecific.c ****     // Get checksum
+ 304:../blockset/rtw/src/XcpTargetSpecific.c ****     uint8_t checksum;
+ 305:../blockset/rtw/src/XcpTargetSpecific.c ****     UartGetByte(xcpUartChannel, &checksum);
+ 306:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 307:../blockset/rtw/src/XcpTargetSpecific.c ****     // No checksum verification
+ 308:../blockset/rtw/src/XcpTargetSpecific.c ****     
+ 309:../blockset/rtw/src/XcpTargetSpecific.c ****           
+ 310:../blockset/rtw/src/XcpTargetSpecific.c ****     // Handle the message
+ 311:../blockset/rtw/src/XcpTargetSpecific.c ****     XcpCommunicationHandling(data,length,&dataToSend[0]);
+ 312:../blockset/rtw/src/XcpTargetSpecific.c ****     
+ 313:../blockset/rtw/src/XcpTargetSpecific.c ****     // Reset counter and wait for next message
+ 314:../blockset/rtw/src/XcpTargetSpecific.c ****     length = 0;
+ 315:../blockset/rtw/src/XcpTargetSpecific.c ****   }      
+ 316:../blockset/rtw/src/XcpTargetSpecific.c ****   
+ 317:../blockset/rtw/src/XcpTargetSpecific.c **** #endif
+ 318:../blockset/rtw/src/XcpTargetSpecific.c ****   
+ 319:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 233              		.loc 1 319 1 view .LVU43
+ 234 001c 0AB0     		add	sp, sp, #40
+ 235              		.cfi_remember_state
+ 236              		.cfi_def_cfa_offset 24
+ 237              		@ sp needed
+ 238 001e BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 239              	.L29:
+ 240              		.cfi_restore_state
+ 241              	.LVL8:
+ 242              	.LBB6:
+ 243              	.LBB7:
+ 298:../blockset/rtw/src/XcpTargetSpecific.c ****     {
+ 244              		.loc 1 298 23 is_stmt 1 view .LVU44
+ 245 0022 0DF10808 		add	r8, sp, #8
+ 298:../blockset/rtw/src/XcpTargetSpecific.c ****     {
+ 246              		.loc 1 298 5 is_stmt 0 view .LVU45
+ 247 0026 63B1     		cbz	r3, .L20
+ 248 0028 4546     		mov	r5, r8
+ 249 002a 0024     		movs	r4, #0
+ 250              	.LVL9:
+ 251              	.L21:
+ 300:../blockset/rtw/src/XcpTargetSpecific.c ****     }
+ 252              		.loc 1 300 7 is_stmt 1 discriminator 3 view .LVU46
+ 253 002c 2946     		mov	r1, r5
+ 254 002e 3878     		ldrb	r0, [r7]	@ zero_extendqisi2
+ 255 0030 FFF7FEFF 		bl	UartGetByte
+ 256              	.LVL10:
+ 298:../blockset/rtw/src/XcpTargetSpecific.c ****     {
+ 257              		.loc 1 298 33 discriminator 3 view .LVU47
+ 298:../blockset/rtw/src/XcpTargetSpecific.c ****     {
+ 258              		.loc 1 298 23 discriminator 3 view .LVU48
+ 298:../blockset/rtw/src/XcpTargetSpecific.c ****     {
+ 259              		.loc 1 298 5 is_stmt 0 discriminator 3 view .LVU49
+ 260 0034 0134     		adds	r4, r4, #1
+ 261              	.LVL11:
+ 298:../blockset/rtw/src/XcpTargetSpecific.c ****     {
+ 262              		.loc 1 298 5 discriminator 3 view .LVU50
+ 263 0036 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
+ 264 0038 A3B2     		uxth	r3, r4
+ 265 003a 9A42     		cmp	r2, r3
+ 266 003c 05F10105 		add	r5, r5, #1
+ 267 0040 F4D8     		bhi	.L21
+ 268              	.L20:
+ 298:../blockset/rtw/src/XcpTargetSpecific.c ****     {
+ 269              		.loc 1 298 5 discriminator 3 view .LVU51
+ 270              	.LBE7:
+ 304:../blockset/rtw/src/XcpTargetSpecific.c ****     UartGetByte(xcpUartChannel, &checksum);
+ 271              		.loc 1 304 5 is_stmt 1 view .LVU52
+ 305:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 272              		.loc 1 305 5 view .LVU53
+ 273 0042 0DF10701 		add	r1, sp, #7
+ 274 0046 3878     		ldrb	r0, [r7]	@ zero_extendqisi2
+ 275 0048 FFF7FEFF 		bl	UartGetByte
+ 276              	.LVL12:
+ 311:../blockset/rtw/src/XcpTargetSpecific.c ****     
+ 277              		.loc 1 311 5 view .LVU54
+ 278 004c 094A     		ldr	r2, .L30+8
+ 279 004e 3178     		ldrb	r1, [r6]	@ zero_extendqisi2
+ 280 0050 4046     		mov	r0, r8
+ 281 0052 FFF7FEFF 		bl	XcpCommunicationHandling
+ 282              	.LVL13:
+ 314:../blockset/rtw/src/XcpTargetSpecific.c ****   }      
+ 283              		.loc 1 314 5 view .LVU55
+ 314:../blockset/rtw/src/XcpTargetSpecific.c ****   }      
+ 284              		.loc 1 314 12 is_stmt 0 view .LVU56
+ 285 0056 0023     		movs	r3, #0
+ 286 0058 3370     		strb	r3, [r6]
+ 287              	.LBE6:
+ 288              		.loc 1 319 1 view .LVU57
+ 289 005a 0AB0     		add	sp, sp, #40
+ 290              		.cfi_remember_state
+ 291              		.cfi_def_cfa_offset 24
+ 292              		@ sp needed
+ 293 005c BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 294              	.L26:
+ 295              		.cfi_restore_state
+ 288:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 296              		.loc 1 288 5 is_stmt 1 view .LVU58
+ 297 0060 3878     		ldrb	r0, [r7]	@ zero_extendqisi2
+ 298 0062 3146     		mov	r1, r6
+ 299 0064 FFF7FEFF 		bl	UartGetByte
+ 300              	.LVL14:
+ 301 0068 D1E7     		b	.L18
+ 302              	.L31:
+ 303 006a 00BF     		.align	2
+ 304              	.L30:
+ 305 006c 00000000 		.word	.LANCHOR4
+ 306 0070 00000000 		.word	.LANCHOR3
+ 307 0074 00000000 		.word	.LANCHOR1
+ 308              		.cfi_endproc
+ 309              	.LFE121:
+ 311              		.section	.text.XcpEthConfigureParamaters,"ax",%progbits
+ 312              		.align	1
+ 313              		.p2align 2,,3
+ 314              		.global	XcpEthConfigureParamaters
+ 315              		.syntax unified
+ 316              		.thumb
+ 317              		.thumb_func
+ 319              	XcpEthConfigureParamaters:
+ 320              	.LFB123:
+ 320:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 321:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 322:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function is the exit point of the XCP stack. This function can be adapted
+ 323:../blockset/rtw/src/XcpTargetSpecific.c **** **			  according the target specific functons to send data over UART
+ 324:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  A pointer to the data array that holds de data to be send to the master
+ 325:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 326:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 327:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 328:../blockset/rtw/src/XcpTargetSpecific.c **** static void XcpUartSend(uint8_t *data)
+ 329:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 330:../blockset/rtw/src/XcpTargetSpecific.c **** #if defined(XCPE407) || defined(XCPOLIMEXINO) || defined(XCPOLIMEXINOF3)
+ 331:../blockset/rtw/src/XcpTargetSpecific.c ****     
+ 332:../blockset/rtw/src/XcpTargetSpecific.c ****   if(dataToSend[0] != 0)
+ 333:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 334:../blockset/rtw/src/XcpTargetSpecific.c ****     // For serial communication 2 are added for Length and checksum
+ 335:../blockset/rtw/src/XcpTargetSpecific.c ****     UartPutBytes(xcpUartChannel, (char *)(&(data[0])), (data[0]+2));    
+ 336:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 337:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 338:../blockset/rtw/src/XcpTargetSpecific.c **** #endif
+ 339:../blockset/rtw/src/XcpTargetSpecific.c ****   
+ 340:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 341:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 342:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 343:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function configures the XCP stack interface for Ethernet connectivity
+ 344:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  none.
+ 345:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 346:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 347:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 348:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpEthConfigureParamaters(void)
+ 349:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 321              		.loc 1 349 1 view -0
+ 322              		.cfi_startproc
+ 323              		@ args = 0, pretend = 0, frame = 0
+ 324              		@ frame_needed = 0, uses_anonymous_args = 0
+ 325              		@ link register save eliminated.
+ 350:../blockset/rtw/src/XcpTargetSpecific.c ****   xcpTransmissionBus = XCPETH;   		// Set Ethernet as active communication bus
+ 326              		.loc 1 350 3 view .LVU60
+ 327              		.loc 1 350 22 is_stmt 0 view .LVU61
+ 328 0000 014B     		ldr	r3, .L33
+ 329 0002 0222     		movs	r2, #2
+ 330 0004 1A70     		strb	r2, [r3]
+ 351:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 331              		.loc 1 351 1 view .LVU62
+ 332 0006 7047     		bx	lr
+ 333              	.L34:
+ 334              		.align	2
+ 335              	.L33:
+ 336 0008 00000000 		.word	.LANCHOR0
+ 337              		.cfi_endproc
+ 338              	.LFE123:
+ 340              		.section	.text.XcpEthReceive,"ax",%progbits
+ 341              		.align	1
+ 342              		.p2align 2,,3
+ 343              		.global	XcpEthReceive
+ 344              		.syntax unified
+ 345              		.thumb
+ 346              		.thumb_func
+ 348              	XcpEthReceive:
+ 349              	.LFB131:
+ 350              		.cfi_startproc
+ 351              		@ args = 0, pretend = 0, frame = 0
+ 352              		@ frame_needed = 0, uses_anonymous_args = 0
+ 353              		@ link register save eliminated.
+ 354 0000 014A     		ldr	r2, .L36
+ 355 0002 FFF7FEBF 		b	XcpCommunicationHandling
+ 356              	.L37:
+ 357 0006 00BF     		.align	2
+ 358              	.L36:
+ 359 0008 00000000 		.word	.LANCHOR1
+ 360              		.cfi_endproc
+ 361              	.LFE131:
+ 363              		.section	.text.XcpSendData,"ax",%progbits
+ 364              		.align	1
+ 365              		.p2align 2,,3
+ 366              		.global	XcpSendData
+ 367              		.syntax unified
+ 368              		.thumb
+ 369              		.thumb_func
+ 371              	XcpSendData:
+ 372              	.LVL15:
+ 373              	.LFB126:
+ 352:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 353:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 354:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function is the entrypoint for XCP data received over the Ethernet communication
+ 355:../blockset/rtw/src/XcpTargetSpecific.c **** **			  bus. In this function, adaptations can be made in case the incomming data is not 
+ 356:../blockset/rtw/src/XcpTargetSpecific.c **** **			  alligned according the demands of the XCP stack. (see general information in the 
+ 357:../blockset/rtw/src/XcpTargetSpecific.c **** **			  file header) 
+ 358:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  Pointer to de data array that holds the incomming XCP data 
+ 359:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  Number of relevant bytes that are available in the
+ 360:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 361:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 362:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 363:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpEthReceive (uint8_t *dataReceived, uint32_t receivedLength)
+ 364:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 365:../blockset/rtw/src/XcpTargetSpecific.c ****   XcpCommunicationHandling(dataReceived,receivedLength,&dataToSend[0]);
+ 366:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 367:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 368:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 369:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function is the exit point of the XCP stack. This function can be adapted
+ 370:../blockset/rtw/src/XcpTargetSpecific.c **** **			  according the target specific functons to send data over Ethernet
+ 371:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  A pointer to the data array that holds de data to be send to the master
+ 372:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 373:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 374:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 375:../blockset/rtw/src/XcpTargetSpecific.c **** static void XcpEthSend(uint8_t *data)
+ 376:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 377:../blockset/rtw/src/XcpTargetSpecific.c ****   if(dataToSend[0] != 0)
+ 378:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 379:../blockset/rtw/src/XcpTargetSpecific.c ****     /* Target specific function */
+ 380:../blockset/rtw/src/XcpTargetSpecific.c ****     #ifdef XCPE407
+ 381:../blockset/rtw/src/XcpTargetSpecific.c ****     MacNetDtoBufferWrite(&data[1], data[0]);
+ 382:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 383:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 384:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 385:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 386:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 387:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function sends the data from the stack to the specified communication
+ 388:../blockset/rtw/src/XcpTargetSpecific.c **** **			  bus.
+ 389:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  A pointer to the data array that holds de data to be send to the master
+ 390:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    Send status 1 if succeded 0 if not send.
+ 391:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 392:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 393:../blockset/rtw/src/XcpTargetSpecific.c **** uint8_t XcpSendData(uint8_t *data)
+ 394:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 374              		.loc 1 394 1 is_stmt 1 view -0
+ 375              		.cfi_startproc
+ 376              		@ args = 0, pretend = 0, frame = 0
+ 377              		@ frame_needed = 0, uses_anonymous_args = 0
+ 395:../blockset/rtw/src/XcpTargetSpecific.c **** 	static uint8_t sendSemaphore = 0;
+ 378              		.loc 1 395 2 view .LVU64
+ 396:../blockset/rtw/src/XcpTargetSpecific.c **** 	
+ 397:../blockset/rtw/src/XcpTargetSpecific.c **** 	if(sendSemaphore == 0) 
+ 379              		.loc 1 397 2 view .LVU65
+ 394:../blockset/rtw/src/XcpTargetSpecific.c **** 	static uint8_t sendSemaphore = 0;
+ 380              		.loc 1 394 1 is_stmt 0 view .LVU66
+ 381 0000 10B5     		push	{r4, lr}
+ 382              		.cfi_def_cfa_offset 8
+ 383              		.cfi_offset 4, -8
+ 384              		.cfi_offset 14, -4
+ 385              		.loc 1 397 19 view .LVU67
+ 386 0002 1A4C     		ldr	r4, .L56
+ 387              		.loc 1 397 4 view .LVU68
+ 388 0004 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 389 0006 0AB1     		cbz	r2, .L54
+ 398:../blockset/rtw/src/XcpTargetSpecific.c **** 	{
+ 399:../blockset/rtw/src/XcpTargetSpecific.c **** 		sendSemaphore = 1;
+ 400:../blockset/rtw/src/XcpTargetSpecific.c **** 		XcpSendBufferCheck();
+ 401:../blockset/rtw/src/XcpTargetSpecific.c **** 		switch(xcpTransmissionBus)
+ 402:../blockset/rtw/src/XcpTargetSpecific.c **** 		{
+ 403:../blockset/rtw/src/XcpTargetSpecific.c **** 		case XCPUSB:   XcpUsbSend(&data[0]);  	break; //External function for writing data to USB bus
+ 404:../blockset/rtw/src/XcpTargetSpecific.c **** 		case XCPCAN:   XcpCanSend(&data[0]);  	break;
+ 405:../blockset/rtw/src/XcpTargetSpecific.c **** 		case XCPUART:  XcpUartSend(&data[0]);  	break;	
+ 406:../blockset/rtw/src/XcpTargetSpecific.c **** 		case XCPETH:   XcpEthSend(&data[0]);  	break;	
+ 407:../blockset/rtw/src/XcpTargetSpecific.c **** 		}
+ 408:../blockset/rtw/src/XcpTargetSpecific.c **** 		sendSemaphore = 0;
+ 409:../blockset/rtw/src/XcpTargetSpecific.c **** 	return 1;
+ 410:../blockset/rtw/src/XcpTargetSpecific.c **** 	}
+ 411:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 412:../blockset/rtw/src/XcpTargetSpecific.c **** return 0; // still here so message is not send.
+ 390              		.loc 1 412 8 view .LVU69
+ 391 0008 0020     		movs	r0, #0
+ 392              	.LVL16:
+ 413:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 393              		.loc 1 413 1 view .LVU70
+ 394 000a 10BD     		pop	{r4, pc}
+ 395              	.LVL17:
+ 396              	.L54:
+ 401:../blockset/rtw/src/XcpTargetSpecific.c **** 		{
+ 397              		.loc 1 401 3 view .LVU71
+ 398 000c 184B     		ldr	r3, .L56+4
+ 399 000e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 399:../blockset/rtw/src/XcpTargetSpecific.c **** 		XcpSendBufferCheck();
+ 400              		.loc 1 399 17 view .LVU72
+ 401 0010 0122     		movs	r2, #1
+ 401:../blockset/rtw/src/XcpTargetSpecific.c **** 		{
+ 402              		.loc 1 401 3 view .LVU73
+ 403 0012 032B     		cmp	r3, #3
+ 404 0014 0146     		mov	r1, r0
+ 399:../blockset/rtw/src/XcpTargetSpecific.c **** 		XcpSendBufferCheck();
+ 405              		.loc 1 399 3 is_stmt 1 view .LVU74
+ 399:../blockset/rtw/src/XcpTargetSpecific.c **** 		XcpSendBufferCheck();
+ 406              		.loc 1 399 17 is_stmt 0 view .LVU75
+ 407 0016 2270     		strb	r2, [r4]
+ 400:../blockset/rtw/src/XcpTargetSpecific.c **** 		switch(xcpTransmissionBus)
+ 408              		.loc 1 400 3 is_stmt 1 view .LVU76
+ 414:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 415:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 416:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function checks the sendbuffer for the specified communication bus
+ 417:../blockset/rtw/src/XcpTargetSpecific.c **** **			  if the message is not yet send, wait for it.
+ 418:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  none
+ 419:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    not implemented yet
+ 420:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 421:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 422:../blockset/rtw/src/XcpTargetSpecific.c **** //TODO implement anti deadlock mechanism
+ 423:../blockset/rtw/src/XcpTargetSpecific.c **** uint8_t XcpSendBufferCheck(void)
+ 424:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 425:../blockset/rtw/src/XcpTargetSpecific.c **** 	switch(xcpTransmissionBus)
+ 409              		.loc 1 425 2 view .LVU77
+ 426:../blockset/rtw/src/XcpTargetSpecific.c **** 	{
+ 427:../blockset/rtw/src/XcpTargetSpecific.c **** 	case XCPUSB:   
+ 428:../blockset/rtw/src/XcpTargetSpecific.c **** 		#ifdef XCPOLIMEXINO
+ 429:../blockset/rtw/src/XcpTargetSpecific.c **** 		while(GetEPTxStatus(ENDP1) != EP_TX_NAK);
+ 430:../blockset/rtw/src/XcpTargetSpecific.c **** 		#endif
+ 431:../blockset/rtw/src/XcpTargetSpecific.c **** 	break;
+ 432:../blockset/rtw/src/XcpTargetSpecific.c **** 		
+ 433:../blockset/rtw/src/XcpTargetSpecific.c **** 	case XCPCAN:
+ 434:../blockset/rtw/src/XcpTargetSpecific.c **** 	break;
+ 435:../blockset/rtw/src/XcpTargetSpecific.c **** 		
+ 436:../blockset/rtw/src/XcpTargetSpecific.c **** 	case XCPUART:
+ 437:../blockset/rtw/src/XcpTargetSpecific.c **** 	break;
+ 438:../blockset/rtw/src/XcpTargetSpecific.c **** 		
+ 439:../blockset/rtw/src/XcpTargetSpecific.c **** 	case XCPETH:
+ 440:../blockset/rtw/src/XcpTargetSpecific.c **** 	break;	
+ 441:../blockset/rtw/src/XcpTargetSpecific.c **** 	}
+ 442:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 443:../blockset/rtw/src/XcpTargetSpecific.c **** return 1;
+ 410              		.loc 1 443 1 view .LVU78
+ 401:../blockset/rtw/src/XcpTargetSpecific.c **** 		{
+ 411              		.loc 1 401 3 view .LVU79
+ 412 0018 07D0     		beq	.L40
+ 401:../blockset/rtw/src/XcpTargetSpecific.c **** 		{
+ 413              		.loc 1 401 3 is_stmt 0 view .LVU80
+ 414 001a 042B     		cmp	r3, #4
+ 415 001c 1BD0     		beq	.L41
+ 416 001e 9342     		cmp	r3, r2
+ 417 0020 10D0     		beq	.L55
+ 418              	.LVL18:
+ 419              	.L42:
+ 408:../blockset/rtw/src/XcpTargetSpecific.c **** 	return 1;
+ 420              		.loc 1 408 3 is_stmt 1 view .LVU81
+ 408:../blockset/rtw/src/XcpTargetSpecific.c **** 	return 1;
+ 421              		.loc 1 408 17 is_stmt 0 view .LVU82
+ 422 0022 0023     		movs	r3, #0
+ 423 0024 2370     		strb	r3, [r4]
+ 409:../blockset/rtw/src/XcpTargetSpecific.c **** 	}
+ 424              		.loc 1 409 2 is_stmt 1 view .LVU83
+ 409:../blockset/rtw/src/XcpTargetSpecific.c **** 	}
+ 425              		.loc 1 409 9 is_stmt 0 view .LVU84
+ 426 0026 0120     		movs	r0, #1
+ 413:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 427              		.loc 1 413 1 view .LVU85
+ 428 0028 10BD     		pop	{r4, pc}
+ 429              	.LVL19:
+ 430              	.L40:
+ 404:../blockset/rtw/src/XcpTargetSpecific.c **** 		case XCPUART:  XcpUartSend(&data[0]);  	break;	
+ 431              		.loc 1 404 18 is_stmt 1 view .LVU86
+ 432              	.LBB14:
+ 433              	.LBI14:
+ 224:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 434              		.loc 1 224 6 view .LVU87
+ 435              	.LBB15:
+ 226:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 436              		.loc 1 226 3 view .LVU88
+ 226:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 437              		.loc 1 226 16 is_stmt 0 view .LVU89
+ 438 002a 124B     		ldr	r3, .L56+8
+ 226:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 439              		.loc 1 226 5 view .LVU90
+ 440 002c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 441 002e 002B     		cmp	r3, #0
+ 442 0030 F7D0     		beq	.L42
+ 230:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 443              		.loc 1 230 5 is_stmt 1 view .LVU91
+ 444 0032 0346     		mov	r3, r0
+ 445 0034 1048     		ldr	r0, .L56+12
+ 446              	.LVL20:
+ 230:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 447              		.loc 1 230 5 is_stmt 0 view .LVU92
+ 448 0036 13F8012B 		ldrb	r2, [r3], #1	@ zero_extendqisi2
+ 449              	.LVL21:
+ 230:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 450              		.loc 1 230 5 view .LVU93
+ 451 003a 0168     		ldr	r1, [r0]
+ 452              	.LVL22:
+ 230:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 453              		.loc 1 230 5 view .LVU94
+ 454 003c 0079     		ldrb	r0, [r0, #4]	@ zero_extendqisi2
+ 455 003e FFF7FEFF 		bl	CanTransmit
+ 456              	.LVL23:
+ 230:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 457              		.loc 1 230 5 view .LVU95
+ 458 0042 EEE7     		b	.L42
+ 459              	.LVL24:
+ 460              	.L55:
+ 230:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 461              		.loc 1 230 5 view .LVU96
+ 462              	.LBE15:
+ 463              	.LBE14:
+ 403:../blockset/rtw/src/XcpTargetSpecific.c **** 		case XCPCAN:   XcpCanSend(&data[0]);  	break;
+ 464              		.loc 1 403 18 is_stmt 1 view .LVU97
+ 465              	.LBB16:
+ 466              	.LBI16:
+ 175:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 467              		.loc 1 175 13 view .LVU98
+ 468              	.LBB17:
+ 177:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 469              		.loc 1 177 3 view .LVU99
+ 177:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 470              		.loc 1 177 16 is_stmt 0 view .LVU100
+ 471 0044 0B4B     		ldr	r3, .L56+8
+ 177:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 472              		.loc 1 177 5 view .LVU101
+ 473 0046 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 474 0048 002B     		cmp	r3, #0
+ 475 004a EAD0     		beq	.L42
+ 181:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 476              		.loc 1 181 5 is_stmt 1 view .LVU102
+ 181:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 477              		.loc 1 181 34 is_stmt 0 view .LVU103
+ 478 004c 0178     		ldrb	r1, [r0]	@ zero_extendqisi2
+ 181:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 479              		.loc 1 181 5 view .LVU104
+ 480 004e 0231     		adds	r1, r1, #2
+ 481 0050 FFF7FEFF 		bl	UsbComTransmit
+ 482              	.LVL25:
+ 181:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 483              		.loc 1 181 5 view .LVU105
+ 484 0054 E5E7     		b	.L42
+ 485              	.LVL26:
+ 486              	.L41:
+ 181:../blockset/rtw/src/XcpTargetSpecific.c ****     #endif
+ 487              		.loc 1 181 5 view .LVU106
+ 488              	.LBE17:
+ 489              	.LBE16:
+ 405:../blockset/rtw/src/XcpTargetSpecific.c **** 		case XCPETH:   XcpEthSend(&data[0]);  	break;	
+ 490              		.loc 1 405 18 is_stmt 1 view .LVU107
+ 491              	.LBB18:
+ 492              	.LBI18:
+ 328:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 493              		.loc 1 328 13 view .LVU108
+ 494              	.LBB19:
+ 332:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 495              		.loc 1 332 3 view .LVU109
+ 332:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 496              		.loc 1 332 16 is_stmt 0 view .LVU110
+ 497 0056 074B     		ldr	r3, .L56+8
+ 332:../blockset/rtw/src/XcpTargetSpecific.c ****   {
+ 498              		.loc 1 332 5 view .LVU111
+ 499 0058 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 500 005a 002B     		cmp	r3, #0
+ 501 005c E1D0     		beq	.L42
+ 335:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 502              		.loc 1 335 5 is_stmt 1 view .LVU112
+ 335:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 503              		.loc 1 335 61 is_stmt 0 view .LVU113
+ 504 005e 0278     		ldrb	r2, [r0]	@ zero_extendqisi2
+ 335:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 505              		.loc 1 335 5 view .LVU114
+ 506 0060 064B     		ldr	r3, .L56+16
+ 507 0062 0232     		adds	r2, r2, #2
+ 508 0064 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 509              	.LVL27:
+ 335:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 510              		.loc 1 335 5 view .LVU115
+ 511 0066 FFF7FEFF 		bl	UartPutBytes
+ 512              	.LVL28:
+ 335:../blockset/rtw/src/XcpTargetSpecific.c ****   }
+ 513              		.loc 1 335 5 view .LVU116
+ 514 006a DAE7     		b	.L42
+ 515              	.L57:
+ 516              		.align	2
+ 517              	.L56:
+ 518 006c 00000000 		.word	.LANCHOR5
+ 519 0070 00000000 		.word	.LANCHOR0
+ 520 0074 00000000 		.word	.LANCHOR1
+ 521 0078 00000000 		.word	.LANCHOR2
+ 522 007c 00000000 		.word	.LANCHOR3
+ 523              	.LBE19:
+ 524              	.LBE18:
+ 525              		.cfi_endproc
+ 526              	.LFE126:
+ 528              		.section	.text.XcpSendBufferCheck,"ax",%progbits
+ 529              		.align	1
+ 530              		.p2align 2,,3
+ 531              		.global	XcpSendBufferCheck
+ 532              		.syntax unified
+ 533              		.thumb
+ 534              		.thumb_func
+ 536              	XcpSendBufferCheck:
+ 537              	.LFB127:
+ 424:../blockset/rtw/src/XcpTargetSpecific.c **** 	switch(xcpTransmissionBus)
+ 538              		.loc 1 424 1 is_stmt 1 view -0
+ 539              		.cfi_startproc
+ 540              		@ args = 0, pretend = 0, frame = 0
+ 541              		@ frame_needed = 0, uses_anonymous_args = 0
+ 542              		@ link register save eliminated.
+ 425:../blockset/rtw/src/XcpTargetSpecific.c **** 	{
+ 543              		.loc 1 425 2 view .LVU118
+ 544              		.loc 1 443 1 view .LVU119
+ 444:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 545              		.loc 1 444 1 is_stmt 0 view .LVU120
+ 546 0000 0120     		movs	r0, #1
+ 547 0002 7047     		bx	lr
+ 548              		.cfi_endproc
+ 549              	.LFE127:
+ 551              		.section	.text.XcpReadData,"ax",%progbits
+ 552              		.align	1
+ 553              		.p2align 2,,3
+ 554              		.global	XcpReadData
+ 555              		.syntax unified
+ 556              		.thumb
+ 557              		.thumb_func
+ 559              	XcpReadData:
+ 560              	.LVL29:
+ 561              	.LFB128:
+ 445:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 446:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function reads the data from a specified memory location. In this 
+ 447:../blockset/rtw/src/XcpTargetSpecific.c **** **			  function, the way to read from a memory location can be programmed.			 
+ 448:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  A pointer to the data array to store the readed data in
+ 449:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  The number of bytes to be read from a specific memory location
+ 450:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  The memory location where to read the data from.
+ 451:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 452:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 453:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 454:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpReadData(uint8_t *data,uint8_t elements, uint32_t *location)
+ 455:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 562              		.loc 1 455 1 is_stmt 1 view -0
+ 563              		.cfi_startproc
+ 564              		@ args = 0, pretend = 0, frame = 0
+ 565              		@ frame_needed = 0, uses_anonymous_args = 0
+ 566              		@ link register save eliminated.
+ 456:../blockset/rtw/src/XcpTargetSpecific.c **** 	switch(elements)
+ 567              		.loc 1 456 2 view .LVU122
+ 568 0000 0139     		subs	r1, r1, #1
+ 569              	.LVL30:
+ 570              		.loc 1 456 2 is_stmt 0 view .LVU123
+ 571 0002 0729     		cmp	r1, #7
+ 572 0004 09D8     		bhi	.L59
+ 573 0006 DFE801F0 		tbb	[pc, r1]
+ 574              	.L62:
+ 575 000a 0F       		.byte	(.L65-.L62)/2
+ 576 000b 0C       		.byte	(.L64-.L62)/2
+ 577 000c 08       		.byte	(.L59-.L62)/2
+ 578 000d 09       		.byte	(.L63-.L62)/2
+ 579 000e 08       		.byte	(.L59-.L62)/2
+ 580 000f 08       		.byte	(.L59-.L62)/2
+ 581 0010 08       		.byte	(.L59-.L62)/2
+ 582 0011 04       		.byte	(.L61-.L62)/2
+ 583              		.p2align 1
+ 584              	.L61:
+ 457:../blockset/rtw/src/XcpTargetSpecific.c **** 	{
+ 458:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 1:				*(uint8_t*)data 		= *(uint8_t*)location;			break;
+ 459:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)data 		= *(uint16_t*)location;			break;
+ 460:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)data 		= *(uint32_t*)location;			break;
+ 461:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)data 		= *(uint32_t*)location;
+ 585              		.loc 1 461 13 is_stmt 1 view .LVU124
+ 586              		.loc 1 461 34 is_stmt 0 view .LVU125
+ 587 0012 1368     		ldr	r3, [r2]
+ 588              		.loc 1 461 32 view .LVU126
+ 589 0014 0360     		str	r3, [r0]
+ 462:../blockset/rtw/src/XcpTargetSpecific.c **** 						*(((uint32_t*)data)+1)	= *(((uint32_t*)location)+1);	break;
+ 590              		.loc 1 462 7 is_stmt 1 view .LVU127
+ 591              		.loc 1 462 30 is_stmt 0 view .LVU128
+ 592 0016 5368     		ldr	r3, [r2, #4]
+ 593 0018 4360     		str	r3, [r0, #4]
+ 594              		.loc 1 462 60 is_stmt 1 view .LVU129
+ 595              	.L59:
+ 463:../blockset/rtw/src/XcpTargetSpecific.c **** 	}
+ 464:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 596              		.loc 1 464 1 is_stmt 0 view .LVU130
+ 597 001a 7047     		bx	lr
+ 598              	.L63:
+ 460:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)data 		= *(uint32_t*)location;
+ 599              		.loc 1 460 13 is_stmt 1 view .LVU131
+ 460:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)data 		= *(uint32_t*)location;
+ 600              		.loc 1 460 34 is_stmt 0 view .LVU132
+ 601 001c 1368     		ldr	r3, [r2]
+ 460:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)data 		= *(uint32_t*)location;
+ 602              		.loc 1 460 32 view .LVU133
+ 603 001e 0360     		str	r3, [r0]
+ 460:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)data 		= *(uint32_t*)location;
+ 604              		.loc 1 460 58 is_stmt 1 view .LVU134
+ 460:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)data 		= *(uint32_t*)location;
+ 605              		.loc 1 460 2 is_stmt 0 view .LVU135
+ 606 0020 7047     		bx	lr
+ 607              	.L64:
+ 459:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)data 		= *(uint32_t*)location;			break;
+ 608              		.loc 1 459 13 is_stmt 1 view .LVU136
+ 459:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)data 		= *(uint32_t*)location;			break;
+ 609              		.loc 1 459 34 is_stmt 0 view .LVU137
+ 610 0022 1388     		ldrh	r3, [r2]
+ 459:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)data 		= *(uint32_t*)location;			break;
+ 611              		.loc 1 459 32 view .LVU138
+ 612 0024 0380     		strh	r3, [r0]	@ movhi
+ 459:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)data 		= *(uint32_t*)location;			break;
+ 613              		.loc 1 459 58 is_stmt 1 view .LVU139
+ 459:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)data 		= *(uint32_t*)location;			break;
+ 614              		.loc 1 459 2 is_stmt 0 view .LVU140
+ 615 0026 7047     		bx	lr
+ 616              	.L65:
+ 458:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)data 		= *(uint16_t*)location;			break;
+ 617              		.loc 1 458 13 is_stmt 1 view .LVU141
+ 458:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)data 		= *(uint16_t*)location;			break;
+ 618              		.loc 1 458 33 is_stmt 0 view .LVU142
+ 619 0028 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 458:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)data 		= *(uint16_t*)location;			break;
+ 620              		.loc 1 458 31 view .LVU143
+ 621 002a 0370     		strb	r3, [r0]
+ 458:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)data 		= *(uint16_t*)location;			break;
+ 622              		.loc 1 458 56 is_stmt 1 view .LVU144
+ 458:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)data 		= *(uint16_t*)location;			break;
+ 623              		.loc 1 458 2 is_stmt 0 view .LVU145
+ 624 002c 7047     		bx	lr
+ 625              		.cfi_endproc
+ 626              	.LFE128:
+ 628 002e 00BF     		.section	.text.XcpWriteData,"ax",%progbits
+ 629              		.align	1
+ 630              		.p2align 2,,3
+ 631              		.global	XcpWriteData
+ 632              		.syntax unified
+ 633              		.thumb
+ 634              		.thumb_func
+ 636              	XcpWriteData:
+ 637              	.LVL31:
+ 638              	.LFB129:
+ 465:../blockset/rtw/src/XcpTargetSpecific.c **** 
+ 466:../blockset/rtw/src/XcpTargetSpecific.c **** /************************************************************************************//**
+ 467:../blockset/rtw/src/XcpTargetSpecific.c **** ** \brief     This function writes the data to a specified memory location. In this 
+ 468:../blockset/rtw/src/XcpTargetSpecific.c **** **			  function, the way to write to a memory location can be programmed.
+ 469:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  A pointer to the data array that holds the data that needs to be written
+ 470:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  The number of bytes to be write to a specific memory location
+ 471:../blockset/rtw/src/XcpTargetSpecific.c **** ** \param	  The memory location where to write the data to.
+ 472:../blockset/rtw/src/XcpTargetSpecific.c **** ** \return    none.
+ 473:../blockset/rtw/src/XcpTargetSpecific.c **** **
+ 474:../blockset/rtw/src/XcpTargetSpecific.c **** ****************************************************************************************/
+ 475:../blockset/rtw/src/XcpTargetSpecific.c **** void XcpWriteData(uint8_t *data,uint8_t elements, uint32_t location)
+ 476:../blockset/rtw/src/XcpTargetSpecific.c **** {
+ 639              		.loc 1 476 1 is_stmt 1 view -0
+ 640              		.cfi_startproc
+ 641              		@ args = 0, pretend = 0, frame = 0
+ 642              		@ frame_needed = 0, uses_anonymous_args = 0
+ 643              		@ link register save eliminated.
+ 477:../blockset/rtw/src/XcpTargetSpecific.c **** //TODO check for write protected area's in memory
+ 478:../blockset/rtw/src/XcpTargetSpecific.c **** 	
+ 479:../blockset/rtw/src/XcpTargetSpecific.c **** 	switch(elements)
+ 644              		.loc 1 479 2 view .LVU147
+ 645 0000 0139     		subs	r1, r1, #1
+ 646              	.LVL32:
+ 647              		.loc 1 479 2 is_stmt 0 view .LVU148
+ 648 0002 0729     		cmp	r1, #7
+ 649 0004 09D8     		bhi	.L66
+ 650 0006 DFE801F0 		tbb	[pc, r1]
+ 651              	.L69:
+ 652 000a 0F       		.byte	(.L72-.L69)/2
+ 653 000b 0C       		.byte	(.L71-.L69)/2
+ 654 000c 08       		.byte	(.L66-.L69)/2
+ 655 000d 09       		.byte	(.L70-.L69)/2
+ 656 000e 08       		.byte	(.L66-.L69)/2
+ 657 000f 08       		.byte	(.L66-.L69)/2
+ 658 0010 08       		.byte	(.L66-.L69)/2
+ 659 0011 04       		.byte	(.L68-.L69)/2
+ 660              		.p2align 1
+ 661              	.L68:
+ 480:../blockset/rtw/src/XcpTargetSpecific.c **** 	{	
+ 481:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 1:				*(uint8_t*)location 		= *(uint8_t*)&data[0];		break;
+ 482:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)location 		= *(uint16_t*)&data[0];		break;
+ 483:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)location 		= *(uint32_t*)&data[0];		break;
+ 484:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)location 		= *(uint32_t*)&data[0];				
+ 662              		.loc 1 484 13 is_stmt 1 view .LVU149
+ 663              		.loc 1 484 38 is_stmt 0 view .LVU150
+ 664 0012 0368     		ldr	r3, [r0]
+ 665              		.loc 1 484 36 view .LVU151
+ 666 0014 1360     		str	r3, [r2]
+ 485:../blockset/rtw/src/XcpTargetSpecific.c **** 						*(((uint32_t*)location)+1) 	= *(uint32_t*)&data[4];		break;
+ 667              		.loc 1 485 7 is_stmt 1 view .LVU152
+ 668              		.loc 1 485 35 is_stmt 0 view .LVU153
+ 669 0016 4368     		ldr	r3, [r0, #4]
+ 670 0018 5360     		str	r3, [r2, #4]
+ 671              		.loc 1 485 60 is_stmt 1 view .LVU154
+ 672              	.L66:
+ 486:../blockset/rtw/src/XcpTargetSpecific.c **** 	}
+ 487:../blockset/rtw/src/XcpTargetSpecific.c **** }
+ 673              		.loc 1 487 1 is_stmt 0 view .LVU155
+ 674 001a 7047     		bx	lr
+ 675              	.L70:
+ 483:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)location 		= *(uint32_t*)&data[0];				
+ 676              		.loc 1 483 13 is_stmt 1 view .LVU156
+ 483:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)location 		= *(uint32_t*)&data[0];				
+ 677              		.loc 1 483 38 is_stmt 0 view .LVU157
+ 678 001c 0368     		ldr	r3, [r0]
+ 483:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)location 		= *(uint32_t*)&data[0];				
+ 679              		.loc 1 483 36 view .LVU158
+ 680 001e 1360     		str	r3, [r2]
+ 483:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)location 		= *(uint32_t*)&data[0];				
+ 681              		.loc 1 483 61 is_stmt 1 view .LVU159
+ 483:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 8:				*(uint32_t*)location 		= *(uint32_t*)&data[0];				
+ 682              		.loc 1 483 2 is_stmt 0 view .LVU160
+ 683 0020 7047     		bx	lr
+ 684              	.L71:
+ 482:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)location 		= *(uint32_t*)&data[0];		break;
+ 685              		.loc 1 482 13 is_stmt 1 view .LVU161
+ 482:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)location 		= *(uint32_t*)&data[0];		break;
+ 686              		.loc 1 482 38 is_stmt 0 view .LVU162
+ 687 0022 0388     		ldrh	r3, [r0]
+ 482:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)location 		= *(uint32_t*)&data[0];		break;
+ 688              		.loc 1 482 36 view .LVU163
+ 689 0024 1380     		strh	r3, [r2]	@ movhi
+ 482:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)location 		= *(uint32_t*)&data[0];		break;
+ 690              		.loc 1 482 61 is_stmt 1 view .LVU164
+ 482:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 4:				*(uint32_t*)location 		= *(uint32_t*)&data[0];		break;
+ 691              		.loc 1 482 2 is_stmt 0 view .LVU165
+ 692 0026 7047     		bx	lr
+ 693              	.L72:
+ 481:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)location 		= *(uint16_t*)&data[0];		break;
+ 694              		.loc 1 481 13 is_stmt 1 view .LVU166
+ 481:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)location 		= *(uint16_t*)&data[0];		break;
+ 695              		.loc 1 481 37 is_stmt 0 view .LVU167
+ 696 0028 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 481:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)location 		= *(uint16_t*)&data[0];		break;
+ 697              		.loc 1 481 35 view .LVU168
+ 698 002a 1370     		strb	r3, [r2]
+ 481:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)location 		= *(uint16_t*)&data[0];		break;
+ 699              		.loc 1 481 59 is_stmt 1 view .LVU169
+ 481:../blockset/rtw/src/XcpTargetSpecific.c **** 	case 2:				*(uint16_t*)location 		= *(uint16_t*)&data[0];		break;
+ 700              		.loc 1 481 2 is_stmt 0 view .LVU170
+ 701 002c 7047     		bx	lr
+ 702              		.cfi_endproc
+ 703              	.LFE129:
+ 705              		.global	uniqueIdString
+ 706              		.global	uniqueIdLength
+ 707              		.global	eventChannel
+ 708              		.global	xcpCanParameters
+ 709 002e 00BF     		.section	.bss.dataToSend,"aw",%nobits
+ 710              		.align	2
+ 711              		.set	.LANCHOR1,. + 0
+ 714              	dataToSend:
+ 715 0000 00000000 		.space	120
+ 715      00000000 
+ 715      00000000 
+ 715      00000000 
+ 715      00000000 
+ 716              		.section	.bss.length.1,"aw",%nobits
+ 717              		.set	.LANCHOR4,. + 0
+ 720              	length.1:
+ 721 0000 00       		.space	1
+ 722              		.section	.bss.sendSemaphore.0,"aw",%nobits
+ 723              		.set	.LANCHOR5,. + 0
+ 726              	sendSemaphore.0:
+ 727 0000 00       		.space	1
+ 728              		.section	.bss.xcpCanParameters,"aw",%nobits
+ 729              		.align	2
+ 730              		.set	.LANCHOR2,. + 0
+ 733              	xcpCanParameters:
+ 734 0000 00000000 		.space	8
+ 734      00000000 
+ 735              		.section	.bss.xcpTransmissionBus,"aw",%nobits
+ 736              		.set	.LANCHOR0,. + 0
+ 739              	xcpTransmissionBus:
+ 740 0000 00       		.space	1
+ 741              		.section	.bss.xcpUartChannel,"aw",%nobits
+ 742              		.set	.LANCHOR3,. + 0
+ 745              	xcpUartChannel:
+ 746 0000 00       		.space	1
+ 747              		.section	.data.eventChannel,"aw"
+ 748              		.align	2
+ 751              	eventChannel:
+ 752 0000 45764368 		.ascii	"EvChnl1"
+ 752      6E6C31
+ 753 0007 45764368 		.ascii	"EvChnl2"
+ 753      6E6C32
+ 754 000e 45764368 		.ascii	"EvChnl3"
+ 754      6E6C33
+ 755              		.section	.data.uniqueIdLength,"aw"
+ 756              		.align	2
+ 759              	uniqueIdLength:
+ 760 0000 35000000 		.word	53
+ 761              		.section	.data.uniqueIdString,"aw"
+ 762              		.align	2
+ 765              	uniqueIdString:
+ 766 0000 48414E63 		.ascii	"HANcoder_Olimexino_F3_ACC_softwareID_v1_080623_1632"
+ 766      6F646572 
+ 766      5F4F6C69 
+ 766      6D657869 
+ 766      6E6F5F46 
+ 767 0033 323100   		.ascii	"21\000"
+ 768              		.text
+ 769              	.Letext0:
+ 770              		.file 2 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 771              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 772              		.file 4 "../blockset/rtw/inc/XcpStack.h"
+ 773              		.file 5 "../blockset/rtw/inc/XcpTargetSpecific.h"
+ 774              		.file 6 "../blockset/rtw/inc/Olimexino_STM32_F3/can.h"
+ 775              		.file 7 "../blockset/rtw/inc/Olimexino_STM32_F3/usbcom.h"
+ 776              		.file 8 "../blockset/rtw/inc/Olimexino_STM32_F3/uart.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 XcpTargetSpecific.c
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:19     .text.XcpUsbConfigureParamaters:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:26     .text.XcpUsbConfigureParamaters:00000000 XcpUsbConfigureParamaters
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:44     .text.XcpUsbConfigureParamaters:00000008 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:49     .text.XcpUsbReceive:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:56     .text.XcpUsbReceive:00000000 XcpUsbReceive
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:75     .text.XcpUsbReceive:00000008 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:80     .text.XcpCanConfigureParamaters:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:87     .text.XcpCanConfigureParamaters:00000000 XcpCanConfigureParamaters
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:115    .text.XcpCanConfigureParamaters:00000014 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:121    .text.XcpCanReceive:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:128    .text.XcpCanReceive:00000000 XcpCanReceive
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:144    .text.XcpCanReceive:00000008 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:149    .text.XcpUartConfigureParamaters:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:156    .text.XcpUartConfigureParamaters:00000000 XcpUartConfigureParamaters
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:180    .text.XcpUartConfigureParamaters:0000000c $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:186    .text.XcpUartReceive:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:193    .text.XcpUartReceive:00000000 XcpUartReceive
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:305    .text.XcpUartReceive:0000006c $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:312    .text.XcpEthConfigureParamaters:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:319    .text.XcpEthConfigureParamaters:00000000 XcpEthConfigureParamaters
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:336    .text.XcpEthConfigureParamaters:00000008 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:341    .text.XcpEthReceive:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:348    .text.XcpEthReceive:00000000 XcpEthReceive
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:359    .text.XcpEthReceive:00000008 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:364    .text.XcpSendData:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:371    .text.XcpSendData:00000000 XcpSendData
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:518    .text.XcpSendData:0000006c $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:529    .text.XcpSendBufferCheck:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:536    .text.XcpSendBufferCheck:00000000 XcpSendBufferCheck
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:552    .text.XcpReadData:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:559    .text.XcpReadData:00000000 XcpReadData
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:575    .text.XcpReadData:0000000a $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:583    .text.XcpReadData:00000012 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:629    .text.XcpWriteData:00000000 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:636    .text.XcpWriteData:00000000 XcpWriteData
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:652    .text.XcpWriteData:0000000a $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:660    .text.XcpWriteData:00000012 $t
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:765    .data.uniqueIdString:00000000 uniqueIdString
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:759    .data.uniqueIdLength:00000000 uniqueIdLength
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:751    .data.eventChannel:00000000 eventChannel
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:733    .bss.xcpCanParameters:00000000 xcpCanParameters
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:710    .bss.dataToSend:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:714    .bss.dataToSend:00000000 dataToSend
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:720    .bss.length.1:00000000 length.1
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:721    .bss.length.1:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:726    .bss.sendSemaphore.0:00000000 sendSemaphore.0
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:727    .bss.sendSemaphore.0:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:729    .bss.xcpCanParameters:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:739    .bss.xcpTransmissionBus:00000000 xcpTransmissionBus
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:740    .bss.xcpTransmissionBus:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:745    .bss.xcpUartChannel:00000000 xcpUartChannel
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:746    .bss.xcpUartChannel:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:748    .data.eventChannel:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:756    .data.uniqueIdLength:00000000 $d
+C:\Users\joeri\AppData\Local\Temp\ccCCWPbB.s:762    .data.uniqueIdString:00000000 $d
+
+UNDEFINED SYMBOLS
+XcpCommunicationHandling
+UartGetNumReceivedBytes
+UartGetByte
+CanTransmit
+UsbComTransmit
+UartPutBytes

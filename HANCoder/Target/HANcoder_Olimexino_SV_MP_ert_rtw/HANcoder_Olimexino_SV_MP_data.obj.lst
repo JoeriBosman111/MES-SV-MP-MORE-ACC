@@ -1,0 +1,40 @@
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 2
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"HANcoder_Olimexino_SV_MP_data.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	rtConstB
+  18              		.section	.rodata.rtConstB,"a"
+  19              		.align	3
+  22              	rtConstB:
+  23 0000 00000000 		.word	0
+  24 0004 00004E40 		.word	1078853632
+  25 0008 00000000 		.word	0
+  26 000c 00005440 		.word	1079246848
+  27 0010 1400     		.short	20
+  28 0012 0800     		.short	8
+  29 0014 00000000 		.space	4
+  30              		.text
+  31              	.Letext0:
+  32              		.file 1 "rtwtypes.h"
+  33              		.file 2 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+  34              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+  35              		.file 4 "HANcoder_Olimexino_SV_MP.h"
+  36              		.file 5 "HANcoder_Olimexino_SV_MP_data.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 HANcoder_Olimexino_SV_MP_data.c
+C:\Users\joeri\AppData\Local\Temp\cc6xBW5H.s:22     .rodata.rtConstB:00000000 rtConstB
+C:\Users\joeri\AppData\Local\Temp\cc6xBW5H.s:19     .rodata.rtConstB:00000000 $d
+
+NO UNDEFINED SYMBOLS
